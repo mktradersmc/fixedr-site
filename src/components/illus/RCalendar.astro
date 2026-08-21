@@ -1,0 +1,24 @@
+---
+// R-Kalender: Tagesergebnisse in R, nicht in Geld.
+---
+<svg viewBox="0 0 200 120" role="img" aria-label="Calendar showing daily results in R" width="100%">
+  {[0, 1, 2, 3, 4].map((col) => [0, 1, 2].map((row) => {
+    const vals = [
+      ['+0.8R', '-1R', '+2.1R', '0R', '+1.2R'],
+      ['-1R', '+1.5R', '+0.4R', '-0.5R', '+2R'],
+      ['+1.1R', '0R', '-1R', '+1.8R', '+0.6R'],
+    ];
+    const v = vals[row][col];
+    const hot = v.startsWith('+') && parseFloat(v) >= 1.5;
+    return (
+      <>
+        <rect x={16 + col * 35} y={18 + row * 30} width="31" height="26" rx="4"
+          fill={hot ? 'var(--signal-bg)' : 'var(--surface-2)'}
+          stroke={hot ? 'var(--signal)' : 'var(--line)'} stroke-width="1.5" />
+        <text x={16 + col * 35 + 15.5} y={18 + row * 30 + 17} text-anchor="middle"
+          fill={hot ? 'var(--signal)' : 'var(--muted)'} font-family="var(--font-mono)" font-size="8.5">{v}</text>
+      </>
+    );
+  }))}
+  <text x="100" y="112" text-anchor="middle" fill="var(--muted)" font-family="var(--font-mono)" font-size="10">a week measured in R</text>
+</svg>

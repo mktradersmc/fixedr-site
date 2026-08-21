@@ -1,0 +1,16 @@
+---
+// Konten-Verteilung: ein Trade, viele Konten — kein Raten ohne Konfiguration.
+---
+<svg viewBox="0 0 200 120" role="img" aria-label="One trade distributed to many accounts" width="100%">
+  <rect x="20" y="46" width="46" height="28" rx="6" fill="var(--signal-bg)" stroke="var(--signal)" stroke-width="2" />
+  <text x="43" y="64" text-anchor="middle" fill="var(--signal)" font-family="var(--font-mono)" font-size="12" font-weight="700">1R</text>
+  {[24, 60, 96].map((y) => (
+    <path d={`M 66 60 C 100 60, 100 ${y + 14}, 128 ${y + 14}`} fill="none" stroke="var(--muted)" stroke-width="2" />
+  ))}
+  {[24, 60, 96].map((y, i) => (
+    <>
+      <rect x="128" y={y} width="52" height="28" rx="6" fill="var(--surface-2)" stroke="var(--line)" stroke-width="2" />
+      <text x="154" y={y + 18} text-anchor="middle" fill="var(--muted)" font-family="var(--font-mono)" font-size="10">{['acct A', 'acct B', 'acct C'][i]}</text>
+    </>
+  ))}
+</svg>

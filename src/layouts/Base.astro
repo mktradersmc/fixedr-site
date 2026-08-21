@@ -1,0 +1,65 @@
+---
+// Grund-Layout: Head (SEO/OG), Header-Nav, Footer. Keine Tracker, keine externen
+// Ressourcen — Fonts kommen aus node_modules und werden von Astro lokal gebündelt.
+import '@fontsource-variable/inter';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '@fontsource/jetbrains-mono/700.css';
+import '../styles/global.css';
+import { SITE_TITLE, DESCRIPTION } from '../config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  narrow?: boolean;
+}
+const { title, description = DESCRIPTION, narrow = false } = Astro.props;
+const fullTitle = title ? `${title} — ${SITE_TITLE}` : `${SITE_TITLE} — your trading cockpit.`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og-image.png', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <header class="site">
+      <div class="inner">
+        <a class="logo" href="/" aria-label="FixedR home">
+          <img src="/wortmarke.svg" alt="FixedR" width="81" height="30" />
+        </a>
+        <nav>
+          <a href="/manifesto">Manifesto</a>
+          <a href="/features">Features</a>
+          <a href="/faq">FAQ</a>
+          <a href="/blog">Blog</a>
+          <a class="cta" href="/waitlist">Join the waitlist</a>
+        </nav>
+      </div>
+    </header>
+    <main class={narrow ? 'narrow' : undefined}>
+      <slot />
+    </main>
+    <footer class="site">
+      <div class="inner">
+        <span>© 2026 FixedR</span>
+        <a href="/imprint">Imprint</a>
+        <a href="/privacy">Privacy</a>
+        <span class="notrack">This site sets no cookies and loads nothing from third parties.</span>
+      </div>
+    </footer>
+  </body>
+</html>

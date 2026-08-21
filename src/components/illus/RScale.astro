@@ -1,0 +1,19 @@
+---
+// R-Skala: Ergebnisse in R statt Geld — eine Achse, ein Marker.
+---
+<svg viewBox="0 0 200 120" role="img" aria-label="Scale measuring outcomes in R" width="100%">
+  <line x1="20" y1="70" x2="180" y2="70" stroke="var(--line)" stroke-width="3" stroke-linecap="round" />
+  {[
+    { x: 40, label: '-1R' },
+    { x: 75, label: '0' },
+    { x: 110, label: '+1R' },
+    { x: 145, label: '+2R' },
+  ].map((t) => (
+    <>
+      <line x1={t.x} y1={64} x2={t.x} y2={76} stroke="var(--muted)" stroke-width="2" />
+      <text x={t.x} y={92} text-anchor="middle" fill="var(--muted)" font-family="var(--font-mono)" font-size="11">{t.label}</text>
+    </>
+  ))}
+  <circle cx="128" cy="70" r="7" fill="var(--signal)" />
+  <text x="128" y="48" text-anchor="middle" fill="var(--signal)" font-family="var(--font-mono)" font-size="13" font-weight="700">+1.5R</text>
+</svg>

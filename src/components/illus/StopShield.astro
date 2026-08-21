@@ -1,0 +1,16 @@
+---
+// Zwingendes Stop-Loss: kein Trade ohne fixierte Risikogrenze. Kurse bewusst farbneutral.
+---
+<svg viewBox="0 0 200 120" role="img" aria-label="Mandatory stop-loss line under price bars" width="100%">
+  {[
+    { x: 40, y: 34, h: 30 }, { x: 62, y: 42, h: 24 }, { x: 84, y: 30, h: 34 },
+    { x: 106, y: 40, h: 26 }, { x: 128, y: 26, h: 36 }, { x: 150, y: 36, h: 24 },
+  ].map((b) => (
+    <>
+      <line x1={b.x} y1={b.y - 8} x2={b.x} y2={b.y + b.h + 8} stroke="var(--line)" stroke-width="2" />
+      <rect x={b.x - 5} y={b.y} width="10" height={b.h} rx="2" fill="var(--surface-2)" stroke="var(--muted)" stroke-width="1.5" />
+    </>
+  ))}
+  <line x1="24" y1="92" x2="176" y2="92" stroke="var(--signal)" stroke-width="3" stroke-dasharray="10 6" stroke-linecap="round" />
+  <text x="176" y="110" text-anchor="end" fill="var(--signal)" font-family="var(--font-mono)" font-size="11" font-weight="700">stop — fixed before entry</text>
+</svg>

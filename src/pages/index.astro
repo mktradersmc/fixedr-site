@@ -1,17 +1,81 @@
 ---
-
+import Base from '../layouts/Base.astro';
+import StopShield from '../components/illus/StopShield.astro';
+import RScale from '../components/illus/RScale.astro';
+import Horizon from '../components/illus/Horizon.astro';
+import Distribution from '../components/illus/Distribution.astro';
+import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
+import RCalendar from '../components/illus/RCalendar.astro';
 ---
+<Base>
+  <section class="hero">
+    <img src="/wortmarke.svg" alt="FixedR" width="243" height="90" />
+    <p class="tagline">your trading cockpit.</p>
+    <h1>The trading cockpit that shows you risk, not&nbsp;money.</h1>
+    <p class="lede">
+      Built for prop traders. Every position starts from a fixed stop-loss, every result is
+      measured in <span class="r-value">R</span> — and the one number that makes you tilt
+      never appears on screen.
+    </p>
+    <p>
+      <a class="btn" href="/waitlist">Join the waitlist</a>
+      <a class="btn ghost" href="/manifesto">Why no money?</a>
+    </p>
+    <p style="color: var(--muted); font-size: 0.9rem;">Windows app · works with MetaTrader &amp; NinjaTrader</p>
+  </section>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+  <section>
+    <h2 style="text-align:center">Six mechanics. One purpose: keep you inside your rules.</h2>
+    <div class="grid">
+      <div class="card">
+        <StopShield />
+        <h3>Mandatory stop-loss</h3>
+        <p>No stop, no trade. The risk of every position is fixed before entry — not negotiated with yourself afterwards.</p>
+      </div>
+      <div class="card">
+        <RScale />
+        <h3>Position size from risk</h3>
+        <p>You decide the fraction of the account to risk. FixedR computes the lot size from your stop distance. Backwards — the only sane direction.</p>
+      </div>
+      <div class="card">
+        <Horizon />
+        <h3>Money stays out of sight</h3>
+        <p>Results, targets, drawdown — everything is denominated in R. What you don't stare at can't make you tilt.</p>
+      </div>
+      <div class="card">
+        <Distribution />
+        <h3>One trade, many accounts</h3>
+        <p>Place a trade once, distribute it across your funded accounts by rule. If an account isn't configured, FixedR refuses loudly — it never guesses.</p>
+      </div>
+      <div class="card">
+        <LayoutMosaic />
+        <h3>Multi-monitor layouts</h3>
+        <p>Charts, journal, risk panel — arranged across screens the way a cockpit arranges instruments: everything where your eyes expect it.</p>
+      </div>
+      <div class="card">
+        <RCalendar />
+        <h3>The R calendar</h3>
+        <p>Your month in R, day by day. Progress you can compare across accounts, account sizes and years.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="callout">
+    <h2 style="margin-top:0.4rem">Why no money?</h2>
+    <p>
+      Prop trading is a percentage game: drawdown limits, profit targets, consistency rules —
+      all defined relative to account size. The money number adds nothing but emotion.
+      FixedR removes it entirely. Not a setting. Not a toggle. It's simply not there.
+    </p>
+    <p><a href="/manifesto">Read the manifesto →</a></p>
+  </section>
+
+  <section style="text-align:center; padding: 2rem 0 3rem;">
+    <h2>Built local-first</h2>
+    <p style="max-width: 34rem; margin: 0.8rem auto;">
+      FixedR runs on your machine. Your journal and account data live in a local database —
+      this website doesn't track you either.
+    </p>
+    <p><a class="btn" href="/waitlist">Join the waitlist</a></p>
+  </section>
+</Base>

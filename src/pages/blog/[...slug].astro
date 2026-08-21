@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+<Base title={post.data.title} description={post.data.description} narrow>
+  <article class="post">
+    <p class="post-meta">{post.data.date.toISOString().slice(0, 10)}</p>
+    <h1>{post.data.title}</h1>
+    <Content />
+    <hr />
+    <p>
+      <a href="/blog">← All posts</a> ·
+      <a href="/waitlist">Join the FixedR waitlist</a>
+    </p>
+  </article>
+</Base>

@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="FAQ"
+  description="Frequently asked questions about FixedR: prop-only policy, MetaTrader and NinjaTrader support, local-first data, R-only display."
+  narrow
+>
+  <h1>FAQ</h1>
+
+  <details>
+    <summary>Why is FixedR only for prop-firm accounts?</summary>
+    <p>
+      By design and by policy. FixedR automates order handling across accounts, and automation
+      must never be in a position to damage someone's private savings through a defect. Funded
+      accounts are the right habitat: the firm's capital, clearly bounded rules, and a
+      risk-first mindset already required by the challenge. Using FixedR on private accounts is
+      against its terms of use.
+    </p>
+  </details>
+
+  <details>
+    <summary>Which platforms does it work with?</summary>
+    <p>
+      MetaTrader and NinjaTrader. FixedR sits beside your platform as the cockpit — placing,
+      sizing and journaling — while the platform remains the execution venue.
+    </p>
+  </details>
+
+  <details>
+    <summary>Really no money display at all? Not even an option?</summary>
+    <p>
+      Really. There is no money mode and no hidden toggle. The absence is deliberate: an option
+      you can switch on in a weak moment is not a commitment device. The only exception is the
+      account size you enter once when connecting an account — after that, everything is R.
+    </p>
+  </details>
+
+  <details>
+    <summary>Where does my data live?</summary>
+    <p>
+      On your machine. FixedR is a local-first Windows application: your journal, account
+      configuration and trading records are stored in a local database, and the app works
+      without a cloud account. If you enable optional notifications to other devices, those
+      messages travel through a delivery service — everything else stays local.
+    </p>
+  </details>
+
+  <details>
+    <summary>Does this website track me?</summary>
+    <p>
+      No. No cookies, no analytics, no external fonts or scripts. The waitlist form is the only
+      thing that sends data anywhere — and only what you type into it.
+    </p>
+  </details>
+
+  <details>
+    <summary>What does R mean, exactly?</summary>
+    <p>
+      R is the amount you decided to risk on a trade, fixed by your stop before entry. A trade
+      that hits its stop is <span class="r-value">-1R</span>. A trade closed at twice the risked
+      amount is <span class="r-value">+2R</span>. Because R is defined relative to your own
+      risk, results stay comparable across instruments, account sizes and time.
+    </p>
+  </details>
+
+  <details>
+    <summary>Will FixedR help me pass my evaluation?</summary>
+    <p>
+      No tool can promise that, and you should distrust any that does. What FixedR does is
+      structural: it makes the disciplined path the only path the software offers — mandatory
+      stops, fixed risk, no money number to tilt against. The trading is still yours.
+    </p>
+  </details>
+
+  <details>
+    <summary>When can I get it? What does it cost?</summary>
+    <p>
+      FixedR is currently in a closed founders phase with a small group of prop traders.
+      Pricing will be announced when the founders phase opens up. The
+      <a href="/waitlist">waitlist</a> is the way in — founders-circle invitations go out in
+      order of signup.
+    </p>
+  </details>
+</Base>

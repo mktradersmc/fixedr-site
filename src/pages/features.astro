@@ -1,0 +1,121 @@
+---
+import Base from '../layouts/Base.astro';
+import StopShield from '../components/illus/StopShield.astro';
+import RScale from '../components/illus/RScale.astro';
+import Horizon from '../components/illus/Horizon.astro';
+import Distribution from '../components/illus/Distribution.astro';
+import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
+import RCalendar from '../components/illus/RCalendar.astro';
+---
+<Base
+  title="Features"
+  description="FixedR's six core mechanics: mandatory stop-loss, position size from risk, R-only display, multi-account distribution, multi-monitor layouts, R calendar."
+>
+  <h1>Features</h1>
+  <p style="max-width: 42rem; color: var(--muted);">
+    Six mechanics, one idea applied consistently: risk is decided once, before the trade —
+    and nothing on the screen renegotiates it with you afterwards.
+  </p>
+
+  <div class="feature-row">
+    <div class="illu"><StopShield /></div>
+    <div>
+      <h2>Mandatory stop-loss</h2>
+      <p>
+        In FixedR there is no such thing as a position without a stop. The stop is not a
+        suggestion or a habit — it is structurally required before an order exists. That single
+        constraint turns "risk management" from a resolution into a property of the software.
+      </p>
+    </div>
+  </div>
+
+  <div class="feature-row">
+    <div class="illu"><RScale /></div>
+    <div>
+      <h2>Position size from risk</h2>
+      <p>
+        You choose what fraction of the account one R means. FixedR combines it with your stop
+        distance and computes the lot size — instead of you choosing a lot size and discovering
+        your risk afterwards. Same risk per trade, every trade, regardless of instrument or
+        stop width.
+      </p>
+    </div>
+  </div>
+
+  <div class="feature-row">
+    <div class="illu"><Horizon /></div>
+    <div>
+      <h2>R-only display</h2>
+      <p>
+        Open positions, closed results, daily totals, drawdown headroom — everything is
+        denominated in R. There is no money mode and no toggle to peek. The absence is the
+        feature: what isn't rendered can't trigger you.
+      </p>
+    </div>
+  </div>
+
+  <div class="feature-row">
+    <div class="illu"><Distribution /></div>
+    <div>
+      <h2>One trade, many accounts</h2>
+      <p>
+        Trading several funded accounts means executing the same idea several times. In FixedR
+        you place the trade once and it is distributed to your accounts according to your
+        configuration. And a hard promise: <strong>without configuration, nothing is guessed</strong> —
+        an unconfigured account stops the distribution with a loud error instead of silently
+        doing something almost right.
+      </p>
+    </div>
+  </div>
+
+  <div class="feature-row">
+    <div class="illu"><LayoutMosaic /></div>
+    <div>
+      <h2>Multi-monitor layouts</h2>
+      <p>
+        A cockpit is an arrangement of instruments, each in its fixed place. FixedR lets you
+        compose charts, journal, risk panel and account views across monitors and save the
+        arrangement — so that during the session, your eyes travel, not your windows.
+      </p>
+    </div>
+  </div>
+
+  <div class="feature-row">
+    <div class="illu"><RCalendar /></div>
+    <div>
+      <h2>The R calendar</h2>
+      <p>
+        Your trading month as a calendar of R values. Because R is stable across account sizes,
+        the calendar stays comparable as you scale — a discipline record, not a money diary.
+      </p>
+    </div>
+  </div>
+
+  <section class="callout" style="margin-top: 3rem;">
+    <p style="margin: 0.4rem 0;">
+      FixedR is a Windows application, works with MetaTrader &amp; NinjaTrader, and is built
+      exclusively for prop-firm accounts. <a href="/waitlist">Join the waitlist →</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .feature-row {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin: 2.6rem 0;
+  }
+  .feature-row .illu {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .feature-row h2 { margin-top: 0; }
+  @media (max-width: 640px) {
+    .feature-row { grid-template-columns: 1fr; }
+    .feature-row .illu { max-width: 300px; }
+  }
+</style>

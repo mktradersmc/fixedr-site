@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import { WAITLIST_ENDPOINT, WAITLIST_EMAIL } from '../config';
+
+// Austauschbarer Empfänger (E-C131): mit Endpoint = echtes Formular,
+// ohne = mailto:-Fallback. Kein JS, kein Drittanbieter-Script auf der Seite.
+const hasEndpoint = WAITLIST_ENDPOINT.length > 0;
+const mailtoHref = `mailto:${WAITLIST_EMAIL}?subject=${encodeURIComponent('FixedR waitlist')}&body=${encodeURIComponent(
+  'Hi,\n\nplease put me on the FixedR waitlist.\n\nWhat I trade (futures/forex/other): \nProp firm(s) I trade with: \n'
+)}`;
+---
+<Base
+  title="Waitlist"
+  description="Join the FixedR waitlist. The founders circle is filled first, in order of signup."
+  narrow
+>
+  <h1>Join the waitlist</h1>
+  <p>
+    FixedR is being rolled out deliberately: a small founders circle of prop traders first,
+    then the waitlist, in order of signup. No spam — you'll hear from us when your spot opens.
+  </p>
+
+  {hasEndpoint ? (
+    <form class="waitlist" action={WAITLIST_ENDPOINT} method="POST">
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="email" />
+      </div>
+      <div>
+        <label for="trades">What do you trade? (optional)</label>
+        <input type="text" id="trades" name="trades" placeholder="futures / forex / …" />
+      </div>
+      <div>
+        <label for="firms">Which prop firm(s)? (optional)</label>
+        <input type="text" id="firms" name="firms" />
+      </div>
+      <button class="btn" type="submit">Put me on the list</button>
+    </form>
+  ) : (
+    <>
+      <p style="margin-top: 2rem;">
+        <a class="btn" href={mailtoHref}>Join via email</a>
+      </p>
+      <p style="color: var(--muted); font-size: 0.9rem;">
+        This opens your mail app with a prefilled message to {WAITLIST_EMAIL} — tell us what
+        you trade and which firms you trade with, if you like.
+      </p>
+    </>
+  )}
+
+  <hr />
+  <p style="color: var(--muted); font-size: 0.9rem;">
+    What happens with your address: it goes on the waitlist, nothing else. No newsletter,
+    no sharing, and you can ask for removal any time. Details in the
+    <a href="/privacy">privacy policy</a>.
+  </p>
+</Base>

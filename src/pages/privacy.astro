@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+// ⚠️ PLATZHALTER — Publikations-Gate G4: Die finale Datenschutzerklärung hängt vom
+// Warteliste-Dienst-Entscheid (E-C131) und vom Hosting ab. Der Marker unten blockiert
+// den Deploy (tools/deploy-gate.mjs), solange er existiert.
+---
+<Base title="Privacy" description="Privacy policy for fixedr.com." narrow>
+  <h1>Privacy</h1>
+  {/* HTML-Kommentare überleben den Astro-Build NICHT — der Marker muss als Attribut in dist/ ankommen */}
+  <div class="callout" data-blocker="WPAC26-PLACEHOLDER-DO-NOT-PUBLISH">
+    <p><strong>Placeholder.</strong> The final privacy policy is added before this site goes
+    public. What is already decided and will not change:</p>
+  </div>
+  <ul>
+    <li>This site sets no cookies and runs no analytics.</li>
+    <li>All assets (fonts, images, styles) are served from this domain — nothing is loaded
+      from third parties.</li>
+    <li>The waitlist stores exactly what you submit, is used only to contact you about
+      FixedR access, and entries are deleted on request.</li>
+  </ul>
+</Base>
