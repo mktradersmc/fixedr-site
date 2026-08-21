@@ -1,0 +1,104 @@
+# FixedR — Marketing-Fundament (WP-AC26 Teil D)
+
+> Kanonische Fassung: `forge-wiki\awesome-cockpit\product\07-marketing-fundament.md`
+> (identischer Stand 2026-08-21; Änderungen zuerst dort, dann hierher spiegeln).
+
+**Prämissen:** Budget ≈ 0 €. Keine bezahlten Anzeigen (nicht v1). Warteliste-Einträge sind die
+einzige KPI. Ehrlichkeits-Regel ist hart: **jede Verbindung wird offengelegt** — verdecktes
+Seeding (Astroturfing) fliegt in Trader-Foren auf und fällt auf die Marke zurück.
+
+## D1 — Funnel
+
+```
+Foren-/Freunde-Kontakt → Blog-Artikel (Mehrwert) → Warteliste → Founders-Angebot (Stufe 4)
+```
+
+- Der Blog ist die Landefläche, NICHT die Produktseite: Links aus Communities zeigen auf
+  Artikel, nie auf `/waitlist` direkt. Wer den Artikel gut findet, findet den CTA selbst.
+- Warteliste-Text setzt Erwartung („Founders-Kreis zuerst, limitiert") — das entschärft das
+  Risiko „verfrühte Warteliste ohne lieferbares Produkt" (D5).
+- Messung v1: Zahl der Warteliste-Einträge. Keine Analytics, keine UTM-Parameter (Privacy-Claim
+  der Site ist selbst ein Marketing-Argument).
+
+## D2 — Seeding-Playbook für die 2–3 Trader-Freunde
+
+**Grundregeln (gelten überall):**
+1. **Verbindung offenlegen** — Standard-Formel: „Ich teste seit ein paar Wochen das Tool eines
+   Bekannten (FixedR)…". Keine Ausnahme, auch nicht auf X.
+2. **Mehrwert zuerst:** Erfahrungsberichte, R-Denke erklären, Challenge-Tagebücher. Links nur
+   auf Blog-Artikel und **nur auf Nachfrage**.
+3. **Je Kanal zuerst die Regeln lesen** (viele Foren verbieten Promo generell — Liste unten).
+4. Nie Produkt-Threads anderer kapern, nie auf Konkurrenz-Kritik aufspringen.
+5. Screenshots nur aus der App mit Demo-Daten und nur nach AC19 (R-only gebaut) — bis dahin gar
+   keine.
+
+**Kanal-Rangliste (Websuche 2026-08-21; Details/Quellen: Recherche-Anhang unten):**
+
+| Rang | Kanal | Einsatz | Achtung |
+|---|---|---|---|
+| 1 | **r/PropFirmTester** (~28k, +372 %/J) | Empfehlungs-Anfragen beantworten, eigene Erfahrungsposts | Subreddit-Regeln vor erstem Post manuell lesen (Crawler-Block verhinderte Abruf); ggf. Mods vorab fragen |
+| 2 | **X / FinTwit** (Prop-Futures-Szene) | Challenge-Journal in R als Thread-Serie; einziger Kanal auf EIGENEM Terrain | Offenlegung trotzdem Pflicht (UWG/FTC-sichere Seite) |
+| 3 | **r/FuturesTrading** (~198k) | Tool-/Setup-Threads, R-Risikomanagement als Angel | Regeln manuell prüfen |
+| 4 | **Topstep-Discord** (186k+, offen) | Mitdiskutieren (Psychologie/Risiko); Tool-Nennung NUR auf direkte Nachfrage, ohne Link | Firmeneigener Server — Moderation sitzt daneben |
+| 5 | **NexusFi** (ex-futures.io) | Nur über echte Trading-Journale; vor Tool-Nennung Moderation kontaktieren | Vendor-Regeln streng; unklar, ob „Freund des Herstellers" als Vendor gilt |
+
+**Explizit NICHT bespielen:** Forex Factory (Verbot erfasst ausdrücklich auch Fremdprodukte,
+Shill-Verdacht genügt für Maßnahmen) und Elite Trader (Nulltoleranz, legal nur als zahlender
+Vendor). Ban-Einträge dort wären dauerhaft mit der Marke verknüpft.
+
+**Nachrangig/Situativ:** r/Daytrading + r/Forex (nur in bestehenden Threads antworten),
+FTMO-/Apex-Discords (wie Topstep), YouTube-Kommentare (nur linkfrei), Trade2Win (Deklarations-
+pflicht passt, aber geringe Dichte), DE-Foren (Peketec am ehesten; die deutschsprachige
+Prop-Szene lebt eher auf Discord/YouTube als in Foren).
+
+**Briefing-Ablauf je Freund:** dieses Playbook geben → gemeinsam die 2–3 Kanäle wählen, in
+denen er OHNEHIN aktiv ist (ein totes Konto, das plötzlich postet, wirkt wie ein Shill) →
+Regeln des Kanals lesen → erst 2–4 Wochen normal beitragen, dann natürlich erwähnen.
+
+## D3 — Build in Public (Option, Michael-Entscheid)
+
+Vorschlag, falls gewollt: 1–2 Posts/Woche auf X aus dem Bau-Alltag (Screenshot einer Mechanik,
+eine Design-Entscheidung erklärt, ein „warum kein Geld auf dem Screen"-Faden). Kein Zwang, keine
+Kadenz-Schuld: wenn eine Woche nichts da ist, wird nichts gepostet. Kein persönlicher
+Trading-Content, keine Ergebnisse. — **Status: offen, Michael entscheidet.**
+
+## D4 — Kadenz & Nullbudget-Plan
+
+- **Bis Launch:** die 5 Blog-Artikel sind der Vorrat; kein Publikationsdruck.
+- **Nach Launch (G4):** 1 Artikel/Monat. Jeder Artikel wird 2–3× wiederverwertet: als
+  Forenantwort-Substanz, als X-Thread, als FAQ-Erweiterung.
+- Bezahlte Anzeigen sind explizit NICHT Teil von v1.
+- E-Mail an Wartelisten-Einträge: nur Zugangs-Benachrichtigungen, kein Newsletter (v1).
+
+## D5 — Risiken & Gegenmittel
+
+| Risiko | Gegenmittel |
+|---|---|
+| Astroturfing-Vorwurf | Offenlegung ausnahmslos (D2-Regel 1); nur Konten mit echter Historie |
+| Promo-Ban (Kanalregeln) | Regel-Recherche je Kanal VOR erstem Post; Verbotsliste (FF, ET) respektieren; im Zweifel Mods fragen |
+| Verfrühte Warteliste ohne lieferbares Produkt | Staffel-Text „Founders-Kreis zuerst, limitiert" auf `/waitlist`; keine Termine versprechen |
+| Marketing konterkariert Kernversprechen | Wächter im Site-Repo (keine Geldwerte/Preise/Versprechen); Screenshots erst nach AC19 |
+| Rechtliches (Impressum/DSGVO) | Publikations-Gate: `npm run deploy-check` verweigert Deploy bei Platzhaltern; nichts geht ohne Michael-Go online |
+
+---
+
+## Anhang: Kanal-Recherche im Detail (2026-08-21)
+
+*Vollständige Rangliste mit Promo-Politik-Zitaten, Quellen-Links und offenen Prüfaufträgen —
+übernommen aus der Websuche-Recherche der Bau-Session. Vor dem ERSTEN Post gilt je Kanal:
+Regeln manuell verifizieren (Reddit-Regeln waren nicht crawlbar, Discord-Regeln erst nach
+Beitritt sichtbar).*
+
+**Offene Prüfaufträge:** (1) Regeln von r/PropFirmTester, r/FuturesTrading, r/Daytrading,
+r/Forex manuell lesen; (2) Discord-Serverregeln nach Beitritt lesen; (3) Existenz weiterer
+Prop-Subreddits (r/propfirms, r/FundedTrading) verifizieren.
+
+**Ungeeignet (belegt):** Forex Factory — User Guide/Commercial-Member-Threads: Mitglieder dürfen
+FF nicht zur Bewerbung von Produkten nutzen, „either their own or someone else's"; Maßnahmen
+auch ohne schlüssigen Beweis. Elite Trader — Terms: Werbung/Solicitation strikt verboten außer
+als zahlender Sponsor (Vendor-Account 499 $/Monat), sofortige Kündigung ohne Vorwarnung.
+
+**NexusFi-Kontext:** futures.io wurde zu nexusfi.com; Gründer „Big Mike" ist im Juni 2026
+verstorben, Betrieb läuft weiter. Vendor-Regeln: keine Traffic-Links, Selbstpromotion = Spam,
+auch Sponsoren dürfen Posts nicht zum Marketing nutzen; Antworten auf Nutzerfragen sind erlaubt,
+solange kein Sales-Pitch, keine Performance-Angaben, keine Testimonials.

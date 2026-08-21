@@ -1,5 +1,5 @@
 // Zentrale Site-Konfiguration.
-// WARTELISTE (E-C131): der Empfänger ist austauschbar — Dienst-Entscheid fällt mit dem
+// WARTELISTE (E-C132): der Empfänger ist austauschbar — Dienst-Entscheid fällt mit dem
 // Hosting-Entscheid vor G4. Solange WAITLIST_ENDPOINT leer ist, rendert die Waitlist-Seite
 // den mailto:-Fallback. Einen Formulardienst aktivieren = nur diese eine Zeile füllen
 // (z. B. Formspree: 'https://formspree.io/f/<id>').
