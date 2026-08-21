@@ -54,6 +54,12 @@ The calm version of you knows the rules. Risk a fixed fraction. Honor the stop. 
 
 This matters doubly in prop trading, where the accounts aren't even yours and the real asset is your ability to follow rules under a drawdown limit. A prop trader's edge is discipline compounded over evaluations and payouts. Everything on the screen should serve that discipline. A live currency ticker serves nothing but the tilt.
 
+## The money was never in the account anyway
+
+For prop traders there is one more argument, and it may be the most honest one: the balance of a challenge or funded account is notional. It is not your money. In many arrangements it isn't literal firm capital either — it is a number in an evaluation system. The only real money in the entire process is the fee you paid to enter and the payout you eventually receive, and neither of those lives inside a trading platform.
+
+A currency display on a notional account projects a concreteness that does not exist. What does exist, and what actually decides whether you keep the account, is your distance to the drawdown limit and your distance to the target — both defined by the firm as percentages, both perfectly expressible in R. A platform that shows you dollars on a challenge account is, in a quiet way, misrepresenting the situation. A platform that shows you your remaining risk budget is describing it exactly.
+
 ## Built into the walls
 
 You can practice R-thinking on any platform. Journal in R, tape over the P&L, do the conversion in your head. Many disciplined traders do, and it works — until the one stressed evening it doesn't, because the money was always one glance away.

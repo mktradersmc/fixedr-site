@@ -7,6 +7,29 @@
 einzige KPI. Ehrlichkeits-Regel ist hart: **jede Verbindung wird offengelegt** — verdecktes
 Seeding (Astroturfing) fliegt in Trader-Foren auf und fällt auf die Marke zurück.
 
+## D0 — Zielkunde (geschärft 2026-08-21, Quelle: Offline-Diskussion `getting-out\fixedr-offline-diskussion.txt`)
+
+**Nicht der Einsteiger, sondern der Trader nach 1–3 verlorenen Challenges.** Der absolute
+Anfänger glaubt, ihm fehle die Strategie, und sucht Indikatoren; dass sein Problem Disziplin
+und Prozess ist, erkennt man erst nach dem ersten Scheitern. Der Gescheiterte hat schon Geld
+ausgegeben (zahlungsbereit), sucht aktiv in Foren/Discords nach der Ursache — und der Satz
+„deine zweite Challenge sollte nicht so enden wie die erste" spricht den Einsteiger MIT an,
+umgekehrt funktioniert es nicht. Die Home trägt diesen Winkel seit 2026-08-21 („If an
+evaluation has ever died on you in one bad afternoon…").
+
+**Planungsgröße Akquise:** Prop-Trader churnen strukturell; realistischer LTV eher 3–6 Monate
+als 24. Konsequenz: bezahlte Akquise trägt sich nicht — Content, Community, Empfehlungen sind
+nicht Sparsamkeit, sondern das einzig tragfähige Modell. (Deckt sich mit dem Nullbudget-Plan D4.)
+
+**Stärkste Marketing-Argumente in dieser Reihenfolge** (aus der Diskussion destilliert):
+1. **Notional-Argument:** „Wir zeigen kein Geld, weil es in dem Account keins gibt — nur deinen
+   Abstand zu Limit und Ziel" (wahr UND verkäuflich; steht jetzt in Manifesto/Blog 1).
+2. **Orientierung:** absolute Zahlen tragen keine Angemessenheits-Information, R/% schon —
+   zieht auch beim Trader, der Emotionsprobleme abstreitet.
+3. **Prozess statt Zustand:** nie „du bleibst neutral" versprechen, sondern „deine Routine vom
+   10k geht unverändert auf den 100k — kein Pixel ändert sich".
+4. Psychologie/Ruhe als Rahmenerzählung, nicht als Einzelversprechen.
+
 ## D1 — Funnel
 
 ```
@@ -60,7 +83,11 @@ Regeln des Kanals lesen → erst 2–4 Wochen normal beitragen, dann natürlich 
 Vorschlag, falls gewollt: 1–2 Posts/Woche auf X aus dem Bau-Alltag (Screenshot einer Mechanik,
 eine Design-Entscheidung erklärt, ein „warum kein Geld auf dem Screen"-Faden). Kein Zwang, keine
 Kadenz-Schuld: wenn eine Woche nichts da ist, wird nichts gepostet. Kein persönlicher
-Trading-Content, keine Ergebnisse. — **Status: offen, Michael entscheidet.**
+Trading-Content, keine Ergebnisse. — **Status: offen, Michael entscheidet (2026-08-21 vertagt).**
+
+**Video-/Demo-Material:** Das Multi-Monitor-Layout ist das beste Öffnungsbild — es wirkt in
+60 Sekunden ohne Erklärung, wo „automatische R-Berechnung" erklärungsbedürftig ist. Regel:
+jedes Video beginnt mit dem Layout, verkauft wird aber die R-These.
 
 ## D4 — Kadenz & Nullbudget-Plan
 
@@ -79,6 +106,7 @@ Trading-Content, keine Ergebnisse. — **Status: offen, Michael entscheidet.**
 | Verfrühte Warteliste ohne lieferbares Produkt | Staffel-Text „Founders-Kreis zuerst, limitiert" auf `/waitlist`; keine Termine versprechen |
 | Marketing konterkariert Kernversprechen | Wächter im Site-Repo (keine Geldwerte/Preise/Versprechen); Screenshots erst nach AC19 |
 | Rechtliches (Impressum/DSGVO) | Publikations-Gate: `npm run deploy-check` verweigert Deploy bei Platzhaltern; nichts geht ohne Michael-Go online |
+| „One trade, many accounts" vs. Firmenregeln (viele Firmen beschränken One-to-many-Muster) | **Michael-Entscheid 2026-08-21: FAQ-Eintrag dazu ERST mit `AC20`** (wenn der Guardian Firmen-Regelprofile wirklich kennt und das Feature abdeckt — dann wird aus dem Konflikt das stärkste Argument). Bis dahin: Seeding-Freunde sprechen das Thema nicht offensiv an |
 
 ---
 

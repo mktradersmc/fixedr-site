@@ -39,6 +39,13 @@ import RCalendar from '../components/illus/RCalendar.astro';
         your risk afterwards. Same risk per trade, every trade, regardless of instrument or
         stop width.
       </p>
+      <p>
+        And honestly: futures contracts are discrete, so the computed size rarely matches your
+        target risk exactly. FixedR rounds conservatively and shows you the <em>effective</em>
+        risk next to the planned one, instead of pretending the numbers came out even. If even
+        the smallest size is too large for your risk budget, it tells you the trade doesn't fit
+        your profile — which is the whole philosophy in one sentence.
+      </p>
     </div>
   </div>
 
