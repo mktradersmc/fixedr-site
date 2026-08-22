@@ -62,6 +62,14 @@ nicht Sparsamkeit, sondern das einzig tragfähige Modell. (Deckt sich mit dem Nu
    10k geht unverändert auf den 100k — kein Pixel ändert sich".
 4. Psychologie/Ruhe als Rahmenerzählung, nicht als Einzelversprechen.
 
+> **Nachtrag 2026-08-23 (Transkript Teil 2):** Offer, Anreiz-Erzählung, Bindungs-Logik und die
+> Vertrauens-/Haftungsarchitektur stehen im Kanon `product\07` **Abschnitt D0b** — dort nachschlagen.
+> Kernsätze: Offer = *„Wir machen dich nicht profitabel. Wir sorgen dafür, dass du nie wieder an etwas
+> anderem als deiner Strategie scheiterst."* · Anreize statt Absicht (*„Egal wie fair deine Firma ist —
+> ihre Anreize sind nie deine"*) · der Gambler ist ein **Zustand**, kein Typ · Pause-Funktion statt
+> Rückkehr-Rabatt · Guardian-Kontoauszug macht den unsichtbaren Wert sichtbar · Trust-Seite
+> (local-only + Sunset + Export + Stop beim Broker). Register: `E-C134`–`E-C138`.
+
 ## D1 — Funnel
 
 ```
