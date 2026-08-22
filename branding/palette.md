@@ -1,11 +1,29 @@
 # FixedR — Farbwelt (A2)
 
-Dark-first (Trading-Kontext). Bewusster Bruch mit der Geld-PnL-Welt: **kein Grün/Rot als
-Signalfarben** — die Signalfarbe gehört dem R, nach dem Vorbild von Avionik-Instrumenten.
-Zwei Paletten zur Auswahl (Gate G1). Beide teilen die Grundtöne, sie unterscheiden sich in der
-Signalfarbe.
+**⚠️ Revidiert am 2026-08-22 (Michael): HELL ist die Leitfassung, nicht Dark.** Grund: Die
+Anwendung bekommt Hell als Standard (Dark bleibt umschaltbar) — der Webauftritt folgt, damit
+Seite und Produktbilder zusammenpassen. Die dunklen Werte unten bleiben gültig für den
+Dark-Mode der Anwendung; die Website nutzt die **helle Fassung** (s. unten und
+`src/styles/global.css`).
 
-## Grundtöne (beide Paletten)
+Unverändert gilt: Bewusster Bruch mit der Geld-PnL-Welt — **kein Grün/Rot als Signalfarben**;
+die Signalfarbe gehört dem R, nach dem Vorbild von Avionik-Instrumenten.
+
+## Helle Leitfassung (Website, künftig App-Standard)
+
+| Rolle | Wert | Verwendung |
+|---|---|---|
+| `--bg` | `#FFFFFF` | Seitenhintergrund |
+| `--bg-alt` | `#F7F9FC` | abwechselnde Abschnittsbänder |
+| `--surface-2` | `#F2F5F9` | Eingabefelder, Kacheln |
+| `--line` | `#E1E7EF` | Ränder, Trennlinien |
+| `--text` | `#101623` | Fließtext |
+| `--muted` | `#59617A` | Sekundärtext |
+| `--signal` | `#B37B00` | R-Werte, Links (kontraststark auf Hell) |
+| `--signal-bright` | `#FFB000` | Flächen: Knöpfe, Akzentlinien |
+| `--signal-bg` | `#FFF6E5` | Hervorhebungskästen |
+
+## Dunkle Fassung (App-Dark-Mode) — Grundtöne
 
 | Rolle | Wert | Verwendung |
 |---|---|---|

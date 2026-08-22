@@ -6,82 +6,148 @@ import Horizon from '../components/illus/Horizon.astro';
 import Distribution from '../components/illus/Distribution.astro';
 import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
 import RCalendar from '../components/illus/RCalendar.astro';
+import CockpitMock from '../components/illus/CockpitMock.astro';
 ---
-<Base>
+<Base bare>
+  <!-- Hero -->
   <section class="hero">
-    <img src="/wortmarke.svg" alt="FixedR" width="243" height="90" />
-    <p class="tagline">your trading cockpit.</p>
-    <h1>The trading cockpit that shows you risk, not&nbsp;money.</h1>
-    <p class="lede">
-      Built for prop traders. Every position starts from a fixed stop-loss, every result is
-      measured in <span class="r-value">R</span> — and the one number that makes you tilt
-      never appears on screen.
-    </p>
-    <p style="color: var(--muted); max-width: 34rem; margin: 0.4rem auto 1rem;">
-      If an evaluation has ever died on you in one bad afternoon, you already know:
-      the problem wasn't your analysis.
-    </p>
-    <p>
-      <a class="btn" href="/waitlist">Join the waitlist</a>
-      <a class="btn ghost" href="/manifesto">Why no money?</a>
-    </p>
-    <p style="color: var(--muted); font-size: 0.9rem;">Windows app · works with MetaTrader &amp; NinjaTrader</p>
-  </section>
+    <div class="wrap">
+      <p class="eyebrow">For prop traders · Windows app</p>
+      <h1>The trading cockpit that shows you risk, not money.</h1>
+      <p class="lede">
+        Place trades across your funded accounts from one screen. Every position starts from
+        a fixed stop, every result is measured in <span class="r-value">R</span> — and the
+        number that makes you tilt is nowhere on screen.
+      </p>
+      <div class="actions">
+        <a class="btn" href="/waitlist">Join the waitlist</a>
+        <a class="btn ghost" href="/manifesto">Why no money?</a>
+      </div>
+      <p class="meta">
+        Works with <strong>MetaTrader</strong> &amp; <strong>NinjaTrader</strong> ·
+        runs on your machine · no cloud account
+      </p>
 
-  <section>
-    <h2 style="text-align:center">Six mechanics. One purpose: keep you inside your rules.</h2>
-    <div class="grid">
-      <div class="card">
-        <StopShield />
-        <h3>Mandatory stop-loss</h3>
-        <p>No stop, no trade. The risk of every position is fixed before entry — not negotiated with yourself afterwards.</p>
-      </div>
-      <div class="card">
-        <RScale />
-        <h3>Position size from risk</h3>
-        <p>You decide the fraction of the account to risk. FixedR computes the lot size from your stop distance. Backwards — the only sane direction.</p>
-      </div>
-      <div class="card">
-        <Horizon />
-        <h3>Money stays out of sight</h3>
-        <p>Results, targets, drawdown — everything is denominated in R. What you don't stare at can't make you tilt.</p>
-      </div>
-      <div class="card">
-        <Distribution />
-        <h3>One trade, many accounts</h3>
-        <p>Place a trade once, distribute it across your funded accounts by rule. If an account isn't configured, FixedR refuses loudly — it never guesses.</p>
-      </div>
-      <div class="card">
-        <LayoutMosaic />
-        <h3>Multi-monitor layouts</h3>
-        <p>Charts, journal, risk panel — arranged across screens the way a cockpit arranges instruments: everything where your eyes expect it.</p>
-      </div>
-      <div class="card">
-        <RCalendar />
-        <h3>The R calendar</h3>
-        <p>Your month in R, day by day. Progress you can compare across accounts, account sizes and years.</p>
+      <div class="stage">
+        <div class="bar">
+          <i></i><i></i><i></i>
+          <span>FixedR — your trading cockpit.</span>
+        </div>
+        <div class="body"><CockpitMock /></div>
       </div>
     </div>
   </section>
 
-  <section class="callout">
-    <h2 style="margin-top:0.4rem">Why no money?</h2>
-    <p>
-      Prop trading is a percentage game: drawdown limits, profit targets, consistency rules —
-      all defined relative to account size. And the balance of a challenge account is notional
-      anyway — there is no money in it. What's real is your distance to the limit and to the
-      target, and that is exactly what FixedR shows you. The money number adds nothing but
-      emotion, so FixedR removes it entirely. Not a setting. Not a toggle. It's simply not there.
-    </p>
-    <p><a href="/manifesto">Read the manifesto →</a></p>
+  <!-- Abgrenzung: was es ist -->
+  <section class="alt">
+    <div class="wrap">
+      <div class="section-head center">
+        <p class="eyebrow">Not another journal</p>
+        <h2>Most tools analyze the trade after it's gone.</h2>
+        <p>
+          FixedR sits where the decision happens. It places the order, sizes it from your risk,
+          and records the whole thing on the way through — so the journal fills itself and the
+          rules apply <em>before</em> the trade exists, not in the review afterwards.
+        </p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="illu"><StopShield /></div>
+          <h3>Mandatory stop-loss</h3>
+          <p>No stop, no trade. Risk is fixed before entry — not renegotiated with yourself while the position runs.</p>
+        </div>
+        <div class="card">
+          <div class="illu"><RScale /></div>
+          <h3>Position size from risk</h3>
+          <p>You set the risk, FixedR computes the size from your stop distance. Backwards from the usual — and the only sane direction.</p>
+        </div>
+        <div class="card">
+          <div class="illu"><Horizon /></div>
+          <h3>Money stays out of sight</h3>
+          <p>Results, targets, drawdown headroom — all in R. No money mode, no toggle. The absence is the feature.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section style="text-align:center; padding: 2rem 0 3rem;">
-    <h2>Built local-first</h2>
-    <p style="max-width: 34rem; margin: 0.8rem auto;">
-      FixedR runs on your machine. Your journal and account data live in a local database —
-      this website doesn't track you either.
-    </p>
-    <p><a class="btn" href="/waitlist">Join the waitlist</a></p>
+  <!-- Feature-Bänder -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Built for funded accounts</p>
+        <h2>One trade, every account, one set of rules.</h2>
+      </div>
+
+      <div class="feature-row">
+        <div class="illu-box"><Distribution /></div>
+        <div>
+          <h2>Distribute a trade across accounts</h2>
+          <p>
+            Trading several funded accounts means executing the same idea several times, by hand,
+            under time pressure. In FixedR you place it once and it goes out by your configuration.
+          </p>
+          <p>
+            And a hard promise: <strong>without configuration, nothing is guessed.</strong> An
+            unconfigured account stops the distribution with a loud error instead of quietly
+            doing something almost right.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row flip">
+        <div class="illu-box"><LayoutMosaic /></div>
+        <div>
+          <h2>Multi-monitor layouts</h2>
+          <p>
+            A cockpit is an arrangement of instruments, each in a fixed place. Compose charts,
+            journal, risk panel and accounts across your screens and save the arrangement — so
+            during the session your eyes travel, not your windows.
+          </p>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <div class="illu-box"><RCalendar /></div>
+        <div>
+          <h2>Your month in R</h2>
+          <p>
+            Because R is defined by your own risk, the record stays comparable across accounts,
+            account sizes and years. Scale from a 10k account to a 100k and the calendar reads
+            exactly the same — that's the point.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manifest-Teaser -->
+  <section class="alt">
+    <div class="wrap">
+      <div class="section-head center">
+        <p class="eyebrow">The thesis</p>
+        <h2>There is no money in a challenge account.</h2>
+        <p>
+          The balance of a funded account is notional — it isn't your money, and often not
+          literal capital at all. What's real is your distance to the drawdown limit and to the
+          target, both defined in percent. A currency display suggests a concreteness that
+          doesn't exist. So we removed it.
+        </p>
+        <p style="margin-top:1.4rem"><a class="btn ghost" href="/manifesto">Read the manifesto</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abschluss-CTA -->
+  <section>
+    <div class="wrap">
+      <div class="section-head center" style="margin-bottom:0">
+        <h2>Founders circle first.</h2>
+        <p>
+          FixedR is rolling out deliberately: a small group of prop traders first, then the
+          waitlist, in order of signup.
+        </p>
+        <p style="margin-top:1.6rem"><a class="btn" href="/waitlist">Join the waitlist</a></p>
+      </div>
+    </div>
   </section>
 </Base>

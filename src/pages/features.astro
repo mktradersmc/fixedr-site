@@ -18,7 +18,7 @@ import RCalendar from '../components/illus/RCalendar.astro';
   </p>
 
   <div class="feature-row">
-    <div class="illu"><StopShield /></div>
+    <div class="illu-box"><StopShield /></div>
     <div>
       <h2>Mandatory stop-loss</h2>
       <p>
@@ -29,8 +29,8 @@ import RCalendar from '../components/illus/RCalendar.astro';
     </div>
   </div>
 
-  <div class="feature-row">
-    <div class="illu"><RScale /></div>
+  <div class="feature-row flip">
+    <div class="illu-box"><RScale /></div>
     <div>
       <h2>Position size from risk</h2>
       <p>
@@ -50,7 +50,7 @@ import RCalendar from '../components/illus/RCalendar.astro';
   </div>
 
   <div class="feature-row">
-    <div class="illu"><Horizon /></div>
+    <div class="illu-box"><Horizon /></div>
     <div>
       <h2>R-only display</h2>
       <p>
@@ -61,8 +61,8 @@ import RCalendar from '../components/illus/RCalendar.astro';
     </div>
   </div>
 
-  <div class="feature-row">
-    <div class="illu"><Distribution /></div>
+  <div class="feature-row flip">
+    <div class="illu-box"><Distribution /></div>
     <div>
       <h2>One trade, many accounts</h2>
       <p>
@@ -76,7 +76,7 @@ import RCalendar from '../components/illus/RCalendar.astro';
   </div>
 
   <div class="feature-row">
-    <div class="illu"><LayoutMosaic /></div>
+    <div class="illu-box"><LayoutMosaic /></div>
     <div>
       <h2>Multi-monitor layouts</h2>
       <p>
@@ -87,8 +87,8 @@ import RCalendar from '../components/illus/RCalendar.astro';
     </div>
   </div>
 
-  <div class="feature-row">
-    <div class="illu"><RCalendar /></div>
+  <div class="feature-row flip">
+    <div class="illu-box"><RCalendar /></div>
     <div>
       <h2>The R calendar</h2>
       <p>
@@ -106,23 +106,3 @@ import RCalendar from '../components/illus/RCalendar.astro';
   </section>
 </Base>
 
-<style>
-  .feature-row {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 2rem;
-    align-items: center;
-    margin: 2.6rem 0;
-  }
-  .feature-row .illu {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 1rem;
-  }
-  .feature-row h2 { margin-top: 0; }
-  @media (max-width: 640px) {
-    .feature-row { grid-template-columns: 1fr; }
-    .feature-row .illu { max-width: 300px; }
-  }
-</style>

@@ -1,5 +1,5 @@
 ---
-// Grund-Layout: Head (SEO/OG), Header-Nav, Footer. Keine Tracker, keine externen
+// Grund-Layout: Head (SEO/OG), Kopfleiste, Fußzeile. Keine Tracker, keine externen
 // Ressourcen — Fonts kommen aus node_modules und werden von Astro lokal gebündelt.
 import '@fontsource-variable/inter';
 import '@fontsource/jetbrains-mono/400.css';
@@ -12,8 +12,10 @@ interface Props {
   title?: string;
   description?: string;
   narrow?: boolean;
+  /** Seiten mit eigenen <section>-Bändern setzen das Innen-Wrapping selbst. */
+  bare?: boolean;
 }
-const { title, description = DESCRIPTION, narrow = false } = Astro.props;
+const { title, description = DESCRIPTION, narrow = false, bare = false } = Astro.props;
 const fullTitle = title ? `${title} — ${SITE_TITLE}` : `${SITE_TITLE} — your trading cockpit.`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -27,6 +29,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <meta name="theme-color" content="#FFFFFF" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -39,11 +42,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <header class="site">
       <div class="inner">
         <a class="logo" href="/" aria-label="FixedR home">
-          <img src="/wortmarke.svg" alt="FixedR" width="81" height="30" />
+          <img src="/wortmarke.svg" alt="FixedR" width="76" height="28" />
         </a>
         <nav>
-          <a href="/manifesto">Manifesto</a>
           <a href="/features">Features</a>
+          <a href="/manifesto">Manifesto</a>
           <a href="/faq">FAQ</a>
           <a href="/blog">Blog</a>
           <a class="cta" href="/waitlist">Join the waitlist</a>
@@ -51,7 +54,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       </div>
     </header>
     <main class={narrow ? 'narrow' : undefined}>
-      <slot />
+      {bare ? <slot /> : <div class="wrap"><slot /></div>}
     </main>
     <footer class="site">
       <div class="inner">
