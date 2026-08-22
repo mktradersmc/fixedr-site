@@ -17,6 +17,38 @@ ausgegeben (zahlungsbereit), sucht aktiv in Foren/Discords nach der Ursache — 
 umgekehrt funktioniert es nicht. Die Home trägt diesen Winkel seit 2026-08-21 („If an
 evaluation has ever died on you in one bad afternoon…").
 
+### Die offene Kernfrage: Nachfrage oder Nischenblindheit? (Michael 2026-08-22)
+
+Zwei Tiefenrecherchen haben gezeigt: „Geld ausblenden" existiert bei Wettbewerbern nur als
+**Umschalter** (TradesViz Hide-PnL, TradeZella Privacy-Mode), nie als Produktgrundlage. Für diese
+Leerstelle gibt es genau zwei Erklärungen, und **beide sind derzeit gleich plausibel**:
+
+1. **Nischenblindheit** — die Kategorie ist auf Geld geeicht, niemand hat die Frage gestellt.
+2. **Es gibt schlicht keine Nachfrage** — Trader *wollen* Geld sehen, und die Leerstelle ist
+   Marktweisheit, kein blinder Fleck.
+
+**Das ist keine Recherche-Frage.** Keine Quelle der Welt beantwortet sie; sie wird empirisch
+beantwortet — und zwar billig, weil die Messinstrumente schon im Plan stehen:
+
+| Instrument | Was es misst | Kosten |
+|---|---|---|
+| **Stufe 2** (Michael + Freund, `E-C111`) | Nutzt es der Erfahrung nach? | ✅ läuft, Befund positiv (n=2, Eigenerfahrung — kein Marktbeleg, aber Existenzbeleg) |
+| **Diese Website + Warteliste** | Melden sich Fremde an, obwohl die Seite mit „kein Geld" AUFMACHT? | ≈ 0 € |
+| **Stufe 3** (dritter Bekannter) | Hält die These bei jemandem, der die Idee nicht mitentwickelt hat? | ≈ 0 € |
+| **Stufe 4** (Founders) | Zahlt jemand dafür? | erst hier fällt die Antwort |
+
+**Konsequenz für diese Seite:** Der Hero führt die These bewusst offensiv („shows you risk, not
+money") statt sie zu verstecken. Damit ist die Warteliste kein bloßer Sammelbehälter, sondern der
+**Test der Positionierung** — wer sich anmeldet, hat die These gelesen und trotzdem (oder deswegen)
+geklickt. Bleiben die Anmeldungen bei vorhandenem Blog-Verkehr aus, ist das das erste ernsthafte
+Signal für Erklärung 2. Genau deshalb steht kein zweiter, weicherer CTA daneben — er würde die
+Messung verwässern.
+
+**Nicht behaupten:** dass niemand sonst Geld ausblenden kann (falsch, s. `product\06 §3a`). Die
+Website tut es auch nirgends — sie beschreibt, was FixedR tut und warum, und überlässt das Urteil
+dem Leser. Diese Zurückhaltung ist nach den Recherchen kein Understatement mehr, sondern
+Faktentreue.
+
 **Planungsgröße Akquise:** Prop-Trader churnen strukturell; realistischer LTV eher 3–6 Monate
 als 24. Konsequenz: bezahlte Akquise trägt sich nicht — Content, Community, Empfehlungen sind
 nicht Sparsamkeit, sondern das einzig tragfähige Modell. (Deckt sich mit dem Nullbudget-Plan D4.)
