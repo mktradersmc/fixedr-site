@@ -7,6 +7,8 @@ import Distribution from '../components/illus/Distribution.astro';
 import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
 import RCalendar from '../components/illus/RCalendar.astro';
 import CockpitMock from '../components/illus/CockpitMock.astro';
+import PayoutLock from '../components/illus/PayoutLock.astro';
+import DynamicRisk from '../components/illus/DynamicRisk.astro';
 ---
 <Base bare>
   <!-- Hero -->
@@ -114,6 +116,52 @@ import CockpitMock from '../components/illus/CockpitMock.astro';
             Because R is defined by your own risk, the record stays comparable across accounts,
             account sizes and years. Scale from a 10k account to a 100k and the calendar reads
             exactly the same — that's the point.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mehrere Konten: der Blickwinkel, den nur eine übergreifende Anbindung hat -->
+  <section class="alt">
+    <div class="wrap">
+      <div class="section-head center">
+        <p class="eyebrow">Several funded accounts</p>
+        <h2>Your book is the unit. Not one account.</h2>
+        <p>
+          Risk tools live inside one platform: a NinjaTrader add-on guards NinjaTrader accounts,
+          a MetaTrader script guards MetaTrader accounts, a firm's dashboard guards its own.
+          FixedR connects all of them at once — so the rules can apply to the trader, not to
+          a single login.
+        </p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="illu"><PayoutLock /></div>
+          <h3>Protect the payout</h3>
+          <p>
+            Once an account is eligible for a payout, the money stops being hypothetical — and
+            that's exactly when accounts get blown. FixedR can pause trading on that account
+            until you've taken the money out. Every other risk tool protects you from a loss;
+            this one protects a win.
+          </p>
+        </div>
+        <div class="card">
+          <div class="illu"><Distribution /></div>
+          <h3>Pick the accounts</h3>
+          <p>
+            Send a trade to all your accounts, or to the ones you choose. Different firms,
+            different platforms, one order ticket — sized correctly for each account rather
+            than copied blindly.
+          </p>
+        </div>
+        <div class="card">
+          <div class="illu"><DynamicRisk /></div>
+          <h3>Risk that follows a rule</h3>
+          <p>
+            One R doesn't have to be the same fraction forever. Let it follow the state of the
+            account — smaller in drawdown, larger near target — written down as a rule in the
+            account profile, not decided in the moment.
           </p>
         </div>
       </div>
