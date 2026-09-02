@@ -16,18 +16,27 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
   title="Product"
   description="What FixedR does the day you connect an account: mandatory stop-loss, position size from risk, R-only display, multi-account distribution, synchronised multi-timeframe layouts, and what's still being built."
 >
-  <h1>Everything here starts working the day you connect an account.</h1>
-  <p style="max-width: 44rem; color: var(--muted); font-size: 1.08rem;">
-    This is the first of two things FixedR does. The mechanics below run today — no setup
-    beyond connecting your accounts. The second layer, the process that carries you across
-    months rather than a single trade, lives on <a href="/methodology">Methodology</a>.
-  </p>
+  {/* H1/Eyebrow nach Kanvas 2026-09-02 ("Everything here starts working the day you
+      connect an account." → "Two groups. Not a feature list with asterisks."). Der
+      Absatz bleibt: er trägt den Querverweis auf /methodology, den das Kanvas nicht
+      abbildet — s. Protokoll. */}
+  <div class="page-hero tint" style="padding-top: 0;">
+    <div class="wrap" style="padding: 0;">
+      <p class="eyebrow">What it does on your first trade</p>
+      <h1>Two groups. Not a feature list with asterisks.</h1>
+      <p class="lede" style="max-width: 44rem; margin-left: auto; margin-right: auto;">
+        This is the first of two things FixedR does. The mechanics below run today — no setup
+        beyond connecting your accounts. The second layer, the process that carries you across
+        months rather than a single trade, lives on <a href="/methodology">Methodology</a>.
+      </p>
+    </div>
+  </div>
 
-  <!-- In the build today -->
+  <!-- In the build today — Gruppenkopf nach Kanvas: H2 + Pille statt Eyebrow + Zweit-H2. -->
   <section style="padding-top: 2.5rem;">
-    <div class="section-head">
-      <p class="eyebrow">In the build today</p>
-      <h2>What the software already does</h2>
+    <div class="group-head">
+      <h2>In the build today</h2>
+      <span class="reifegrad reifegrad-built">built</span>
     </div>
 
     <div class="feature-row">
@@ -125,7 +134,7 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
           approach runs into the same wall.
         </p>
       </div>
-      <div class="grid">
+      <div class="grid cols-2">
         <div class="card">
           <h3>Checking balances in the broker terminal or firm dashboard</h3>
           <p>
@@ -167,18 +176,20 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
     </div>
   </section>
 
-  <!-- On the way -->
+  <!-- On the way — Gruppenkopf nach Kanvas: H2 + Pille statt Eyebrow + Zweit-H2. -->
   <section>
+    <div class="group-head">
+      <h2>On the way — and what shapes it</h2>
+      <span class="reifegrad reifegrad-planned">planned</span>
+    </div>
     <div class="section-head">
-      <p class="eyebrow">On the way — and what shapes it</p>
-      <h2>What isn't built yet, said plainly</h2>
       <p>
         This is not a hedge. Building these with the first traders who use FixedR is the
         point of the founders circle — the record below is honest about what still needs to
         be built, and that's the invitation, not a caveat.
       </p>
     </div>
-    <div class="grid">
+    <div class="grid cols-2">
       <div class="card">
         <h3>Automatic trade documentation <ReifegradChip id="auto-documentation" /></h3>
         <p>The plan sitting next to the result, without typing it up after the fact.</p>
