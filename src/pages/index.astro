@@ -61,12 +61,16 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
   </section>
 
   <!-- R1 (product\10 §2): Kontrast gegen die LAGE, nicht gegen andere Journale.
-       War: "Not another journal" / "Most tools analyze the trade after it's gone." -->
+       War: "Not another journal" / "Most tools analyze the trade after it's gone."
+       Eyebrow/H2 nach Kanvas 2026-09-02 (E-C210: Kanvas ist Vorgabe) — s. Protokoll. -->
   <section class="alt">
     <div class="wrap">
       <div class="section-head center">
-        <p class="eyebrow">Where the decision happens</p>
-        <h2>The journal fills itself, because the tool placed the order.</h2>
+        <p class="eyebrow">The journal fills itself</p>
+        <h2>The rules apply before the trade exists.</h2>
+        <div style="display: flex; justify-content: center; margin: 0.9rem 0 0.2rem;">
+          <span class="reifegrad reifegrad-built">built</span>
+        </div>
         <p>
           FixedR sits where the decision happens. It places the order, sizes it from your risk,
           and records the whole thing on the way through. The rules apply <em>before</em> the
@@ -163,12 +167,17 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
   </section>
 
   <!-- R1 (product\10 §2): Kontrast gegen die LAGE, nicht gegen Firmen.
-       War: "a NinjaTrader add-on guards NinjaTrader accounts, a MetaTrader script …" -->
+       War: "a NinjaTrader add-on guards NinjaTrader accounts, a MetaTrader script …"
+       Eyebrow nach Kanvas 2026-09-02 ("Several funded accounts" → "One order, every
+       account"); H2 stand bereits identisch im Kanvas — s. Protokoll. -->
   <section class="alt">
     <div class="wrap">
       <div class="section-head center">
-        <p class="eyebrow">Several funded accounts</p>
+        <p class="eyebrow">One order, every account</p>
         <h2>Your risk rules apply to you, across every account you trade.</h2>
+        <div style="display: flex; justify-content: center; margin: 0.9rem 0 0.2rem;">
+          <span class="reifegrad reifegrad-built">built</span>
+        </div>
         <p>
           Risk tools usually live inside a single platform, tied to a single login — each
           account enforcing its own rules alone, with no picture of you as a trader across all
@@ -218,8 +227,13 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
   <section class="ink">
     <div class="wrap">
       <div class="section-head center">
-        <p class="eyebrow">The thesis</p>
-        <h2>There is no money in a challenge account.</h2>
+        {/* Eyebrow/H2 nach Kanvas 2026-09-02 ("The thesis" → "What's on the screen",
+            "There is no money in a challenge account." → "There's no money in this
+            account. Only a number and a scale."). Absatz + Manifest-Link bleiben:
+            das Kanvas zeigt hier keinen Link, die Seite braucht ihn als Übergang zu
+            /manifesto — s. Protokoll. */}
+        <p class="eyebrow">What's on the screen</p>
+        <h2>There's no money in this account. Only a number and a scale.</h2>
         <p>
           The balance of a funded account is notional — it isn't your money, and often not
           literal capital at all. What's real is your distance to the drawdown limit and to the
@@ -231,11 +245,13 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
     </div>
   </section>
 
-  <!-- Abschluss-CTA -->
-  <section>
+  <!-- Abschluss-CTA — Eyebrow + H2 nach Kanvas 2026-09-02, Absatz bleibt (kohärent mit
+       der neuen H2), Fläche jetzt "alt" wie im Kanvas. -->
+  <section class="alt">
     <div class="wrap">
       <div class="section-head center" style="margin-bottom:0">
-        <h2>Founders circle first.</h2>
+        <p class="eyebrow">Founders circle</p>
+        <h2>A small group of prop traders starts here, and shapes what comes next.</h2>
         <p>
           FixedR is rolling out deliberately: a small group of prop traders first, then the
           waitlist, in order of signup.
