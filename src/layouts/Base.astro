@@ -16,6 +16,11 @@ interface Props {
 const { title, description = DESCRIPTION, narrow = false, bare = false } = Astro.props;
 const fullTitle = title ? `${title} — ${SITE_TITLE}` : `${SITE_TITLE} — ${TAGLINE}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// Aktive Seite in der Kopfleiste (Kanvas 2026-09-02): Marke statt Neutral auf dem
+// Nav-Ziel, das der aktuellen Seite entspricht. Nur /product, /methodology, /trust
+// tragen ein eigenes Nav-Ziel — Home hat keins, deshalb bleibt dort alles neutral.
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (path === href ? 'page' : undefined);
 ---
 <!doctype html>
 <html lang="en">
@@ -55,12 +60,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           {/* product §3 Stufe 1: /product und /methodology sind die zwei
               Stockwerke des Angebots (R2), /trust die Vertrauensseite (§6). Reihenfolge
               folgt der Kaufentscheidung: was es tut, wie es bindet, warum man ihm traut. */}
-          <a href="/product">Product</a>
-          <a href="/methodology">Methodology</a>
-          <a href="/trust">Trust</a>
-          <a href="/manifesto">Manifesto</a>
-          <a href="/faq">FAQ</a>
-          <a href="/blog">Blog</a>
+          <a href="/product" aria-current={isActive('/product')}>Product</a>
+          <a href="/methodology" aria-current={isActive('/methodology')}>Methodology</a>
+          <a href="/trust" aria-current={isActive('/trust')}>Trust</a>
+          <a href="/manifesto" aria-current={isActive('/manifesto')}>Manifesto</a>
+          <a href="/faq" aria-current={isActive('/faq')}>FAQ</a>
+          <a href="/blog" aria-current={isActive('/blog')}>Blog</a>
           <a class="cta" href="/waitlist">Join the waitlist</a>
         </nav>
       </div>
@@ -70,9 +75,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </main>
     <footer class="site">
       <div class="inner">
-        <span>© 2026 FixedR</span>
-        <a href="/imprint">Imprint</a>
-        <a href="/privacy">Privacy</a>
+        {/* Kanvas 2026-09-02: „© FixedR" ohne Jahr, mono. */}
+        <span class="copy mono">© FixedR</span>
+        <nav>
+          <a href="/product">Product</a>
+          <a href="/methodology">Methodology</a>
+          <a href="/trust">Trust</a>
+          <a href="/faq">FAQ</a>
+          <a href="/blog">Blog</a>
+          <a href="/imprint">Imprint</a>
+          <a href="/privacy">Privacy</a>
+        </nav>
         <span class="notrack">This site sets no cookies and loads nothing from third parties.</span>
       </div>
     </footer>
