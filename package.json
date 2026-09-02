@@ -13,6 +13,7 @@
     "guards": "node tools/guards.mjs",
     "guards:dist": "node tools/guards.mjs --dist",
     "guards:rotprobe": "node tools/guards-rotprobe.mjs",
+    "guards:leadmagnet": "node tools/guards-lead-magnet.mjs",
     "assets": "node tools/gen-assets.mjs",
     "deploy-check": "node tools/deploy-gate.mjs"
   },

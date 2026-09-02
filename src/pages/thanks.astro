@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+
+// FXR-45: erreichbar nur nach einem Warteliste-Absenden — kein Grund, dass sie in der
+// Suche auftaucht. `Base` bekommt hier keine neue Prop (nicht anfassen); die Seite trägt
+// ihr eigenes Robots-Meta.
+const guidePath = '/downloads/fixedr-guide.pdf'; // Platzhalter-Pfad, PDF selbst folgt später
+---
+<meta name="robots" content="noindex, nofollow" />
+<Base
+  title="Thanks"
+  description="You're on the FixedR waitlist. Your guide is one tap away."
+  narrow
+>
+  <h1>You're on the list</h1>
+  <p>
+    Check your inbox — we've sent the same link below to your email address, so you have it
+    either way.
+  </p>
+  <p>
+    <a class="btn" href={guidePath}>Get your guide</a>
+  </p>
+  <p style="color: var(--muted); font-size: 0.9rem;">
+    Eight short chapters, about 20 minutes: the problems that end a challenge more often than the
+    strategy does, and what closes each one structurally. A few short follow-up emails come next,
+    ending with an invitation once the next window opens.
+  </p>
+  <hr />
+  <p style="color: var(--muted); font-size: 0.9rem;">
+    Wrong inbox, or want off the list? Details in the <a href="/privacy">privacy policy</a>.
+  </p>
+</Base>

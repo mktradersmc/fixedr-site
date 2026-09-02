@@ -639,3 +639,13 @@ als zahlender Sponsor (Vendor-Account 499 $/Monat), sofortige Kündigung ohne Vo
 verstorben, Betrieb läuft weiter. Vendor-Regeln: keine Traffic-Links, Selbstpromotion = Spam,
 auch Sponsoren dürfen Posts nicht zum Marketing nutzen; Antworten auf Nutzerfragen sind erlaubt,
 solange kein Sales-Pitch, keine Performance-Angaben, keine Testimonials.
+
+---
+
+## Verweis: Pre-Sell-Texte (`FXR-45`, 2026-09-02)
+
+Die Rohtexte für Lead-Magnet, Sequenz und Danke-Seite sind Michaels operative Quelle in diesem
+Repo (`src/content/lead-magnet/*.md`, `marketing/SEQUENZ.md`, `src/pages/thanks.astro`) — die
+Spiegelpflicht dieses Dokuments wird hier über einen Verweis statt einer Kopie erfüllt: die
+Zusammenfassung (Kapitelliste mit Alternative + Mechanismus, Sequenz-Tabelle) steht in
+`..\..\forge-wiki\awesome-cockpit\product\07-marketing-fundament.md` Abschnitt **D9**.

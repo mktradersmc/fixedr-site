@@ -22,6 +22,10 @@ const mailtoHref = `mailto:${WAITLIST_EMAIL}?subject=${encodeURIComponent('Fixed
 
   {hasEndpoint ? (
     <form class="waitlist" action={WAITLIST_ENDPOINT} method="POST">
+      {/* FXR-45: Redirect nach dem Absenden zur Danke-Seite. `_next` ist die
+          Formspree-Konvention; der Feldname ist Dienst-abhängig (② noch offen,
+          `FXR-44`) und muss beim Anbieter-Entscheid nachgezogen werden. */}
+      <input type="hidden" name="_next" value="/thanks" />
       <div>
         <label for="email">Email</label>
         <input type="email" id="email" name="email" required autocomplete="email" />
@@ -44,6 +48,11 @@ const mailtoHref = `mailto:${WAITLIST_EMAIL}?subject=${encodeURIComponent('Fixed
       <p style="color: var(--muted); font-size: 0.9rem;">
         This opens your mail app with a prefilled message to {WAITLIST_EMAIL} — tell us what
         you trade and which firms you trade with, if you like.
+      </p>
+      {/* mailto: löst keine Formular-Navigation aus — kein automatischer Redirect
+          möglich, deshalb ein manueller Weiterweg zur Danke-Seite. */}
+      <p style="color: var(--muted); font-size: 0.9rem;">
+        Already sent it? <a href="/thanks">Continue to your guide</a>.
       </p>
     </>
   )}
