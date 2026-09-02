@@ -4,7 +4,9 @@ import Base from '../layouts/Base.astro';
 // FXR-45: erreichbar nur nach einem Warteliste-Absenden — kein Grund, dass sie in der
 // Suche auftaucht. `Base` bekommt hier keine neue Prop (nicht anfassen); die Seite trägt
 // ihr eigenes Robots-Meta.
-const guidePath = '/downloads/fixedr-guide.pdf'; // Platzhalter-Pfad, PDF selbst folgt später
+// FXR-45: die echte PDF liegt seit `tools/build-lead-magnet.mjs` (npm run
+// lead-magnet:pdf) unter `public/downloads/fixedr-guide.pdf` — kein Platzhalter mehr.
+const guidePath = '/downloads/fixedr-guide.pdf';
 ---
 <meta name="robots" content="noindex, nofollow" />
 <Base

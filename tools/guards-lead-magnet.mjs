@@ -17,6 +17,12 @@ const root = join(fileURLToPath(new URL('.', import.meta.url)), '..');
 const TARGETS = [
   { dir: join(root, 'src', 'content', 'lead-magnet'), exts: new Set(['.md']) },
   { dir: join(root, 'marketing'), file: 'SEQUENZ.md' },
+  // FXR-45 §3: die Quelle allein belegt nicht, was ausgeliefert wird — die gerenderte
+  // Druckseite bekommt zusätzliche Absätze (Titel/TOC/Intro/Schluss) außerhalb der
+  // geprüften Markdown-Dateien. Wie `SEQUENZ.md` oben: existiert die Datei nicht (vor
+  // dem ersten `astro build`), wird sie von der Sammelschleife unten still übersprungen
+  // — kein Abbruch, nur bei bereits vorhandenem dist/ auch tatsächlich mitgeprüft.
+  { dir: join(root, 'dist', 'lead-magnet'), file: 'print.html' },
 ];
 
 function* walk(dir, exts) {
@@ -67,4 +73,4 @@ if (findings.length) {
   for (const f of findings) console.error('  ' + f + '\n');
   process.exit(1);
 }
-console.log(`Wächter grün: ${ALL_RULES.length} Regeln über ${files.length} Datei(en) (Lead-Magnet + Sequenz).`);
+console.log(`Wächter grün: ${ALL_RULES.length} Regeln über ${files.length} Datei(en) (Lead-Magnet + Sequenz + Druckseite, falls gebaut).`);

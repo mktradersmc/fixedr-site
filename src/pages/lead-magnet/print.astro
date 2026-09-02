@@ -1,0 +1,185 @@
+---
+// FXR-45 — Druckseite für den Lead-Magnet. Wird NIE als Web-Seite verlinkt (kein
+// Navigationseintrag, kein Linkcheck-Ziel nötig — Auftrag ausdrücklich so): einziger
+// Zweck ist `tools/build-lead-magnet.mjs`, das genau diese Route per Edge-Headless zu
+// `public/downloads/fixedr-guide.pdf` druckt. Deshalb bewusst OHNE `Base.astro` (keine
+// Kopf-/Fußzeile, keine Site-Navigation — ein gedrucktes Heft hat keine) und mit einem
+// eigenen `noindex`-Meta, das der dist-Wächter (`tools/guards.mjs --dist`) ohnehin über
+// jede ausgelieferte Seite generisch prüft.
+//
+// Kapitel-Rohtexte werden aus `src/content/lead-magnet/*.md` gelesen — bewusst per
+// `?raw`-Import statt Content-Collections-API: die Kapiteldateien sind in keiner
+// `content/config.ts`-Collection deklariert (nicht Teil der FXR-45-Dateimenge), und die
+// Struktur ist regelmäßig genug (fester Vierer-Aufbau je Kapitel, keine verschachtelte
+// Formatierung) für einen kleinen handgeschriebenen Parser ohne neue Abhängigkeit.
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
+import '../../styles/global.css';
+import '../../styles/print.css';
+import { SITE_TITLE, TAGLINE } from '../../config';
+
+interface ParsedSection {
+  heading: string;
+  html: string;
+}
+interface ParsedChapter {
+  chapter: number;
+  title: string;
+  sections: ParsedSection[];
+}
+
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+/** Absatzblöcke -> `<p>`; eine Register-Kommentarzeile (`<!-- E-Cxxx -->`) steht in den
+ * Quelldateien OHNE Leerzeile vor dem Absatz, den sie belegt (siehe Kapitel 1), zählt
+ * beim Blank-Line-Split also zum selben Block. Deshalb werden Kommentare zuerst
+ * herausgezogen und wörtlich (unescaped) vor die Absätze gestellt — sie landen so
+ * unverändert im HTML-Quelltext, unsichtbar beim Druck/PDF, statt escaped als
+ * sichtbarer Text zu rendern (das war der erste Fund am gebauten `dist/`). */
+function paragraphsToHtml(raw: string): string {
+  const comments: string[] = [];
+  const withoutComments = raw.replace(/<!--[\s\S]*?-->/g, (m) => {
+    comments.push(m);
+    return '';
+  });
+  const paragraphs = withoutComments
+    .split(/\r?\n\r?\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => `<p>${escapeHtml(block).replace(/\r?\n/g, ' ')}</p>`);
+  return [...comments, ...paragraphs].join('\n');
+}
+
+function parseChapter(raw: string): ParsedChapter {
+  const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+  if (!m) throw new Error('Lead-Magnet-Kapitel ohne Frontmatter-Block gefunden.');
+  const [, frontmatter, bodyRaw] = m;
+  const titleMatch = frontmatter.match(/title:\s*"([^"]+)"/);
+  const chapterMatch = frontmatter.match(/chapter:\s*(\d+)/);
+  if (!titleMatch || !chapterMatch) {
+    throw new Error('Lead-Magnet-Kapitel ohne title/chapter im Frontmatter.');
+  }
+  const parts = bodyRaw.trim().split(/\r?\n(?=## )/);
+  const sections: ParsedSection[] = parts
+    .filter((p) => p.startsWith('## '))
+    .map((p) => {
+      const nl = p.indexOf('\n');
+      const heading = p.slice(3, nl === -1 ? undefined : nl).trim();
+      const body = nl === -1 ? '' : p.slice(nl + 1);
+      return { heading, html: paragraphsToHtml(body) };
+    });
+  return { chapter: Number(chapterMatch[1]), title: titleMatch[1], sections };
+}
+
+const rawModules = import.meta.glob('/src/content/lead-magnet/*.md', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+}) as Record<string, string>;
+
+const parsedAll = Object.values(rawModules).map(parseChapter);
+const toc = parsedAll.find((c) => c.chapter === 0);
+if (!toc) throw new Error('00-inhalt.md (Inhaltsverzeichnis) fehlt unter src/content/lead-magnet/.');
+const chapters = parsedAll.filter((c) => c.chapter > 0).sort((a, b) => a.chapter - b.chapter);
+if (chapters.length !== 8) {
+  throw new Error(`Erwartet 8 Kapitel, gefunden: ${chapters.length}.`);
+}
+
+// Titel = erste der zwei Varianten aus 00-inhalt.md, wörtlich übernommen (Auftrag §1).
+const tocRaw = Object.entries(rawModules).find(([path]) => path.endsWith('00-inhalt.md'))![1];
+const variantA = tocRaw.match(/\*\*A\s*—\s*"([^"]+)"\*\*/);
+if (!variantA) throw new Error('Titel-Variante A nicht in 00-inhalt.md gefunden.');
+const title = variantA[1];
+
+const pad2 = (n: number) => String(n).padStart(2, '0');
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} — {SITE_TITLE}</title>
+    {/* Eigenes Robots-Meta (keine Base.astro hier) — E-C216 gilt für JEDE ausgelieferte
+        Seite, auch eine, die nie verlinkt wird und nur als Druckvorlage existiert. */}
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body class="print-doc">
+    <section class="page title-page">
+      <img
+        class="wordmark"
+        src="/wortmarke.svg"
+        width="220"
+        height="65"
+        alt={`${SITE_TITLE} — ${TAGLINE}`}
+      />
+      <h1>{title}</h1>
+      <p class="subtitle">
+        Eight failure modes that end a challenge more often than the strategy does — and
+        what closes each one structurally.
+      </p>
+      <p class="tagline mono">{TAGLINE}</p>
+    </section>
+
+    <section class="page toc-page">
+      <h2 class="section-label">Contents</h2>
+      <ol class="toc">
+        {chapters.map((ch) => (
+          <li>
+            <span class="toc-num mono">{pad2(ch.chapter)}</span>
+            <span class="toc-title">{ch.title}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="page intro-page">
+      <h2 class="section-label">How this guide works</h2>
+      <p>
+        Each chapter follows the same shape: a problem, named as behavior rather than a
+        missing feature. What actually fixes it, stated as a requirement before any
+        product enters the picture. How the platform closes it, as one concrete
+        mechanism. And what it replaces — the alternative most prop traders reach for
+        today, in behavior, never by name.
+      </p>
+      <p>
+        Eight chapters, about 20 minutes end to end. Read them in order, or open the one
+        that matches what is happening on your account right now.
+      </p>
+    </section>
+
+    {chapters.map((ch) => (
+      <section class="page chapter-page">
+        <div class="running-head mono">
+          {SITE_TITLE} · Chapter {pad2(ch.chapter)}
+        </div>
+        <div class="chapter-num mono">{pad2(ch.chapter)}</div>
+        <h2 class="chapter-title">{ch.title}</h2>
+        <div class="chapter-body">
+          {ch.sections.map((sec) => (
+            <>
+              <h3>{sec.heading}</h3>
+              <Fragment set:html={sec.html} />
+            </>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <section class="page closing-page">
+      <h2 class="section-label">Before you go</h2>
+      <p>
+        If someone forwarded you this guide rather than you signing up yourself, the
+        waitlist is where it starts:
+      </p>
+      <p class="waitlist-url mono"><a href="https://fixedr.com/waitlist">https://fixedr.com/waitlist</a></p>
+      <p class="closing-note">
+        A short handful of follow-up emails walks through each mechanism in more detail,
+        ending with an invitation once the next window opens. Support capacity is
+        limited on purpose, so windows open in small, fixed batches rather than staying
+        open continuously.
+      </p>
+      <p class="tagline mono">{TAGLINE}</p>
+    </section>
+  </body>
+</html>

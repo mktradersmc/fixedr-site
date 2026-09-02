@@ -1,0 +1,201 @@
+/* FXR-45 — Druck-CSS für die Lead-Magnet-PDF (`/lead-magnet/print`). Nur für diese eine
+   Route gedacht: A4-Paginierung, Kolumnentitel, Seitenzahlen über einen CSS-Zähler statt
+   über Chromes eigene Kopf-/Fußzeile (die Druckpipeline ruft
+   `--no-pdf-header-footer` auf, siehe `tools/build-lead-magnet.mjs`). Tokens kommen aus
+   `global.css` (mitimportiert) — hier stehen nur Seiten-/Layoutregeln, keine neuen Farben.
+
+   `@page`/Seitenumbrüche sind Druckmedien-CSS: Chromiums `--print-to-pdf` wendet
+   `@media print` und `@page` an, ein normaler Browser-Tab (z. B. zur Sichtprüfung per
+   `astro dev`) zeigt dieselbe Gestaltung testweise auch im Bildschirmmodus, damit sich
+   die Seite ohne Druckdialog kontrollieren lässt. */
+
+@page {
+  size: A4;
+  margin: 22mm 20mm 18mm 20mm;
+}
+
+body.print-doc {
+  display: block;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 12.5pt;
+  line-height: 1.62;
+}
+
+.page {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 253mm; /* A4 (297mm) minus die @page-Ränder oben/unten */
+  padding-bottom: 16mm;
+}
+
+/* Jede Seite außer der ersten erzwingt einen Seitenumbruch davor — die Titelseite
+   startet natürlich am Anfang des Dokuments und braucht keinen eigenen Umbruch. */
+.page + .page {
+  break-before: page;
+  page-break-before: always;
+}
+
+.page {
+  counter-increment: gp;
+}
+
+.page::after {
+  content: counter(gp);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-family: var(--font-mono);
+  font-size: 9pt;
+  color: var(--faint);
+  text-align: center;
+}
+
+/* Titelseite trägt bewusst keine sichtbare Seitenzahl (Buchkonvention) — der Zähler
+   läuft trotzdem mit, damit die Folgeseiten korrekt weiterzählen. */
+.title-page::after {
+  content: none;
+}
+
+.title-page {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 253mm;
+}
+
+.title-page .wordmark {
+  width: 46mm;
+  height: auto;
+  margin-bottom: 14mm;
+}
+
+.title-page h1 {
+  font-size: 30pt;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  margin: 0 0 8mm;
+  max-width: 150mm;
+}
+
+.title-page .subtitle {
+  font-size: 13pt;
+  color: var(--muted);
+  max-width: 130mm;
+  margin: 0 0 16mm;
+}
+
+.title-page .tagline {
+  font-size: 10.5pt;
+  color: var(--brand);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 10pt;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brand);
+  margin: 0 0 10mm;
+}
+
+.toc-page ol.toc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc-page ol.toc li {
+  display: flex;
+  gap: 6mm;
+  align-items: baseline;
+  padding: 4mm 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 13.5pt;
+}
+
+.toc-page .toc-num {
+  font-family: var(--font-mono);
+  color: var(--faint);
+  font-size: 11pt;
+  min-width: 8mm;
+}
+
+.intro-page p,
+.closing-page p {
+  max-width: 145mm;
+}
+
+.closing-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 253mm;
+}
+
+.closing-page .waitlist-url {
+  font-size: 13pt;
+  margin: 6mm 0 10mm;
+}
+
+.closing-page .waitlist-url a {
+  color: var(--brand);
+}
+
+.closing-page .closing-note {
+  font-size: 11pt;
+  color: var(--muted);
+}
+
+.closing-page .tagline {
+  margin-top: 14mm;
+  font-size: 10.5pt;
+  color: var(--faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Kapitelseiten (eine je Kapitel) ─────────────────────────────────────────── */
+
+.chapter-page .running-head {
+  font-size: 9pt;
+  color: var(--faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10mm;
+}
+
+.chapter-page .chapter-num {
+  font-size: 13pt;
+  color: var(--brand);
+  margin-bottom: 2mm;
+}
+
+.chapter-page .chapter-title {
+  font-size: 22pt;
+  line-height: 1.2;
+  margin: 0 0 10mm;
+  max-width: 150mm;
+}
+
+.chapter-body h3 {
+  font-family: var(--font-mono);
+  font-size: 10pt;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--brand);
+  margin: 9mm 0 3mm;
+}
+
+.chapter-body h3:first-child {
+  margin-top: 0;
+}
+
+.chapter-body p {
+  margin: 0 0 3mm;
+  max-width: 155mm;
+}
