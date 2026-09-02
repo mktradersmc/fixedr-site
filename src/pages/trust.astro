@@ -1,0 +1,75 @@
+---
+// /trust — product\10 §6: vier Punkte, die kein größerer Anbieter glaubwürdig kopiert.
+// Kein Vergleich mit größeren Anbietern (R1) — die LAGE wird beschrieben, kein Name genannt.
+import Base from '../layouts/Base.astro';
+import ReifegradChip from '../components/ReifegradChip.astro';
+---
+<Base
+  title="Trust"
+  description="What stays on your machine, what leaves it, and why: local-only trading data, a licence check you can verify, and the stop-loss that stays with your broker no matter what happens to us."
+  narrow
+>
+  <h1>Why hand a one-person company your trading?</h1>
+  <p style="color: var(--muted); font-size: 1.08rem;">
+    That question is fair, and the honest answer isn't a promise — it's an architecture you
+    can check. Your tool is tied to an account that belongs to someone else; that's true no
+    matter who built it. Here's what changes when almost nothing leaves your machine.
+  </p>
+
+  <h2>What stays on your machine, what leaves it</h2>
+  <p>
+    Nearly everything FixedR does runs locally: broker connections, market data, the
+    application itself, your journal, your account configuration, every trade it places.
+    Exactly two things ever reach a server we operate, and nothing else does.
+  </p>
+  <div class="grid" style="margin: 1.4rem 0 2rem;">
+    <div class="card">
+      <h3>Stays on your machine</h3>
+      <p>Broker connections, market data, order execution, your journal, account
+        configuration and trading history — the whole working system.</p>
+    </div>
+    <div class="card">
+      <h3>Leaves the machine</h3>
+      <p>Only two things: a licence/subscription check, and the allocation step that decides
+        account order and per-account risk when a trade goes to several accounts at once.</p>
+    </div>
+  </div>
+  <p>
+    Neither of those two carries a price, a symbol or a trade — only what a licence check
+    needs, and the account IDs and risk percentages an allocation decision needs.
+    <ReifegradChip id="local-only" /> The server never learns what you trade.
+  </p>
+
+  <h2>The sunset clause</h2>
+  <!-- TODO Michael: exakter Sunset-Wortlaut, sobald FXR-28 gebaut ist und/oder in den AGB
+       steht (product\10 §6 Punkt 2 / §10 Frage 1: Zusage erst nach AGB, dann Seite). -->
+  <p>
+    <ReifegradChip id="sunset-clause" /> The intent, not yet the exact terms: if the signing
+    key behind the licence check ever goes silent for an extended stretch, licence enforcement
+    is meant to lapse for good — the tool keeps working, the subscription requirement doesn't
+    survive us. The precise wording isn't settled yet, so we're not going to phrase it here
+    before it is.
+  </p>
+
+  <h2>Export, on request</h2>
+  <p>
+    <ReifegradChip id="data-export" /> A committed direction, not yet built: your journal and
+    trading records should leave in an open format whenever you ask, not only while you keep
+    paying.
+  </p>
+
+  <h2>The stop-loss lives with your broker</h2>
+  <p>
+    <ReifegradChip id="stop-loss-at-broker" /> FixedR places the stop-loss as an order at your
+    broker, the same way any manual order would sit there. If our software stops running, if
+    our server disappears, if the machine you run FixedR on loses power — the stop is already
+    resting where the broker enforces it, not waiting on us to still be there.
+  </p>
+
+  <section class="callout" style="margin-top: 2.5rem;">
+    <p>
+      Trust is an architecture question first. What FixedR does with that architecture is on
+      <a href="/product">Product</a>. <a href="/waitlist">Join the waitlist →</a>
+    </p>
+  </section>
+</Base>

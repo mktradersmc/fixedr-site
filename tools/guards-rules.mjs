@@ -126,6 +126,31 @@ export const CLAIM_RULES = [
     trips: ['built-in divergence detection', 'RSI-Divergenz erkennen'],
     passes: ['indicators you configure yourself'],
   },
+
+  // ── E-C196 (c), 2026-09-01 — Erstheits-/Spitzenstellungsbehauptung ───────
+  // UWG §5: "der Erste"/"die Einzige" ist eine nachweispflichtige Tatsachenbehauptung,
+  // nicht Meinung — abmahnfähig, und die Herleitung stützt sich hier auf ungebaute
+  // Features UND einen ungemessenen Markt (L1 offen). Erlaubte Ersatzformen bleiben
+  // unberührt: Bauabsicht ("built as the only one to …") und selbstprüfbare Abwesenheit
+  // ("find the switch that removes the balance") — beides ohne Marktrang-Anspruch, also
+  // OHNE "the only <Kategorie> that/in the market/available" direkt danach.
+  {
+    id: 'erstheitsbehauptung',
+    re: /(?:\bthe first (?:tool|platform|app|software|company|cockpit|trading (?:app|tool|platform))\b|\bfirst[- ]ever\b|\bworld'?s first\b|#1\b|\bpioneer(?:s|ing|ed)?\b|\bthe only (?:tool|platform|app|software|company|product|cockpit)\s+(?:that|in the market|available)\b)/i,
+    why: 'Erstheits-/Spitzenstellungsbehauptung (UWG §5, abmahnfähig; E-C196 (c)) — nutze stattdessen eine Bauabsicht ("built as the only … to …") oder eine selbstprüfbare Abwesenheit',
+    trips: [
+      'FixedR is the first trading platform to hide your balance.',
+      'The only tool that removes money from your screen.',
+      "We are the world's first risk-first cockpit for prop traders.",
+      'FixedR pioneered R-only trading for prop firms.',
+      'The #1 cockpit for prop traders.',
+    ],
+    passes: [
+      'FixedR was built as the only tool made to remove the balance from your screen.',
+      'Open your platform. Find the switch that removes the balance.',
+      'A small group of prop traders first, then the waitlist.',
+    ],
+  },
 ];
 
 /** Markenkonsistenz: Schreibweise exakt „FixedR"; Kleinschreibung nur in Domains/Pfaden/Idents. */

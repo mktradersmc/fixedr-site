@@ -1,2 +1,5 @@
+# E-C216 (2026-09-02): die Site steht hinter einer Login-Wall auf dem Testserver und
+# geht NICHT produktiv. Nichts hier darf gecrawlt werden — siehe zusätzlich das
+# `noindex,nofollow` in jeder Seite (src/layouts/Base.astro).
 User-agent: *
-Allow: /
+Disallow: /

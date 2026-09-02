@@ -24,6 +24,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {/* E-C216 (2026-09-02): kein Produktivdeploy, die Site steht hinter einer
+        Login-Wall auf dem Testserver. JEDE Seite bleibt uncrawlbar, solange dieser
+        Zustand gilt — dazu public/robots.txt (Disallow: /) und der dist-Wächter
+        (tools/guards.mjs --dist), der den Bau bricht, wenn diese Zeile fehlt. */}
+    <meta name="robots" content="noindex,nofollow" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
@@ -35,6 +40,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:image" content={new URL('/og-image.png', Astro.site)} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="generator" content={Astro.generator} />
+    <slot name="head" />
   </head>
   <body>
     <header class="site">
@@ -46,7 +52,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           <img src="/wortmarke.svg" alt="FixedR — trade calm. by design." width="152" height="45" />
         </a>
         <nav>
-          <a href="/features">Features</a>
+          {/* product §3 Stufe 1: /product und /methodology sind die zwei
+              Stockwerke des Angebots (R2), /trust die Vertrauensseite (§6). Reihenfolge
+              folgt der Kaufentscheidung: was es tut, wie es bindet, warum man ihm traut. */}
+          <a href="/product">Product</a>
+          <a href="/methodology">Methodology</a>
+          <a href="/trust">Trust</a>
           <a href="/manifesto">Manifesto</a>
           <a href="/faq">FAQ</a>
           <a href="/blog">Blog</a>

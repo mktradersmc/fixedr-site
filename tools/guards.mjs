@@ -78,10 +78,36 @@ for (const file of walk(scanDir, exts)) {
   });
 }
 
+// ── E-C216 (2026-09-02): kein Produktivdeploy — JEDE ausgelieferte Seite muss
+// noindex,nofollow tragen. Nur im dist-Durchgang prüfbar: die Quelle setzt es einmal
+// in Base.astro, hier wird gemessen, was wirklich im HTML ankommt (jede Seite einzeln,
+// falls eine Seite Base.astro je umgeht). Kein trips/passes-Paar wie bei ALL_RULES —
+// das ist eine Anwesenheits-, keine Verbotsregel; der rote Fall ist eine dist-Datei
+// ohne die Zeile, der grüne ist der aktuelle Bau selbst (Positivprobe unten).
+let noindexGeprueft = 0;
+if (distMode) {
+  const NOINDEX_RE = /<meta\s+name="robots"\s+content="[^"]*noindex[^"]*nofollow[^"]*"/i;
+  for (const file of walk(scanDir, exts)) {
+    noindexGeprueft++;
+    const rel = relative(root, file);
+    const html = readFileSync(file, 'utf8');
+    if (!NOINDEX_RE.test(html)) {
+      findings.push(
+        `${rel} — [noindex-fehlt] Seite ohne <meta name="robots" content="noindex,nofollow"> ` +
+          `im gebauten HTML (E-C216: kein Produktivdeploy, jede Seite muss uncrawlbar sein).`
+      );
+    }
+  }
+  if (noindexGeprueft === 0) {
+    findings.push('[noindex-fehlt] dist/ enthält keine .html-Datei — Prüfung konnte nichts messen.');
+  }
+}
+
 const wo = distMode ? 'dist/ (ausgeliefertes HTML)' : 'src/ (Quellen)';
 if (findings.length) {
   console.error(`WÄCHTER ROT in ${wo} — ${findings.length} Fund(e):\n`);
   for (const f of findings) console.error('  ' + f + '\n');
   process.exit(1);
 }
-console.log(`Wächter grün: ${ALL_RULES.length} Regeln über ${dateien} Datei(en) in ${wo}.`);
+const noindexSatz = distMode ? ` + noindex-Anwesenheit über ${noindexGeprueft} Seite(n)` : '';
+console.log(`Wächter grün: ${ALL_RULES.length} Regeln über ${dateien} Datei(en) in ${wo}${noindexSatz}.`);

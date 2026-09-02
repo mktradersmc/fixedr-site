@@ -1,0 +1,208 @@
+---
+// /product — Stockwerk 1 (product\10 §4): was FixedR beim allerersten Trade tut.
+// Der Reifegrad IST die Gliederung (Befund B, product\10 §1): "In the build today" und
+// "On the way" sind zwei getrennte Gruppen, nicht eine Liste mit Sternchen.
+import Base from '../layouts/Base.astro';
+import ReifegradChip from '../components/ReifegradChip.astro';
+import StopShield from '../components/illus/StopShield.astro';
+import Distribution from '../components/illus/Distribution.astro';
+import Horizon from '../components/illus/Horizon.astro';
+import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
+import RCalendar from '../components/illus/RCalendar.astro';
+import PayoutLock from '../components/illus/PayoutLock.astro';
+import DynamicRisk from '../components/illus/DynamicRisk.astro';
+---
+<Base
+  title="Product"
+  description="What FixedR does the day you connect an account: mandatory stop-loss, position size from risk, R-only display, multi-account distribution, synchronised multi-timeframe layouts, and what's still being built."
+>
+  <h1>Everything here starts working the day you connect an account.</h1>
+  <p style="max-width: 44rem; color: var(--muted); font-size: 1.08rem;">
+    This is the first of two things FixedR does. The mechanics below run today — no setup
+    beyond connecting your accounts. The second layer, the process that carries you across
+    months rather than a single trade, lives on <a href="/methodology">Methodology</a>.
+  </p>
+
+  <!-- In the build today -->
+  <section style="padding-top: 2.5rem;">
+    <div class="section-head">
+      <p class="eyebrow">In the build today</p>
+      <h2>What the software already does</h2>
+    </div>
+
+    <div class="feature-row">
+      <div class="illu-box"><StopShield /></div>
+      <div>
+        <h2>Place the trade <ReifegradChip id="mandatory-stop" /></h2>
+        <p>
+          No stop, no trade — the constraint is structural, not a habit you keep or break.
+          Risk is fixed before entry, not renegotiated with yourself while the position runs.
+        </p>
+        <p>
+          Position size follows from that same stop: you set the risk, FixedR computes the
+          size from the stop distance. <ReifegradChip id="position-size-from-risk" />
+        </p>
+      </div>
+    </div>
+
+    <div class="feature-row flip">
+      <div class="illu-box"><Distribution /></div>
+      <div>
+        <h2>Across your accounts <ReifegradChip id="across-accounts" /></h2>
+        <p>
+          One order, sent to the accounts you choose, sized correctly for each. And a hard
+          promise: <strong>without configuration, nothing is guessed</strong> — an
+          unconfigured account stops the distribution with a loud error instead of quietly
+          doing something almost right. MetaTrader and NinjaTrader sit under one surface.
+        </p>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="illu-box"><Horizon /></div>
+      <div>
+        <h2>Read it in R <ReifegradChip id="r-only-display" /></h2>
+        <p>
+          Open positions, closed results, drawdown headroom — every number is denominated in
+          R, never in currency. No money mode, no toggle to peek.
+        </p>
+        <p>
+          Your month reads as a calendar of R values, comparable across accounts and account
+          sizes: scale from a 10k account to a 100k and the calendar reads exactly the same —
+          that's the point.
+        </p>
+      </div>
+    </div>
+
+    <div class="feature-row flip">
+      <div class="illu-box"><LayoutMosaic /></div>
+      <div>
+        <h2>Your working surface <ReifegradChip id="multi-timeframe-sync" /></h2>
+        <p>
+          The same symbol on several timeframes at once, each chart tile carrying a role you
+          assign — <span class="r-value">HTF</span>, <span class="r-value">MTF</span>,
+          <span class="r-value">LTF</span>. The synchronisation follows the role, not the
+          window position — that is what turns an arrangement of charts into a named analysis
+          structure. Layouts save that way, and alerts carry a target.
+        </p>
+      </div>
+    </div>
+
+    <div class="illu-box" style="margin: 1rem 0 3rem;"><RCalendar /></div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="illu"><PayoutLock /></div>
+        <h3>Protect the payout <ReifegradChip id="payout-lock" /></h3>
+        <p>Once an account is eligible for a payout, trading on it can pause until you've
+          taken the money out. Every other risk tool protects you from a loss; this one
+          protects a win.</p>
+      </div>
+      <div class="card">
+        <div class="illu"><DynamicRisk /></div>
+        <h3>Risk that follows a rule <ReifegradChip id="dynamic-risk-rule" /></h3>
+        <p>One R doesn't have to be the same fraction forever. Let it follow the state of the
+          account, written down as a rule in the account profile — not decided in the
+          moment.</p>
+      </div>
+      <div class="card">
+        <h3>On your machine <ReifegradChip id="on-your-machine" /></h3>
+        <p>A Windows application with an installer. No cloud account, no browser tab to
+          leave open. What that does and doesn't mean for your data is on
+          <a href="/trust">Trust</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- R1: die Lage statt eines Produktvergleichs (product\10 §2 R1, D6.1) -->
+  <section class="alt">
+    <div class="wrap" style="padding: 0;">
+      <div class="section-head">
+        <p class="eyebrow">Without FixedR</p>
+        <h2>What most of this replaces</h2>
+        <p>
+          Not a list of competitors — a list of what a prop trader does today, and where each
+          approach runs into the same wall.
+        </p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h3>Checking balances in the broker terminal or firm dashboard</h3>
+          <p>
+            It gives you the firm's binding number — but it has no relationship to your own
+            R record, so money and process live in two disconnected systems.
+          </p>
+          <p><ReifegradChip id="r-only-display" /> Read everything in the same unit, on the
+            same screen you trade from.</p>
+        </div>
+        <div class="card">
+          <h3>Enlarging a stop-loss by hand once the trade is open</h3>
+          <p>
+            It keeps a losing trade alive a little longer — and quietly turns "−1R maximum
+            loss" into an open money scale, which is exactly the thing calm trading depends
+            on not happening.
+          </p>
+          <p><ReifegradChip id="mandatory-stop" /> That door doesn't exist inside FixedR.</p>
+        </div>
+        <div class="card">
+          <h3>Several single-purpose tools, no thread between them</h3>
+          <p>
+            Charts, indicators and a journal all exist somewhere already. What's missing is
+            the connection between them — nothing forces the chain from definition to
+            measurement to verdict.
+          </p>
+          <p><ReifegradChip id="across-accounts" /> One order ticket, one record, across
+            every platform and account you trade.</p>
+        </div>
+        <div class="card">
+          <h3>Watching the news calendar yourself and reacting by hand</h3>
+          <p>
+            It gives you full control — and no net if you don't react in time. The response
+            depends entirely on you noticing and moving fast enough.
+          </p>
+          <p><ReifegradChip id="news-protection" /> An escalation ladder is on the way — see
+            below. Netz, kein Garant.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- On the way -->
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">On the way — and what shapes it</p>
+      <h2>What isn't built yet, said plainly</h2>
+      <p>
+        This is not a hedge. Building these with the first traders who use FixedR is the
+        point of the founders circle — the record below is honest about what still needs to
+        be built, and that's the invitation, not a caveat.
+      </p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>Automatic trade documentation <ReifegradChip id="auto-documentation" /></h3>
+        <p>The plan sitting next to the result, without typing it up after the fact.</p>
+      </div>
+      <div class="card">
+        <h3>Firm rule profiles <ReifegradChip id="firm-rule-profiles" /></h3>
+        <p>Maintained rule sets per prop firm, instead of numbers you enter by hand.</p>
+      </div>
+      <div class="card">
+        <h3>News protection <ReifegradChip id="news-protection" /></h3>
+        <p>An escalation ladder around high-impact news. <strong>Netz, kein Garant.</strong>
+          A net, not a guarantor.</p>
+      </div>
+      <div class="card">
+        <h3>The monthly guardian statement <ReifegradChip id="guardian-statement" /></h3>
+        <p>What the tool quietly prevented over a month, laid out the way a statement is.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="callout">
+    <p>
+      FixedR is a Windows application, works with MetaTrader &amp; NinjaTrader, and is built
+      exclusively for prop-firm accounts. <a href="/waitlist">Join the waitlist →</a>
+    </p>
+  </section>
+</Base>

@@ -338,3 +338,17 @@ section.ink .btn.ghost:hover {
   header.site .inner { gap: 1rem; }
   section { padding: 3rem 0; }
 }
+
+/* ── Reifegrad-Chip (FXR-26 Nachtrag 2026-09-01 Punkt 4) ──────────────────
+   Funktionale Minimalfassung für diese Runde (Struktur/Text) — die visuelle
+   Feinabstimmung folgt mit dem Design-Kanvas. */
+.reifegrad {
+  display: inline-block; font-family: var(--font-mono); font-size: .68rem;
+  font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  padding: .18rem .5rem; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--surface-2); color: var(--muted); vertical-align: middle;
+  cursor: default;
+}
+.reifegrad-built { background: var(--brand-soft); border-color: var(--brand-line); color: var(--brand); }
+.reifegrad-planned { background: var(--surface-2); border-color: var(--line); color: var(--faint); }
+.reifegrad-in-progress { background: #fdf3e0; border-color: #eeddb0; color: #8a6a1a; }

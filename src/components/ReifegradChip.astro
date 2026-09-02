@@ -1,0 +1,25 @@
+---
+// Reifegrad-Etikett — Daten in src/content/reifegrad.ts, damit der Stand einer Aussage
+// nachprüfbar ist statt in Prosa vergraben zu sein (FXR-26 Nachtrag 2026-09-01 Punkt 4).
+//
+// ⭐ Erst anlegen, dann zitieren: eine id ohne Eintrag in reifegrad.ts bricht den Bau.
+import { REIFEGRAD } from '../content/reifegrad';
+
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+const entry = REIFEGRAD.find((e) => e.id === id);
+if (!entry) {
+  throw new Error(
+    `ReifegradChip: keine Reifegrad-Angabe für "${id}" in src/content/reifegrad.ts. ` +
+      `Erst dort eintragen, dann hier zitieren.`
+  );
+}
+const LABEL: Record<string, string> = {
+  built: 'built',
+  'in-progress': 'in progress',
+  planned: 'planned',
+};
+---
+<span class={`reifegrad reifegrad-${entry.status}`} title={entry.note}>{LABEL[entry.status]}</span>
