@@ -9,6 +9,10 @@ import ReifegradChip from '../components/ReifegradChip.astro';
   description="What stays on your machine, what leaves it, and why: local-only trading data, a licence check you can verify, and the stop-loss that stays with your broker no matter what happens to us."
   narrow
 >
+  {/* Eyebrow ergänzt nach Kanvas 2026-09-02 ("Why trust a one-person team"). Die H1
+      bleibt: der Kanvas-H1 ("Four things worth knowing …") würde den direkt folgenden
+      Absatz ("That question is fair …") beziehungslos machen — s. Protokoll. */}
+  <p class="eyebrow">Why trust a one-person team</p>
   <h1>Why hand a one-person company your trading?</h1>
   <p style="color: var(--muted); font-size: 1.08rem;">
     That question is fair, and the honest answer isn't a promise — it's an architecture you
@@ -22,18 +26,56 @@ import ReifegradChip from '../components/ReifegradChip.astro';
     application itself, your journal, your account configuration, every trade it places.
     Exactly two things ever reach a server we operate, and nothing else does.
   </p>
-  <div class="grid" style="margin: 1.4rem 0 2rem;">
-    <div class="card">
+  <div class="grid cols-2" style="margin: 1.4rem 0 2rem;">
+    <div class="card tint">
       <h3>Stays on your machine</h3>
       <p>Broker connections, market data, order execution, your journal, account
         configuration and trading history — the whole working system.</p>
     </div>
-    <div class="card">
+    <div class="card tint">
       <h3>Leaves the machine</h3>
       <p>Only two things: a licence/subscription check, and the allocation step that decides
         account order and per-account risk when a trade goes to several accounts at once.</p>
     </div>
   </div>
+
+  {/* Vier-Karten-Zusammenfassung nach Kanvas — zusätzlich zu, nicht statt der
+      ausführlichen Abschnitte unten (dieselbe Schichtung wie auf /product: kurze
+      Karte + volle Tiefe). Kartentexte sind Kanvas-Wortlaut (E-C210), weil diese
+      Karten neu sind und keine bestehende Absatzfassung an dieser Stelle stand. */}
+  <div class="grid cols-2" style="margin: 0 0 2rem;">
+    <div class="card">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .5rem;">
+        <h3 style="margin: 0;">Local-only</h3>
+        <ReifegradChip id="local-only" />
+      </div>
+      <p>The server never learns what you traded. Prices, positions and orders stay on your machine.</p>
+    </div>
+    <div class="card">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .5rem;">
+        <h3 style="margin: 0;">If FixedR goes away</h3>
+        <ReifegradChip id="sunset-clause" />
+      </div>
+      <p>If the license signature goes quiet for a stated stretch, the license check turns itself
+        off for good. The tool is meant to outlive the company that built it.</p>
+    </div>
+    <div class="card">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .5rem;">
+        <h3 style="margin: 0;">Export, anytime</h3>
+        <ReifegradChip id="data-export" />
+      </div>
+      <p>Your data leaves in open formats, whenever you want it — a commitment, not yet a shipped screen.</p>
+    </div>
+    <div class="card">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .5rem;">
+        <h3 style="margin: 0;">The stop-loss sits at the broker</h3>
+        <ReifegradChip id="stop-loss-at-broker" />
+      </div>
+      <p>If everything else goes down — FixedR, your machine, your connection — the protection
+        already placed at the broker still holds.</p>
+    </div>
+  </div>
+
   <p>
     Neither of those two carries a price, a symbol or a trade — only what a licence check
     needs, and the account IDs and risk percentages an allocation decision needs.
