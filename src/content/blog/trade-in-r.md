@@ -48,6 +48,6 @@ This matters most in prop trading, where a trader often runs several accounts at
 
 You can keep an R journal by hand next to any platform, and disciplined traders have done it in spreadsheets for years. The friction is that the platform keeps talking money at you while your journal talks R, and under pressure the louder voice tends to win.
 
-This is the gap FixedR was built to close. The unit isn't a column you add — it's the only unit the application knows. Every trade starts from a mandatory stop-loss, position size is derived from your risk percentage, and the outcome lands in the calendar and journal as a multiple of R. Run one account or ten across MetaTrader and NinjaTrader; the history stays one history, in one unit, readable this year and readable in five.
+This is the gap [FixedR](/product) was built to close. The unit isn't a column you add — it's the only unit the application knows. Every trade starts from a mandatory stop-loss, position size is derived from your risk percentage, and the outcome lands in the calendar and journal as a multiple of R. Run one account or ten across MetaTrader and NinjaTrader; the history stays one history, in one unit, readable this year and readable in five.
 
 Your account size will change. Your unit shouldn't. If you want a cockpit that measures the trader instead of the account, [join the waitlist](/waitlist).

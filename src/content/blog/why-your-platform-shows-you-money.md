@@ -64,7 +64,7 @@ A currency display on a notional account projects a concreteness that does not e
 
 You can practice R-thinking on any platform. Journal in R, tape over the P&L, do the conversion in your head. Many disciplined traders do, and it works — until the one stressed evening it doesn't, because the money was always one glance away.
 
-We took the other route when we built FixedR: make the discipline structural. There is no money display to cover, because there is no money display. Every trade requires a stop-loss before it can exist — not as a nag, but because without a stop there is no R, and without R there is nothing to show. Position size falls out of the risk percentage. The journal, the calendar, the stats: all denominated in R, comparable across accounts and across months, silent about currency.
+We took the other route when we built [FixedR](/product): make the discipline structural. There is no money display to cover, because there is no money display. Every trade requires a stop-loss before it can exist — not as a nag, but because without a stop there is no R, and without R there is nothing to show. Position size falls out of the risk percentage. The journal, the calendar, the stats: all denominated in R, comparable across accounts and across months, silent about currency.
 
 Not a hidden setting. Not a toggle someone flips at midnight after a losing streak. The absence of money is the architecture.
 

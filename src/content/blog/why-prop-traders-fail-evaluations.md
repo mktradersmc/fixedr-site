@@ -32,7 +32,7 @@ After a loss, the most natural sentence in a trader's head is *I need to make th
 
 There's a special failure mode near the profit target: the trader who traded well for weeks, gets within reach of passing, and suddenly can't pull the trigger — or worse, starts taking tiny profits and letting losses run because *not failing today* has replaced *trading well* as the objective. The closer the pass, the heavier every trade feels, and heavy trades get managed emotionally.
 
-What these three have in common: in every case the trader's stated rules were fine. The rules just weren't *load-bearing*. They lived in a document, or in intentions, and intentions are precisely the thing that tilt disables first.
+What these three have in common: in every case the trader's stated rules were fine. The rules just weren't [*load-bearing*](/methodology). They lived in a document, or in intentions, and intentions are precisely the thing that tilt disables first.
 
 ## Willpower is the wrong tool
 
