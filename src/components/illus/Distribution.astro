@@ -1,16 +1,25 @@
 ---
-// Konten-Verteilung: ein Trade, viele Konten — kein Raten ohne Konfiguration.
+// Konten-Verteilung: ein Auftrag, viele Konten — und ohne Konfiguration wird nichts
+// geraten (E-C125). Genau deshalb steht die dritte Zeile hier: das unkonfigurierte
+// Konto ist kein Randfall, es ist das Versprechen. Ein Bild, in dem alles glatt
+// läuft, würde die Zusage nicht zeigen.
+//
+// Die Firmennamen sind echt (Michael-Entscheid 2026-08-27). Sie sind eine Aussage
+// über Anbindbarkeit, keine Partnerschaft.
+const konten = [
+  { name: 'FTMO 100k', wert: '4.2', aktiv: true },
+  { name: 'Apex 150k', wert: '6.1', aktiv: true },
+  { name: 'TopStep 50k', wert: 'not configured', aktiv: false },
+];
 ---
-<svg viewBox="0 0 200 120" role="img" aria-label="One trade distributed to many accounts" width="100%">
-  <rect x="20" y="46" width="46" height="28" rx="6" fill="var(--signal-bg)" stroke="var(--signal)" stroke-width="2" />
-  <text x="43" y="64" text-anchor="middle" fill="var(--signal)" font-family="var(--font-mono)" font-size="12" font-weight="700">1R</text>
-  {[24, 60, 96].map((y) => (
-    <path d={`M 66 60 C 100 60, 100 ${y + 14}, 128 ${y + 14}`} fill="none" stroke="var(--muted)" stroke-width="2" />
-  ))}
-  {[24, 60, 96].map((y, i) => (
-    <>
-      <rect x="128" y={y} width="52" height="28" rx="6" fill="var(--surface-2)" stroke="var(--line)" stroke-width="2" />
-      <text x="154" y={y + 18} text-anchor="middle" fill="var(--muted)" font-family="var(--font-mono)" font-size="10">{['acct A', 'acct B', 'acct C'][i]}</text>
-    </>
-  ))}
-</svg>
+<div class="rows">
+  <div class="row head"><span>MES · SHORT</span><span>1 R</span></div>
+  <div class="rows indent">
+    {konten.map((k) => (
+      <div class="row">
+        <span>{k.name}</span>
+        <span class={k.aktiv ? 'on' : 'off'}>{k.wert}</span>
+      </div>
+    ))}
+  </div>
+</div>

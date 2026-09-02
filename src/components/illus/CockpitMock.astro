@@ -9,7 +9,7 @@
     .lbl-b { font-family: var(--font-text); font-size: 12px; font-weight: 600; fill: var(--text); }
     .num { font-family: var(--font-mono); font-size: 12px; fill: var(--text); }
     .num-s { font-family: var(--font-mono); font-size: 11px; fill: var(--muted); }
-    .r-pos { font-family: var(--font-mono); font-size: 13px; font-weight: 700; fill: var(--signal); }
+    .r-pos { font-family: var(--font-mono); font-size: 13px; font-weight: 700; fill: var(--brand); }
     .panel { fill: var(--surface); stroke: var(--line); stroke-width: 1; }
     .soft { fill: var(--bg-alt); stroke: var(--line); stroke-width: 1; }
   </style>
@@ -18,7 +18,7 @@
   <rect x="0" y="0" width="52" height="460" rx="8" class="soft" />
   {[26, 62, 98, 134, 170].map((y, i) => (
     <rect x="14" y={y} width="24" height="18" rx="5"
-          fill={i === 1 ? 'var(--signal-bright)' : 'var(--line)'} />
+          fill={i === 1 ? 'var(--brand)' : 'var(--line)'} />
   ))}
 
   <!-- Chart -->
@@ -40,11 +40,11 @@
   ))}
 
   <!-- Einstieg + Stop -->
-  <line x1="80" y1="112" x2="628" y2="112" stroke="var(--signal-bright)" stroke-width="2" stroke-dasharray="6 5" />
-  <text x="634" y="109" text-anchor="end" class="num-s" style="fill:var(--signal)">entry</text>
+  <line x1="80" y1="112" x2="628" y2="112" stroke="var(--brand)" stroke-width="2" stroke-dasharray="6 5" />
+  <text x="634" y="109" text-anchor="end" class="num-s" style="fill:var(--brand)">entry</text>
   <line x1="80" y1="212" x2="628" y2="212" stroke="#101623" stroke-width="2" stroke-dasharray="6 5" opacity=".55" />
   <text x="634" y="226" text-anchor="end" class="num-s">stop · 1R</text>
-  <rect x="80" y="112" width="548" height="100" fill="var(--signal-bright)" opacity=".07" />
+  <rect x="80" y="112" width="548" height="100" fill="var(--brand)" opacity=".07" />
 
   <!-- Order-Ticket -->
   <rect x="664" y="0" width="296" height="290" rx="10" class="panel" />
@@ -60,12 +60,12 @@
   <text x="696" y="145" class="num">32 ticks</text>
 
   <text x="684" y="180" class="lbl">Size (computed)</text>
-  <rect x="684" y="188" width="256" height="34" rx="6" fill="var(--signal-bg)" stroke="#F0DCB4" />
+  <rect x="684" y="188" width="256" height="34" rx="6" fill="var(--brand-soft)" stroke="var(--brand-line)" />
   <text x="696" y="210" class="num" style="font-weight:700">3 contracts</text>
   <text x="930" y="210" text-anchor="end" class="num-s">effective 0.47 %</text>
 
-  <rect x="684" y="238" width="256" height="34" rx="7" fill="var(--signal-bright)" />
-  <text x="812" y="260" text-anchor="middle" class="lbl-b" style="fill:#241B08">Place across 3 accounts</text>
+  <rect x="684" y="238" width="256" height="34" rx="7" fill="var(--brand)" />
+  <text x="812" y="260" text-anchor="middle" class="lbl-b" style="fill:#ffffff">Place across 3 accounts</text>
 
   <!-- Konten -->
   <rect x="64" y="304" width="580" height="156" rx="10" class="panel" />
@@ -82,7 +82,7 @@
       <text x={96 + i * 188} y="412" class="num-s">{row[2]}</text>
       <text x={96 + i * 188} y="430" class="num-s">to target {row[3]}</text>
       <rect x={96 + i * 188} y="434" width="140" height="4" rx="2" fill="var(--line)" />
-      <rect x={96 + i * 188} y="434" width={[87, 67, 99][i]} height="4" rx="2" fill="var(--signal-bright)" />
+      <rect x={96 + i * 188} y="434" width={[87, 67, 99][i]} height="4" rx="2" fill="var(--brand)" />
     </>
   ))}
 
@@ -92,7 +92,7 @@
   <text x="684" y="360" class="r-pos" style="font-size:26px">4.0R</text>
   <text x="750" y="360" class="num-s">left of 5.0R</text>
   <rect x="684" y="376" width="256" height="8" rx="4" fill="var(--line)" />
-  <rect x="684" y="376" width="205" height="8" rx="4" fill="var(--signal-bright)" />
+  <rect x="684" y="376" width="205" height="8" rx="4" fill="var(--brand)" />
   <text x="684" y="408" class="lbl">Drawdown headroom</text>
   <text x="684" y="432" class="num" style="font-weight:700">3.2 %</text>
   <text x="736" y="432" class="num-s">of 6.0 % limit</text>

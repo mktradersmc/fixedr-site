@@ -1,8 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import StopShield from '../components/illus/StopShield.astro';
-import RScale from '../components/illus/RScale.astro';
-import Horizon from '../components/illus/Horizon.astro';
+import { SITE_TITLE, TAGLINE } from '../config';
 import Distribution from '../components/illus/Distribution.astro';
 import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
 import RCalendar from '../components/illus/RCalendar.astro';
@@ -15,11 +13,33 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
   <section class="hero">
     <div class="wrap">
       <p class="eyebrow">For prop traders · Windows app</p>
-      <h1>The trading cockpit that shows you risk, not money.</h1>
+      {/* Die Überschrift führt mit dem Ergebnis, nicht mit dem Mittel (Michael 2026-08-29):
+          „shows you risk" war eine Aussage darüber, was wir verweigern — eine
+          Verkäufer-Tugend, keine Käufer-Sehnsucht.
+
+          Die Grenze aus D0 Punkt 3 ist scharf und wurde einmal gerissen: „Calm is a
+          setup. Not a character trait." war stark, aber FALSCH — Temperament gibt es,
+          und der Satz sprach den Trader frei. Das ist der Guru-Zug spiegelverkehrt.
+          Die jetzige Fassung behauptet deshalb nichts über den Trader, sondern über
+          den BAU: „built to" ist Konstruktionsabsicht, keine Zusage. „Level" trägt
+          zugleich die Flug-Metapher, die im Wort Cockpit ohnehin steckt (künstlicher
+          Horizont) — s. Blogartikel „Fly by instruments".
+
+          Die These steht weiter offensiv in der Unterzeile — sie ist nach D0 das
+          Messinstrument der Positionierung und darf die Sichtfläche nicht verlassen. */}
+      <h1>Everything on this screen is built to keep you level.</h1>
+      {/* Michael 2026-08-29: der Kern ist NICHT „Risiko statt Geld" — 0,25 % ist genauso
+          eine Risikozahl wie ein Betrag. Der Kern ist RELATIV statt ABSOLUT: die Zahl
+          verschwindet nicht, sie wechselt die Skala und wird dadurch unvergleichbar mit
+          dem eigenen Leben. Das ist `07` D0 Argument 2, das dort fälschlich als
+          Nebenargument für Skeptiker geführt wurde — es ist der Wirkmechanismus.
+          Das Notional-Argument („in dem Konto ist kein Geld") trägt weiter unten das
+          eigene dunkle Band; hier wäre es eine Dopplung. */}
       <p class="lede">
-        Place trades across your funded accounts from one screen. Every position starts from
-        a fixed stop, every result is measured in <span class="r-value">R</span> — and the
-        number that makes you tilt is nowhere on screen.
+        <strong>Same trader, better conditions.</strong> FixedR is a trading cockpit for funded
+        accounts where the numbers don't disappear — they change scale. You risk
+        0.5&thinsp;%, not an amount; a loss reads <span class="r-value">−1R</span>, not a sum
+        you can hold against your rent.
       </p>
       <div class="actions">
         <a class="btn" href="/waitlist">Join the waitlist</a>
@@ -33,7 +53,7 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
       <div class="stage">
         <div class="bar">
           <i></i><i></i><i></i>
-          <span>FixedR — your trading cockpit.</span>
+          <span>{SITE_TITLE} — {TAGLINE}</span>
         </div>
         <div class="body"><CockpitMock /></div>
       </div>
@@ -54,17 +74,31 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
       </div>
       <div class="grid">
         <div class="card">
-          <div class="illu"><StopShield /></div>
+          <div class="token">
+            <span class="bars"><b></b><b></b><b></b></span>
+            <span class="lbl">STOP · REQUIRED</span>
+          </div>
           <h3>Mandatory stop-loss</h3>
           <p>No stop, no trade. Risk is fixed before entry — not renegotiated with yourself while the position runs.</p>
         </div>
         <div class="card">
-          <div class="illu"><RScale /></div>
+          <div class="token">
+            <span class="lbl">RISK</span><span class="val brand">1 R</span>
+            <span class="arrow">→</span>
+            <span class="lbl">SIZE</span><span class="val">4.2</span>
+          </div>
           <h3>Position size from risk</h3>
           <p>You set the risk, FixedR computes the size from your stop distance. Backwards from the usual — and the only sane direction.</p>
         </div>
         <div class="card">
-          <div class="illu"><Horizon /></div>
+          {/* Der Betrag ist bewusst unlesbar: die Karte behauptet, dass Geld außer
+              Sicht bleibt — sie darf ihn nicht selbst wieder herstellen. */}
+          <div class="token">
+            <span class="val">+2.4 R</span>
+            <span class="masked" aria-label="a currency amount, deliberately hidden">
+              <span class="cur">$</span><i></i><i class="sep"></i><i></i><i></i><i></i>
+            </span>
+          </div>
           <h3>Money stays out of sight</h3>
           <p>Results, targets, drawdown headroom — all in R. No money mode, no toggle. The absence is the feature.</p>
         </div>
@@ -99,11 +133,16 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
       <div class="feature-row flip">
         <div class="illu-box"><LayoutMosaic /></div>
         <div>
-          <h2>Multi-monitor layouts</h2>
+          <h2>Timeframes that stay in sync</h2>
           <p>
-            A cockpit is an arrangement of instruments, each in a fixed place. Compose charts,
-            journal, risk panel and accounts across your screens and save the arrangement — so
-            during the session your eyes travel, not your windows.
+            Put the same symbol on several timeframes side by side, and give each chart a
+            role — <span class="r-value">HTF</span>, <span class="r-value">MTF</span>,
+            <span class="r-value">LTF</span>. The synchronisation follows the role, not the
+            window.
+          </p>
+          <p>
+            That is the difference between an arrangement of windows and a named analysis
+            structure: the charts belong together because you said what each one is for.
           </p>
         </div>
       </div>
@@ -147,7 +186,11 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
           </p>
         </div>
         <div class="card">
-          <div class="illu"><Distribution /></div>
+          {/* Echte Firmennamen (Michael-Entscheid 2026-08-27): eine Aussage über
+              Anbindbarkeit, keine Partnerschaft und keine Empfehlung. */}
+          <div class="chips">
+            <span class="on">FTMO</span><span class="on">Apex</span><span>TopStep</span>
+          </div>
           <h3>Pick the accounts</h3>
           <p>
             Send a trade to all your accounts, or to the ones you choose. Different firms,
@@ -168,8 +211,9 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
     </div>
   </section>
 
-  <!-- Manifest-Teaser -->
-  <section class="alt">
+  <!-- Manifest-Teaser: die EINE dunkle Fläche der Seite. Die These ist kein weiterer
+       Abschnitt, deshalb trägt die Farbe den Bruch. -->
+  <section class="ink">
     <div class="wrap">
       <div class="section-head center">
         <p class="eyebrow">The thesis</p>

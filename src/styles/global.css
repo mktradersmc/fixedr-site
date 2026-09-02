@@ -1,21 +1,40 @@
-/* FixedR — Farbwelt „Instrumententafel", Palette Amber (E-C133), HELLE Fassung.
-   Michael-Entscheid 2026-08-22: Die Anwendung bekommt Hell als Standard (Dark bleibt
-   umschaltbar) — der Webauftritt folgt, damit Seite und Produktbilder zusammenpassen. */
+/* FixedR — Farbwelt aus dem Design-Handoff „Runde 7" (2026-08-27).
+   Löst die Palette Amber ab (E-C133 revidiert). Blau ist gewählt, WEIL Grün im Chart
+   schon „Gewinn" heißt: eine grüne Marke würde die Bewertungsfarbe entwerten. Es gibt
+   in Produkt und Site genau ein Blau — Grün und Rot bleiben der Bewertung vorbehalten.
+   Hell bleibt Standard (Michael-Entscheid 2026-08-22), damit Seite und Produktbilder
+   zusammenpassen. Die Werte sind identisch zum Handoff, damit Site und Anwendung
+   dieselbe Marke tragen. */
 :root {
-  --bg: #FFFFFF;
-  --bg-alt: #F7F9FC;        /* abwechselnde Abschnitte */
-  --surface: #FFFFFF;
-  --surface-2: #F2F5F9;
-  --line: #E1E7EF;
-  --text: #101623;
-  --muted: #59617A;
-  --signal: #B37B00;        /* Text/Links — kontraststark auf Hell */
-  --signal-bright: #FFB000; /* Flächen: Knöpfe, Akzentlinien */
-  --signal-bg: #FFF6E5;
-  --shadow: 0 1px 2px rgba(16, 22, 35, .04), 0 8px 24px rgba(16, 22, 35, .06);
-  --radius: 12px;
-  --font-text: 'Inter Variable', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --bg: #ffffff;
+  --bg-alt: #f6f8fb;        /* abwechselnde Abschnitte */
+  --surface: #ffffff;
+  --surface-2: #f1f4f8;
+  --line: #e3e8ef;
+  --line-soft: #eef1f6;
+  --text: #0b0f17;
+  --muted: #576274;
+  --faint: #7d8798;
+
+  /* Marke. Ein Ton für Text, Linien und Flächen — auf Blau steht weiße Schrift,
+     deshalb braucht es anders als bei Amber keinen zweiten, helleren Wert. */
+  --brand: #0a62cf;
+  --brand-hover: #084fa6;
+  --brand-soft: #e4effb;
+  --brand-line: #b3d3f4;
+
+  /* Tinte: die eine dunkle Fläche (Manifest-Band, Produktbühne). */
+  --ink: #06070a;
+  --ink-line: #1c2027;
+  --on-ink: #f3f5f7;
+  --on-ink-muted: #98a1ab;
+  --brand-on-ink: #2e86f6;
+
+  --shadow: 0 1px 2px rgba(11, 15, 23, .04), 0 10px 30px -12px rgba(11, 15, 23, .10);
+  --shadow-stage: 0 2px 4px rgba(11, 15, 23, .06), 0 40px 80px -40px rgba(11, 15, 23, .45);
+  --radius: 10px;
+  --font-text: 'Geist Variable', system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -42,7 +61,7 @@ h2 { font-size: 2rem; margin: 0 0 0.9rem; }
 h3 { font-size: 1.15rem; margin: 1.6rem 0 0.4rem; }
 p { margin: 0.85rem 0; }
 
-a { color: var(--signal); text-decoration: none; font-weight: 500; }
+a { color: var(--brand); text-decoration: none; font-weight: 500; }
 a:hover { text-decoration: underline; }
 
 code, .mono { font-family: var(--font-mono); font-size: 0.92em; }
@@ -55,7 +74,7 @@ hr { border: none; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 
 blockquote {
   margin: 1.3rem 0; padding: 0.6rem 1.3rem;
-  border-left: 3px solid var(--signal-bright);
+  border-left: 3px solid var(--brand);
   background: var(--bg-alt); border-radius: 0 8px 8px 0; color: var(--muted);
 }
 
@@ -70,15 +89,16 @@ header.site .inner {
   max-width: 74rem; margin: 0 auto; padding: 0.75rem 1.5rem;
   display: flex; align-items: center; gap: 2rem;
 }
-header.site .logo img { display: block; height: 28px; }
+header.site .logo { display: flex; align-items: center; }
+header.site .logo img { display: block; width: 152px; height: auto; }
 header.site nav { display: flex; align-items: center; gap: 1.5rem; margin-left: auto; }
 header.site nav a { color: var(--muted); font-size: 0.94rem; font-weight: 500; }
 header.site nav a:hover { color: var(--text); text-decoration: none; }
 header.site nav a.cta {
-  background: var(--text); color: #fff; border-radius: 8px;
+  background: var(--brand); color: #fff; border-radius: 8px;
   padding: 0.42rem 0.95rem; font-weight: 600;
 }
-header.site nav a.cta:hover { background: #29344a; }
+header.site nav a.cta:hover { background: var(--brand-hover); color: #fff; }
 
 /* ── Abschnitte ───────────────────────────────────────────── */
 section { padding: 4.5rem 0; }
@@ -88,7 +108,7 @@ section.alt { background: var(--bg-alt); border-block: 1px solid var(--line); }
 .section-head p { color: var(--muted); font-size: 1.08rem; }
 .eyebrow {
   font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600;
-  letter-spacing: .08em; text-transform: uppercase; color: var(--signal);
+  letter-spacing: .08em; text-transform: uppercase; color: var(--brand);
   margin-bottom: 0.6rem;
 }
 
@@ -119,11 +139,11 @@ section.alt { background: var(--bg-alt); border-block: 1px solid var(--line); }
 
 /* ── Knöpfe ───────────────────────────────────────────────── */
 .btn {
-  display: inline-block; background: var(--signal-bright); color: #241B08;
+  display: inline-block; background: var(--brand); color: #ffffff;
   font-weight: 650; border-radius: 9px; padding: 0.7rem 1.6rem; border: none;
   font-size: 1.02rem; cursor: pointer; box-shadow: var(--shadow);
 }
-.btn:hover { background: #ffbe2b; text-decoration: none; }
+.btn:hover { background: var(--brand-hover); text-decoration: none; }
 .btn.ghost { background: #fff; color: var(--text); border: 1px solid var(--line); box-shadow: none; }
 .btn.ghost:hover { border-color: #C3CCDA; background: var(--bg-alt); }
 
@@ -155,10 +175,10 @@ section.alt { background: var(--bg-alt); border-block: 1px solid var(--line); }
 .feature-row h2 { font-size: 1.65rem; }
 .feature-row p { color: var(--muted); }
 
-.r-value { font-family: var(--font-mono); color: var(--signal); font-weight: 600; }
+.r-value { font-family: var(--font-mono); color: var(--brand); font-weight: 600; }
 
 .callout {
-  background: var(--signal-bg); border: 1px solid #F0DCB4;
+  background: var(--brand-soft); border: 1px solid var(--brand-line);
   border-radius: var(--radius); padding: 1.4rem 1.7rem; margin: 1.8rem 0;
 }
 .callout p:first-child { margin-top: 0; }
@@ -170,7 +190,7 @@ details {
   border-radius: 10px; padding: 1rem 1.4rem; margin: .7rem 0;
 }
 details summary { cursor: pointer; font-weight: 600; }
-details[open] summary { color: var(--signal); }
+details[open] summary { color: var(--brand); }
 
 /* ── Formulare ────────────────────────────────────────────── */
 form.waitlist { display: flex; flex-direction: column; gap: 1rem; max-width: 26rem; }
@@ -180,7 +200,7 @@ form.waitlist input {
   color: var(--text); padding: .65rem .85rem; font-size: 1rem;
   font-family: inherit; width: 100%;
 }
-form.waitlist input:focus { outline: 2px solid var(--signal-bright); border-color: transparent; }
+form.waitlist input:focus { outline: 2px solid var(--brand); border-color: transparent; }
 
 /* ── Blog ─────────────────────────────────────────────────── */
 .post-list { list-style: none; padding: 0; }
@@ -204,6 +224,109 @@ footer.site .inner {
 }
 footer.site a { color: var(--muted); font-weight: 400; }
 footer.site .notrack { margin-left: auto; }
+
+/* ── Die eine dunkle Fläche ───────────────────────────────────
+   Genau EIN Band der Seite ist dunkel: das Manifest. Es ist die These, nicht ein
+   weiterer Abschnitt — die Farbe trägt den Bruch, nicht eine Überschriftgröße. */
+section.ink {
+  background: var(--ink); color: var(--on-ink);
+  border-block: 1px solid var(--ink-line);
+}
+section.ink .eyebrow { color: var(--brand-on-ink); }
+section.ink .section-head p { color: var(--on-ink-muted); }
+section.ink .btn.ghost {
+  background: transparent; color: var(--on-ink); border-color: var(--ink-line);
+}
+section.ink .btn.ghost:hover {
+  background: transparent; border-color: var(--brand-on-ink); color: var(--brand-on-ink);
+}
+
+/* ── Typografische Merkzeichen in Kartenköpfen ────────────────
+   Der Entwurf ersetzt die abstrakten Illustrationen in den drei Kernkarten durch
+   Zahlen und Beschriftungen in der Mono-Schrift. Das ist genauer: eine Zeichnung
+   deutet an, eine Zahl benennt. */
+.token { display: flex; align-items: baseline; gap: .75rem; font-family: var(--font-mono); }
+.token .lbl { font-size: .72rem; letter-spacing: .06em; color: var(--faint); }
+.token .val { font-size: 1.3rem; font-weight: 500; letter-spacing: -.02em; color: var(--text); }
+.token .val.brand { color: var(--brand); }
+.token .arrow { font-size: .72rem; color: var(--faint); }
+
+/* Signalbalken für „STOP · REQUIRED": drei Striche, einer betont. */
+.bars { display: inline-flex; align-items: center; gap: 5px; }
+.bars b { display: block; width: 3px; height: 14px; background: var(--brand-line); }
+.bars b:first-child { height: 22px; background: var(--brand); }
+
+/* Der ausgeblendete Geldbetrag. Die Ziffern fehlen ABSICHTLICH: die Karte sagt
+   „Geld bleibt außer Sicht" — sie darf den Betrag nicht selbst wieder herstellen.
+   Deshalb Blöcke statt Zeichen, damit auch kein Zeichensatz sie zurückbringt. */
+.masked { position: relative; display: inline-flex; align-items: center; gap: 3px; }
+.masked .cur { font-family: var(--font-mono); font-size: 1.3rem; color: #c2cbd8; line-height: 1; }
+.masked i { display: block; width: 9px; height: 15px; border-radius: 2px; background: #dde3ec; }
+.masked i.sep { width: 3px; height: 3px; border-radius: 50%; }
+/* Der Strich muss deutlich dunkler sein als die Blöcke — sonst liest sich das
+   Ganze als Darstellungsfehler statt als durchgestrichener Betrag. */
+.masked::after {
+  content: ''; position: absolute; left: -4px; right: -4px; top: 50%;
+  border-top: 2px solid #9aa6b8;
+}
+
+/* ── Kontenzeilen (Verteilung, Auswahl, Regel) ────────────────── */
+.rows { display: flex; flex-direction: column; gap: .5rem; font-family: var(--font-mono); font-size: .8rem; }
+.rows.indent { padding-left: 1.3rem; border-left: 1px solid var(--brand-line); }
+.row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .6rem .8rem; border-radius: 8px;
+  background: var(--surface); border: 1px solid var(--line); color: var(--muted);
+}
+.row.head { background: var(--brand); border-color: var(--brand); color: #fff; }
+.row.now { background: var(--brand-soft); border-color: var(--brand-line); }
+.row .on { color: var(--brand); font-weight: 500; }
+.row .off { color: var(--faint); font-size: .68rem; }
+.row .now-val { color: var(--brand); font-weight: 600; }
+.rows .row-label { font-family: var(--font-text); font-size: .78rem; color: var(--faint); }
+
+/* Firmen-Marken als Auswahlchips. */
+.chips { display: flex; gap: .4rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: .72rem; }
+.chips span { padding: .35rem .65rem; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--line); color: var(--faint); }
+.chips span.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+/* ── R-Kalender ───────────────────────────────────────────────── */
+.cal { display: flex; flex-direction: column; gap: .8rem; }
+.cal .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.cal .d {
+  display: grid; place-items: center; height: 34px; border-radius: 5px;
+  font-family: var(--font-mono); font-size: .68rem; font-weight: 500;
+  background: var(--surface); border: 1px solid var(--line-soft); color: transparent;
+}
+/* Zwei Stufen statt einer Rampe: eine stufenlose Mischung hat nur an ihren Enden
+   Kontrast, und der Wechsel der Schriftfarbe läge genau in der Mitte, wo weder
+   Blau noch Weiß reicht. */
+.cal .d.win { background: var(--brand-soft); border-color: transparent; color: var(--brand); }
+.cal .d.win.strong { background: var(--brand); color: #fff; }
+/* Verluste bleiben neutral — auf der Website gibt es kein Rot und kein Grün als Wertung. */
+.cal .d.loss { background: var(--surface-2); border-color: transparent; color: var(--muted); }
+.cal .foot {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding-top: .7rem; border-top: 1px solid var(--line); font-family: var(--font-mono);
+}
+.cal .foot .m { font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+.cal .foot .sum { font-size: 1.3rem; font-weight: 500; letter-spacing: -.025em; color: var(--brand); }
+
+/* ── Layout-Mosaik ────────────────────────────────────────────── */
+.mosaic { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: repeat(3, 42px); gap: 8px; }
+.mosaic span { border-radius: 6px; background: var(--surface); border: 1px solid var(--line); }
+.mosaic span.main {
+  grid-row: span 2; background: var(--brand-soft); border-color: var(--brand-line);
+  display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: .95rem; font-weight: 600; color: var(--brand);
+}
+/* Kacheln mit vergebener Rolle tragen dieselbe Farbe wie die große — sie sind EINE
+   synchronisierte Struktur. Kacheln ohne Rolle bleiben neutral. */
+.mosaic span.tagged {
+  background: var(--brand-soft); border-color: var(--brand-line);
+  display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: .72rem; font-weight: 600; color: var(--brand);
+}
 
 @media (max-width: 780px) {
   html { font-size: 16px; }

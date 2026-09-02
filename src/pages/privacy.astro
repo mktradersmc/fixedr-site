@@ -12,9 +12,14 @@ import Base from '../layouts/Base.astro';
     public. What is already decided and will not change:</p>
   </div>
   <ul>
-    <li>This site sets no cookies and runs no analytics.</li>
+    {/* E-C161: „keine Fremd-Tracker" statt „trackt dich nicht" — die eigene
+        Funnel-Messung (Warteliste, Quellen-Link) darf den Satz nicht widerlegen. */}
+    <li>This site sets no cookies, carries no third-party trackers and no advertising
+      pixels. Your data is never sold or shared.</li>
     <li>All assets (fonts, images, styles) are served from this domain — nothing is loaded
       from third parties.</li>
+    <li>We count waitlist signups and which campaign link they came from. That is a
+      count, not a profile, and it is not tied to an identity.</li>
     <li>The waitlist stores exactly what you submit, is used only to contact you about
       FixedR access, and entries are deleted on request.</li>
   </ul>

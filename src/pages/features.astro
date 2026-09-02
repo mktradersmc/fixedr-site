@@ -9,7 +9,7 @@ import RCalendar from '../components/illus/RCalendar.astro';
 ---
 <Base
   title="Features"
-  description="FixedR's six core mechanics: mandatory stop-loss, position size from risk, R-only display, multi-account distribution, multi-monitor layouts, R calendar."
+  description="FixedR's six core mechanics: mandatory stop-loss, position size from risk, R-only display, multi-account distribution, synchronised multi-timeframe layouts, R calendar."
 >
   <h1>Features</h1>
   <p style="max-width: 42rem; color: var(--muted);">
@@ -78,11 +78,18 @@ import RCalendar from '../components/illus/RCalendar.astro';
   <div class="feature-row">
     <div class="illu-box"><LayoutMosaic /></div>
     <div>
-      <h2>Multi-monitor layouts</h2>
+      <h2>Timeframes that stay in sync</h2>
       <p>
-        A cockpit is an arrangement of instruments, each in its fixed place. FixedR lets you
-        compose charts, journal, risk panel and account views across monitors and save the
-        arrangement — so that during the session, your eyes travel, not your windows.
+        Multi-timeframe analysis means seeing the same symbol at several resolutions at once.
+        FixedR builds that as a layout of chart tiles, each with its own symbol, timeframe and
+        indicators — and each with a <strong>role</strong> you assign:
+        <span class="r-value">HTF</span>, <span class="r-value">MTF</span>,
+        <span class="r-value">LTF</span>.
+      </p>
+      <p>
+        The synchronisation works through those roles rather than through window positions. That
+        is what turns an arrangement of charts into a named analysis structure — the tiles belong
+        together because you stated what each one is for, and the layout is saved that way.
       </p>
     </div>
   </div>

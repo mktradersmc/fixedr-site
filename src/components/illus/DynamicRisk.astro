@@ -1,20 +1,19 @@
 ---
-// Dynamisches R: die Risikogröße folgt einer Regel, die im Kontoprofil steht.
+// Dynamisches R: die Risikogröße folgt einer Regel, die im Kontoprofil steht — nicht
+// einer Entscheidung im Moment. Die Regel wird BENANNT, nicht angedeutet: eine
+// Andeutung ließe offen, wer sie festlegt, und genau das ist der Punkt.
+const lagen = [
+  { lage: 'in drawdown', wert: '0.25 %' },
+  { lage: 'normal', wert: '0.50 %', jetzt: true },
+  { lage: 'at target', wert: '0.75 %' },
+];
 ---
-<svg viewBox="0 0 200 120" role="img" aria-label="Risk per trade adapts to account state by rule" width="100%">
-  <text x="18" y="30" font-family="var(--font-text)" font-size="10" fill="var(--muted)">rule · risk per trade</text>
-  {[
-    ['in drawdown', '0.25 %', 30],
-    ['normal', '0.50 %', 62],
-    ['at target', '0.75 %', 94],
-  ].map((row, i) => (
-    <>
-      <rect x="18" y={38 + i * 26} width="164" height="20" rx="5"
-            fill={i === 1 ? 'var(--signal-bg)' : 'var(--surface-2)'}
-            stroke={i === 1 ? 'var(--signal)' : 'var(--line)'} stroke-width={i === 1 ? 2 : 1} />
-      <text x="30" y={52 + i * 26} font-family="var(--font-text)" font-size="10" fill="var(--muted)">{row[0]}</text>
-      <text x="170" y={52 + i * 26} text-anchor="end" font-family="var(--font-mono)" font-size="11"
-            font-weight={i === 1 ? 700 : 400} fill={i === 1 ? 'var(--signal)' : 'var(--text)'}>{row[1]}</text>
-    </>
+<div class="rows" role="img" aria-label="Risk per trade follows a written rule for each account state">
+  <span class="row-label">rule · risk per trade</span>
+  {lagen.map((l) => (
+    <div class={l.jetzt ? 'row now' : 'row'}>
+      <span>{l.lage}</span>
+      <span class={l.jetzt ? 'now-val' : ''}>{l.wert}</span>
+    </div>
   ))}
-</svg>
+</div>

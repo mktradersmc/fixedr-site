@@ -1,12 +1,16 @@
 ---
-// Layout-Mosaik: Multi-Monitor-Arbeitsflächen.
+// Multi-Timeframe-Aufbau: dasselbe Symbol in mehreren Zeitrahmen nebeneinander, jede
+// Kachel mit einer inhaltlichen ROLLE (HTF/MTF/LTF). Die Synchronisation arbeitet über
+// diese Rollen — deshalb tragen hier alle drei Kacheln die Markenfarbe: sie sind EINE
+// Struktur, nicht drei Fenster. Die neutrale Kachel ist eine Kachel ohne Rolle; sie
+// zeigt, dass die Rolle vergeben wird und nicht automatisch entsteht.
+//
+// Aufteilung „eine groß plus zwei klein" — eine der Vorlagen des Bestands.
 ---
-<svg viewBox="0 0 200 120" role="img" aria-label="Multi-monitor layout mosaic" width="100%">
-  <rect x="18" y="22" width="76" height="50" rx="4" fill="var(--surface-2)" stroke="var(--line)" stroke-width="2" />
-  <rect x="102" y="22" width="80" height="30" rx="4" fill="var(--surface-2)" stroke="var(--line)" stroke-width="2" />
-  <rect x="102" y="58" width="38" height="40" rx="4" fill="var(--surface-2)" stroke="var(--line)" stroke-width="2" />
-  <rect x="146" y="58" width="36" height="40" rx="4" fill="var(--surface-2)" stroke="var(--signal)" stroke-width="2" />
-  <rect x="18" y="78" width="76" height="20" rx="4" fill="var(--surface-2)" stroke="var(--line)" stroke-width="2" />
-  <polyline points="26,60 40,48 52,54 66,38 86,44" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-  <text x="164" y="82" text-anchor="middle" fill="var(--signal)" font-family="var(--font-mono)" font-size="12" font-weight="700">R</text>
-</svg>
+<div class="mosaic" role="img" aria-label="One symbol across several timeframes; each chart carries a role — HTF, MTF, LTF — and the synchronisation follows the role">
+  <span class="main">HTF</span>
+  <span class="tagged">MTF</span>
+  <span class="tagged">LTF</span>
+  <span></span>
+  <span></span>
+</div>

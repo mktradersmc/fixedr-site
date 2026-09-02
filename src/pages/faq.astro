@@ -48,9 +48,14 @@ import Base from '../layouts/Base.astro';
 
   <details>
     <summary>Does this website track me?</summary>
+    {/* E-C161: der Anspruch endet an der Mess-Grenze. „Diese Seite trackt dich nicht"
+        wäre in dem Moment falsch, in dem ein Kampagnen-Link eine Quelle unterscheidet.
+        Also: keine FREMD-Tracker, kein Datenverkauf — und offen sagen, was gemessen wird. */}
     <p>
-      No. No cookies, no analytics, no external fonts or scripts. The waitlist form is the only
-      thing that sends data anywhere — and only what you type into it.
+      No third-party trackers, no advertising pixels, no cookies, no external fonts or scripts.
+      Nothing about you is sold or shared. What we do count is how many people join the waitlist
+      and which link they arrived from — a number, not a profile. The waitlist form is the only
+      thing that sends data anywhere, and only what you type into it.
     </p>
   </details>
 

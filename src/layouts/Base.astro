@@ -1,12 +1,10 @@
 ---
 // Grund-Layout: Head (SEO/OG), Kopfleiste, Fußzeile. Keine Tracker, keine externen
 // Ressourcen — Fonts kommen aus node_modules und werden von Astro lokal gebündelt.
-import '@fontsource-variable/inter';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/500.css';
-import '@fontsource/jetbrains-mono/700.css';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
 import '../styles/global.css';
-import { SITE_TITLE, DESCRIPTION } from '../config';
+import { SITE_TITLE, TAGLINE, DESCRIPTION } from '../config';
 
 interface Props {
   title?: string;
@@ -16,7 +14,7 @@ interface Props {
   bare?: boolean;
 }
 const { title, description = DESCRIPTION, narrow = false, bare = false } = Astro.props;
-const fullTitle = title ? `${title} — ${SITE_TITLE}` : `${SITE_TITLE} — your trading cockpit.`;
+const fullTitle = title ? `${title} — ${SITE_TITLE}` : `${SITE_TITLE} — ${TAGLINE}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -42,7 +40,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <header class="site">
       <div class="inner">
         <a class="logo" href="/" aria-label="FixedR home">
-          <img src="/wortmarke.svg" alt="FixedR" width="76" height="28" />
+          {/* Die Aufstellung ist gezeichnet, nicht gesetzt: Bildmarke, Wortmarke und
+              Untertitel liegen als Pfade vor, damit sie unabhängig von geladenen
+              Schriften sitzen. Deshalb steht die Tagline hier nicht als Text. */}
+          <img src="/wortmarke.svg" alt="FixedR — trade calm. by design." width="152" height="45" />
         </a>
         <nav>
           <a href="/features">Features</a>
