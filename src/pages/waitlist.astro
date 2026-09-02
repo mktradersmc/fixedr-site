@@ -14,11 +14,17 @@ const mailtoHref = `mailto:${WAITLIST_EMAIL}?subject=${encodeURIComponent('Fixed
   description="Join the FixedR waitlist. The founders circle is filled first, in order of signup."
   narrow
 >
-  <h1>Join the waitlist</h1>
-  <p>
-    FixedR is being rolled out deliberately: a small founders circle of prop traders first,
-    then the waitlist, in order of signup. No spam — you'll hear from us when your spot opens.
-  </p>
+  {/* Eyebrow ergänzt + H1 mit Punkt + Button-Beschriftung nach Kanvas 2026-09-02.
+      Absatz bleibt (trägt die Founders-Erklärung, die das Kanvas nicht ausführt);
+      die drei Formularfelder bleiben (FXR-45/44-Segmentierung) — s. Protokoll. */}
+  <div class="waitlist-intro">
+    <p class="eyebrow">For prop traders · Windows app</p>
+    <h1>Join the waitlist.</h1>
+    <p>
+      FixedR is being rolled out deliberately: a small founders circle of prop traders first,
+      then the waitlist, in order of signup. No spam — you'll hear from us when your spot opens.
+    </p>
+  </div>
 
   {hasEndpoint ? (
     <form class="waitlist" action={WAITLIST_ENDPOINT} method="POST">
@@ -38,7 +44,7 @@ const mailtoHref = `mailto:${WAITLIST_EMAIL}?subject=${encodeURIComponent('Fixed
         <label for="firms">Which prop firm(s)? (optional)</label>
         <input type="text" id="firms" name="firms" />
       </div>
-      <button class="btn" type="submit">Put me on the list</button>
+      <button class="btn" type="submit">Join the waitlist</button>
     </form>
   ) : (
     <>
