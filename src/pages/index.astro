@@ -1,83 +1,88 @@
 ---
+// Startseite — Runde 13 (FXR-142): 1:1 nach `temp/export-web-v2/FixedR Web Home.html`
+// (README, Abschnittsreihenfolge und Wortlaut sind die Vorgabe). Bild-Komponenten
+// (Distribution/LayoutMosaic/RCalendar/PayoutLock/DynamicRisk) sind unverändert aus
+// FXR-26 übernommen — ihre Daten decken sich bereits mit der Referenz.
 import Base from '../layouts/Base.astro';
-import { SITE_TITLE, TAGLINE } from '../config';
 import Distribution from '../components/illus/Distribution.astro';
 import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
 import RCalendar from '../components/illus/RCalendar.astro';
-import CockpitMock from '../components/illus/CockpitMock.astro';
 import PayoutLock from '../components/illus/PayoutLock.astro';
 import DynamicRisk from '../components/illus/DynamicRisk.astro';
+
+const pillars = [
+  { nr: '01', title: 'The R view', text: 'Risk fixed before entry, results as multiples of it. Money never appears on screen.' },
+  { nr: '02', title: 'Safety guard', text: "Your firm's rules — drawdown, daily loss, flatten time — enforced before the order leaves, on every account at once." },
+  { nr: '03', title: 'Backtest', text: 'Replay any market at your pace, trade it as if live, and see the result in R before it costs anything.' },
+  { nr: '04', title: 'Journal', text: 'Every trade documented on the way through: setup, rule compliance, outcome. Nothing to fill in afterwards.' },
+];
+
+// Keine Zahl, kein Währungszeichen (E-C009/`preisnennung`-Wächter: die Website nennt
+// KEINE Preise, solange FXR-74 nicht entschieden ist — ausdrücklich Nicht-Ziel dieses
+// Tickets). Die Referenz zeigt Beispielzahlen "als Vorschlag"; hier bleibt der Rahmen
+// (Karten, Schnitt, Reihenfolge) exakt, der Betrag ist TBD statt eines Vorgriffs.
+const packages = [
+  { name: 'Basic', price: 'TBD', note: 'One account, the whole cockpit.', points: ['1 account', 'Mandatory stop, size from risk', 'R journal and calendar', 'Multi-timeframe workspaces'], featured: false, cta: 'Start with Basic' },
+  { name: 'Advanced', price: 'TBD', note: 'Several accounts, one order ticket.', points: ['Up to 3 accounts', 'Distribute a trade across accounts', 'Payout protection', 'Multi-monitor layouts'], featured: true, cta: 'Join the waitlist' },
+  { name: 'Pro', price: 'TBD', note: 'For the trader running a book.', points: ['Unlimited accounts', 'Backtest sessions with replay', 'Risk that follows a rule', 'Priority support'], featured: false, cta: 'Talk to us' },
+];
 ---
 <Base bare>
   <!-- Hero -->
-  <section class="hero">
-    <div class="wrap">
-      <p class="eyebrow">For prop traders · Windows app</p>
-      {/* Die Überschrift führt mit dem Ergebnis, nicht mit dem Mittel (Michael 2026-08-29):
-          „shows you risk" war eine Aussage darüber, was wir verweigern — eine
-          Verkäufer-Tugend, keine Käufer-Sehnsucht.
-
-          Die Grenze aus D0 Punkt 3 ist scharf und wurde einmal gerissen: „Calm is a
-          setup. Not a character trait." war stark, aber FALSCH — Temperament gibt es,
-          und der Satz sprach den Trader frei. Das ist der Guru-Zug spiegelverkehrt.
-          Die jetzige Fassung behauptet deshalb nichts über den Trader, sondern über
-          den BAU: „built to" ist Konstruktionsabsicht, keine Zusage. „Level" trägt
-          zugleich die Flug-Metapher, die im Wort Cockpit ohnehin steckt (künstlicher
-          Horizont) — s. Blogartikel „Fly by instruments".
-
-          Die These steht weiter offensiv in der Unterzeile — sie ist nach D0 das
-          Messinstrument der Positionierung und darf die Sichtfläche nicht verlassen. */}
-      <h1>Everything on this screen is built to keep you level.</h1>
-      {/* Michael 2026-08-29: der Kern ist NICHT „Risiko statt Geld" — 0,25 % ist genauso
-          eine Risikozahl wie ein Betrag. Der Kern ist RELATIV statt ABSOLUT: die Zahl
-          verschwindet nicht, sie wechselt die Skala und wird dadurch unvergleichbar mit
-          dem eigenen Leben. Das ist `07` D0 Argument 2, das dort fälschlich als
-          Nebenargument für Skeptiker geführt wurde — es ist der Wirkmechanismus.
-          Das Notional-Argument („in dem Konto ist kein Geld") trägt weiter unten das
-          eigene dunkle Band; hier wäre es eine Dopplung. */}
-      <p class="lede">
-        <strong>Same trader, better conditions.</strong> FixedR is a trading cockpit for funded
-        accounts where the numbers don't disappear — they change scale. You risk
-        0.5&thinsp;%, not an amount; a loss reads <span class="r-value">−1R</span>, not a sum
-        you can hold against your rent.
-      </p>
-      <div class="actions">
-        <a class="btn" href="/waitlist">Join the waitlist</a>
-        <a class="btn ghost" href="/manifesto">Why no money?</a>
-      </div>
-      <p class="meta">
-        Works with <strong>MetaTrader</strong> &amp; <strong>NinjaTrader</strong> ·
-        runs on your machine · no cloud account
-      </p>
-
-      <div class="stage">
-        <div class="bar">
-          <i></i><i></i><i></i>
-          <span>{SITE_TITLE} — {TAGLINE}</span>
+  <section class="home-hero ink">
+    <span class="big-r" aria-hidden="true">R</span>
+    <div class="inner">
+      <div class="intro">
+        <span class="pill"><span class="dot"></span>For prop traders · Windows app · founders circle open</span>
+        <h1>Loud charts. Calm numbers. <span class="accent">Trade in R.</span></h1>
+        <p class="lede">
+          Money changes scale with every account and pulls at you on every trade.
+          <strong>R does neither.</strong> One unit from your first evaluation to the account
+          that pays out.
+        </p>
+        <div class="actions">
+          <a class="btn" href="/waitlist">Join the waitlist</a>
+          <a class="btn ghost" href="/manifesto">Why no money?</a>
         </div>
-        <div class="body"><CockpitMock /></div>
+        <p class="meta">
+          Works with <strong>MetaTrader</strong> &amp; <strong>NinjaTrader</strong> ·
+          runs on your machine · no cloud account
+        </p>
+      </div>
+      <div class="stripe-wrap">
+        <div class="stripe">
+          <img src="/screens/trading-dark.placeholder.svg" alt="FixedR trading cockpit, dark mode (placeholder — real screenshot follows in a later package)" width="1600" height="1000" />
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- R1 (product\10 §2): Kontrast gegen die LAGE, nicht gegen andere Journale.
-       War: "Not another journal" / "Most tools analyze the trade after it's gone."
-       Eyebrow/H2 nach Kanvas 2026-09-02 (E-C210: Kanvas ist Vorgabe) — s. Protokoll. -->
+  <!-- Vier Säulen -->
+  <section class="pillars">
+    <div class="inner">
+      {pillars.map((p) => (
+        <a href="/product">
+          <span class="nr"><span>{p.nr}</span><span class="ln"></span></span>
+          <h3>{p.title}</h3>
+          <p>{p.text}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Die Regeln greifen vor dem Trade -->
   <section class="alt">
     <div class="wrap">
       <div class="section-head center">
         <p class="eyebrow">The journal fills itself</p>
         <h2>The rules apply before the trade exists.</h2>
-        <div style="display: flex; justify-content: center; margin: 0.9rem 0 0.2rem;">
-          <span class="reifegrad reifegrad-built">built</span>
-        </div>
         <p>
           FixedR sits where the decision happens. It places the order, sizes it from your risk,
           and records the whole thing on the way through. The rules apply <em>before</em> the
           trade exists — there's no review afterwards where a rule could have quietly bent.
         </p>
       </div>
-      <div class="grid">
+      <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
         <div class="card">
           <div class="token">
             <span class="bars"><b></b><b></b><b></b></span>
@@ -96,8 +101,6 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
           <p>You set the risk, FixedR computes the size from your stop distance. Backwards from the usual — and the only sane direction.</p>
         </div>
         <div class="card">
-          {/* Der Betrag ist bewusst unlesbar: die Karte behauptet, dass Geld außer
-              Sicht bleibt — sie darf ihn nicht selbst wieder herstellen. */}
           <div class="token">
             <span class="val">+2.4 R</span>
             <span class="masked" aria-label="a currency amount, deliberately hidden">
@@ -136,7 +139,6 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
       </div>
 
       <div class="feature-row flip">
-        <div class="illu-box"><LayoutMosaic /></div>
         <div>
           <h2>Timeframes that stay in sync</h2>
           <p>
@@ -150,6 +152,7 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
             structure: the charts belong together because you said what each one is for.
           </p>
         </div>
+        <div class="illu-box" style="background: var(--ink); border-color: var(--ink-line);"><LayoutMosaic /></div>
       </div>
 
       <div class="feature-row">
@@ -166,18 +169,12 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
     </div>
   </section>
 
-  <!-- R1 (product\10 §2): Kontrast gegen die LAGE, nicht gegen Firmen.
-       War: "a NinjaTrader add-on guards NinjaTrader accounts, a MetaTrader script …"
-       Eyebrow nach Kanvas 2026-09-02 ("Several funded accounts" → "One order, every
-       account"); H2 stand bereits identisch im Kanvas — s. Protokoll. -->
+  <!-- Ein Auftrag, jedes Konto -->
   <section class="alt">
     <div class="wrap">
       <div class="section-head center">
         <p class="eyebrow">One order, every account</p>
         <h2>Your risk rules apply to you, across every account you trade.</h2>
-        <div style="display: flex; justify-content: center; margin: 0.9rem 0 0.2rem;">
-          <span class="reifegrad reifegrad-built">built</span>
-        </div>
         <p>
           Risk tools usually live inside a single platform, tied to a single login — each
           account enforcing its own rules alone, with no picture of you as a trader across all
@@ -185,7 +182,7 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
           to whichever login happens to be open.
         </p>
       </div>
-      <div class="grid">
+      <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
         <div class="card">
           <div class="illu"><PayoutLock /></div>
           <h3>Protect the payout</h3>
@@ -197,8 +194,6 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
           </p>
         </div>
         <div class="card">
-          {/* Echte Firmennamen (Michael-Entscheid 2026-08-27): eine Aussage über
-              Anbindbarkeit, keine Partnerschaft und keine Empfehlung. */}
           <div class="chips">
             <span class="on">FTMO</span><span class="on">Apex</span><span>TopStep</span>
           </div>
@@ -222,16 +217,39 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
     </div>
   </section>
 
-  <!-- Manifest-Teaser: die EINE dunkle Fläche der Seite. Die These ist kein weiterer
-       Abschnitt, deshalb trägt die Farbe den Bruch. -->
+  <!-- Pakete -->
+  <section>
+    <div class="wrap">
+      <div class="section-head center">
+        <p class="eyebrow">Pricing</p>
+        <h2>Three tiers. One set of rules.</h2>
+        <span class="price-placeholder">SCHNITT UND PREISE — VORSCHLAG</span>
+      </div>
+      <div class="pricing-grid">
+        {packages.map((p) => (
+          <div class={`price-card ${p.featured ? 'hervor' : ''}`}>
+            <span class="head">
+              <span class="name">{p.name}</span>
+              {p.featured && <span class="badge">MOST TRADERS</span>}
+            </span>
+            <span class="price">
+              <span class="amount">{p.price}</span><span class="per">/ month</span>
+            </span>
+            <span class="satz">{p.note}</span>
+            <a class="knopf" href="/waitlist">{p.cta}</a>
+            <span class="points">
+              {p.points.map((pt) => <span><span class="check">✓</span>{pt}</span>)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- These: Tinte -->
   <section class="ink">
     <div class="wrap">
       <div class="section-head center">
-        {/* Eyebrow/H2 nach Kanvas 2026-09-02 ("The thesis" → "What's on the screen",
-            "There is no money in a challenge account." → "There's no money in this
-            account. Only a number and a scale."). Absatz + Manifest-Link bleiben:
-            das Kanvas zeigt hier keinen Link, die Seite braucht ihn als Übergang zu
-            /manifesto — s. Protokoll. */}
         <p class="eyebrow">What's on the screen</p>
         <h2>There's no money in this account. Only a number and a scale.</h2>
         <p>
@@ -240,24 +258,23 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
           target, both defined in percent. A currency display suggests a concreteness that
           doesn't exist. So we removed it.
         </p>
-        <p style="margin-top:1.4rem"><a class="btn ghost" href="/manifesto">Read the manifesto</a></p>
       </div>
+      <p style="text-align: center; margin-top: 10px;"><a class="btn ghost" href="/manifesto">Read the manifesto</a></p>
     </div>
   </section>
 
-  <!-- Abschluss-CTA — Eyebrow + H2 nach Kanvas 2026-09-02, Absatz bleibt (kohärent mit
-       der neuen H2), Fläche jetzt "alt" wie im Kanvas. -->
+  <!-- Founders circle -->
   <section class="alt">
     <div class="wrap">
-      <div class="section-head center" style="margin-bottom:0">
+      <div class="section-head center">
         <p class="eyebrow">Founders circle</p>
         <h2>A small group of prop traders starts here, and shapes what comes next.</h2>
         <p>
           FixedR is rolling out deliberately: a small group of prop traders first, then the
           waitlist, in order of signup.
         </p>
-        <p style="margin-top:1.6rem"><a class="btn" href="/waitlist">Join the waitlist</a></p>
       </div>
+      <p style="text-align: center; margin-top: 10px;"><a class="btn" href="/waitlist">Join the waitlist</a></p>
     </div>
   </section>
 </Base>
