@@ -1,16 +1,22 @@
 ---
 // Multi-Timeframe-Aufbau: dasselbe Symbol in mehreren Zeitrahmen nebeneinander, jede
-// Kachel mit einer inhaltlichen ROLLE (HTF/MTF/LTF). Die Synchronisation arbeitet über
-// diese Rollen — deshalb tragen hier alle drei Kacheln die Markenfarbe: sie sind EINE
-// Struktur, nicht drei Fenster. Die neutrale Kachel ist eine Kachel ohne Rolle; sie
-// zeigt, dass die Rolle vergeben wird und nicht automatisch entsteht.
-//
-// Aufteilung „eine groß plus zwei klein" — eine der Vorlagen des Bestands.
+// Kachel mit einer inhaltlichen ROLLE (HTF/MTF/LTF) und ihrem Zeitrahmen-Kürzel.
+// Korrektur FXR-142 (Michael 2026-09-03): 1:1 aus der Referenz übernommen — Tinte-
+// Fläche mit eigenem Innenrand, große Kachel links (span 2 Zeilen, blau umrandet,
+// aktiv), zwei kleine Kacheln rechts (neutral umrandet). Die Komponente trägt jetzt
+// ihre eigene dunkle Box (kein zusätzlicher .illu-box-Wrapper mehr nötig).
+const kacheln = [
+  { rolle: 'HTF · H4', gross: true },
+  { rolle: 'MTF · M15', gross: false },
+  { rolle: 'LTF · M1', gross: false },
+];
 ---
-<div class="mosaic" role="img" aria-label="One symbol across several timeframes; each chart carries a role — HTF, MTF, LTF — and the synchronisation follows the role">
-  <span class="main">HTF</span>
-  <span class="tagged">MTF</span>
-  <span class="tagged">LTF</span>
-  <span></span>
-  <span></span>
+<div
+  class="mosaic-v2"
+  role="img"
+  aria-label="One symbol across several timeframes; each chart carries a role — HTF, MTF, LTF — and the synchronisation follows the role"
+>
+  {kacheln.map((k) => (
+    <span class={k.gross ? 'big' : ''}>{k.rolle}</span>
+  ))}
 </div>

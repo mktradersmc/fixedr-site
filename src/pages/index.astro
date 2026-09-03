@@ -1,14 +1,13 @@
 ---
 // Startseite — Runde 13 (FXR-142): 1:1 nach `temp/export-web-v2/FixedR Web Home.html`
 // (README, Abschnittsreihenfolge und Wortlaut sind die Vorgabe). Bild-Komponenten
-// (Distribution/LayoutMosaic/RCalendar/PayoutLock/DynamicRisk) sind unverändert aus
-// FXR-26 übernommen — ihre Daten decken sich bereits mit der Referenz.
+// (Distribution/RCalendar) sind unveraendert aus FXR-26 uebernommen — ihre Daten
+// decken sich bereits mit der Referenz. LayoutMosaic + die Kartenfuellungen 'One
+// order' sind Korrektur FXR-142 (2026-09-03): 1:1 aus der Referenz gebaut.
 import Base from '../layouts/Base.astro';
 import Distribution from '../components/illus/Distribution.astro';
 import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
 import RCalendar from '../components/illus/RCalendar.astro';
-import PayoutLock from '../components/illus/PayoutLock.astro';
-import DynamicRisk from '../components/illus/DynamicRisk.astro';
 
 const pillars = [
   { nr: '01', title: 'The R view', text: 'Risk fixed before entry, results as multiples of it. Money never appears on screen.' },
@@ -138,7 +137,8 @@ const packages = [
         </div>
       </div>
 
-      <div class="feature-row flip">
+      <div class="feature-row">
+        <LayoutMosaic />
         <div>
           <h2>Timeframes that stay in sync</h2>
           <p>
@@ -152,7 +152,6 @@ const packages = [
             structure: the charts belong together because you said what each one is for.
           </p>
         </div>
-        <div class="illu-box" style="background: var(--ink); border-color: var(--ink-line);"><LayoutMosaic /></div>
       </div>
 
       <div class="feature-row">
@@ -184,7 +183,7 @@ const packages = [
       </div>
       <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
         <div class="card">
-          <div class="illu"><PayoutLock /></div>
+          <span class="pill-tag">PAYOUT &middot; PAUSED</span>
           <h3>Protect the payout</h3>
           <p>
             Once an account is eligible for a payout, the money stops being hypothetical — and
@@ -205,7 +204,11 @@ const packages = [
           </p>
         </div>
         <div class="card">
-          <div class="illu"><DynamicRisk /></div>
+          <span class="risk-bars" aria-hidden="true">
+            {[10,14,18,22,26,30,24,16,12].map((h, i) => (
+              <span style={`height:${h}px${i === 5 ? ';background:var(--brand)' : ''}`}></span>
+            ))}
+          </span>
           <h3>Risk that follows a rule</h3>
           <p>
             One R doesn't have to be the same fraction forever. Let it follow the state of the
