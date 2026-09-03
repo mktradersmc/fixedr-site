@@ -6,28 +6,39 @@ import Base from '../layouts/Base.astro';
 // ihr eigenes Robots-Meta.
 // FXR-45: die echte PDF liegt seit `tools/build-lead-magnet.mjs` (npm run
 // lead-magnet:pdf) unter `public/downloads/fixedr-guide.pdf` — kein Platzhalter mehr.
+// Runde 13 (FXR-142): "thanks.astro nach dem Warteliste-Muster" — einspaltige
+// Abwandlung von `.waitlist-hero` statt eines eigenen Formulars (s. Protokoll).
 const guidePath = '/downloads/fixedr-guide.pdf';
 ---
 <meta name="robots" content="noindex, nofollow" />
 <Base
   title="Thanks"
   description="You're on the FixedR waitlist. Your guide is one tap away."
-  narrow
+  bare
 >
-  <h1>You're on the list</h1>
-  <p>
-    Grab your guide below — no need to wait on an email.
-  </p>
-  <p>
-    <a class="btn" href={guidePath}>Get your guide</a>
-  </p>
-  <p style="color: var(--muted); font-size: 0.9rem;">
-    Eight short chapters, about 20 minutes: the problems that end a challenge more often than the
-    strategy does, and what closes each one structurally. A few short follow-up emails come next,
-    ending with an invitation once the next window opens.
-  </p>
-  <hr />
-  <p style="color: var(--muted); font-size: 0.9rem;">
-    Wrong inbox, or want off the list? Details in the <a href="/privacy">privacy policy</a>.
-  </p>
+  <section class="waitlist-hero single ink">
+    <div class="inner">
+      <div class="intro">
+        <p class="eyebrow">Founders circle</p>
+        <h1>You're on the list.</h1>
+        <p class="lede">Grab your guide below — no need to wait on an email.</p>
+      </div>
+      <div class="waitlist-card">
+        <p><a class="btn" href={guidePath}>Get your guide</a></p>
+        <p class="fine">
+          Eight short chapters, about 20 minutes: the problems that end a challenge more often
+          than the strategy does, and what closes each one structurally. A few short follow-up
+          emails come next, ending with an invitation once the next window opens.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap" style="max-width: 46rem;">
+      <p style="color: var(--muted); font-size: 0.9rem;">
+        Wrong inbox, or want off the list? Details in the <a href="/privacy">privacy policy</a>.
+      </p>
+    </div>
+  </section>
 </Base>

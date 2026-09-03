@@ -1,4 +1,8 @@
 ---
+// Runde 13 (FXR-142): 1:1 nach `temp/export-web-v2/FixedR Web Waitlist.html` — zweispaltiger
+// Hero auf Tinte. Die Referenz zeigt nur ein Email-Feld + eine dekorative Plattform-Auswahl;
+// die echten drei Formularfelder (E-Mail, trades, firms — FXR-44/45-Segmentierung) bleiben,
+// nur im selben Karten-Look wie die Referenz, s. Protokoll.
 import Base from '../layouts/Base.astro';
 import { WAITLIST_ENDPOINT, WAITLIST_EMAIL } from '../config';
 
@@ -12,61 +16,62 @@ const mailtoHref = `mailto:${WAITLIST_EMAIL}?subject=${encodeURIComponent('Fixed
 <Base
   title="Waitlist"
   description="Join the FixedR waitlist. The founders circle is filled first, in order of signup."
-  narrow
+  bare
 >
-  {/* Eyebrow ergänzt + H1 mit Punkt + Button-Beschriftung nach Kanvas 2026-09-02.
-      Absatz bleibt (trägt die Founders-Erklärung, die das Kanvas nicht ausführt);
-      die drei Formularfelder bleiben (FXR-45/44-Segmentierung) — s. Protokoll. */}
-  <div class="waitlist-intro">
-    <p class="eyebrow">For prop traders · Windows app</p>
-    <h1>Join the waitlist.</h1>
-    <p>
-      FixedR is being rolled out deliberately: a small founders circle of prop traders first,
-      then the waitlist, in order of signup. No spam — you'll hear from us when your spot opens.
-    </p>
-  </div>
+  <section class="waitlist-hero ink">
+    <div class="inner">
+      <div class="intro">
+        <p class="eyebrow">Founders circle</p>
+        <h1>Join the waitlist.</h1>
+        <p class="lede">
+          FixedR is being rolled out deliberately: a small founders circle of prop traders
+          first, then the waitlist, in order of signup. No spam — you'll hear from us when
+          your spot opens.
+        </p>
+      </div>
 
-  {hasEndpoint ? (
-    <form class="waitlist" action={WAITLIST_ENDPOINT} method="POST">
-      {/* FXR-45: Redirect nach dem Absenden zur Danke-Seite. `_next` ist die
-          Formspree-Konvention; der Feldname ist Dienst-abhängig (② noch offen,
-          `FXR-44`) und muss beim Anbieter-Entscheid nachgezogen werden. */}
-      <input type="hidden" name="_next" value="/thanks" />
-      <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required autocomplete="email" />
+      <div class="waitlist-card">
+        {hasEndpoint ? (
+          <form class="waitlist" action={WAITLIST_ENDPOINT} method="POST">
+            {/* FXR-45: Redirect nach dem Absenden zur Danke-Seite. `_next` ist die
+                Formspree-Konvention; der Feldname ist Dienst-abhängig (② noch offen,
+                `FXR-44`) und muss beim Anbieter-Entscheid nachgezogen werden. */}
+            <input type="hidden" name="_next" value="/thanks" />
+            <label for="email">Email
+              <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com" />
+            </label>
+            <label for="trades">What do you trade? (optional)
+              <input type="text" id="trades" name="trades" placeholder="futures / forex / …" />
+            </label>
+            <label for="firms">Which prop firm(s)? (optional)
+              <input type="text" id="firms" name="firms" />
+            </label>
+            <button class="btn" type="submit">Join the waitlist</button>
+          </form>
+        ) : (
+          <>
+            <p><a class="btn" href={mailtoHref}>Join via email</a></p>
+            <p class="fine">
+              This opens your mail app with a prefilled message to {WAITLIST_EMAIL} — tell us
+              what you trade and which firms you trade with, if you like.
+            </p>
+            {/* mailto: löst keine Formular-Navigation aus — kein automatischer Redirect
+                möglich, deshalb ein manueller Weiterweg zur Danke-Seite. */}
+            <p class="fine">Already sent it? <a href="/thanks">Continue to your guide</a>.</p>
+          </>
+        )}
+        <p class="fine">No newsletter. One mail when your seat opens.</p>
       </div>
-      <div>
-        <label for="trades">What do you trade? (optional)</label>
-        <input type="text" id="trades" name="trades" placeholder="futures / forex / …" />
-      </div>
-      <div>
-        <label for="firms">Which prop firm(s)? (optional)</label>
-        <input type="text" id="firms" name="firms" />
-      </div>
-      <button class="btn" type="submit">Join the waitlist</button>
-    </form>
-  ) : (
-    <>
-      <p style="margin-top: 2rem;">
-        <a class="btn" href={mailtoHref}>Join via email</a>
-      </p>
-      <p style="color: var(--muted); font-size: 0.9rem;">
-        This opens your mail app with a prefilled message to {WAITLIST_EMAIL} — tell us what
-        you trade and which firms you trade with, if you like.
-      </p>
-      {/* mailto: löst keine Formular-Navigation aus — kein automatischer Redirect
-          möglich, deshalb ein manueller Weiterweg zur Danke-Seite. */}
-      <p style="color: var(--muted); font-size: 0.9rem;">
-        Already sent it? <a href="/thanks">Continue to your guide</a>.
-      </p>
-    </>
-  )}
+    </div>
+  </section>
 
-  <hr />
-  <p style="color: var(--muted); font-size: 0.9rem;">
-    What happens with your address: it goes on the waitlist, nothing else. No newsletter,
-    no sharing, and you can ask for removal any time. Details in the
-    <a href="/privacy">privacy policy</a>.
-  </p>
+  <section>
+    <div class="wrap" style="max-width: 46rem;">
+      <p style="color: var(--muted); font-size: 0.9rem;">
+        What happens with your address: it goes on the waitlist, nothing else. No newsletter,
+        no sharing, and you can ask for removal any time. Details in the
+        <a href="/privacy">privacy policy</a>.
+      </p>
+    </div>
+  </section>
 </Base>

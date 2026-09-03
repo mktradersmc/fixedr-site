@@ -1,18 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 ---
 <Base
   title="Manifesto"
   description="Why FixedR shows you no money: risk is fixed before the trade, results are measured in R, and the number that makes you tilt never appears on screen."
-  narrow
+  bare
 >
-  <article class="post">
-    <h1>Why FixedR shows you no money</h1>
+  <PageHead
+    eyebrow="Manifesto"
+    lede="Open any trading platform and the largest number on the screen is money. Balance, equity, floating profit and loss — blinking, updating, demanding attention on every tick."
+  >Why FixedR shows you no money</PageHead>
 
-    <p>
-      Open any trading platform and the largest number on the screen is money. Balance,
-      equity, floating profit and loss — blinking, updating, demanding attention on every tick.
-    </p>
+  <article class="post">
     <p>
       We think that number is the single biggest reason disciplined traders break their own rules.
       So we removed it. Not behind a setting. Not behind a toggle. FixedR simply does not
