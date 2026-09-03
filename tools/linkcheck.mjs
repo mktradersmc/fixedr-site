@@ -7,7 +7,10 @@ import { join, relative, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(fileURLToPath(new URL('.', import.meta.url)), '..');
-const dist = join(root, 'dist');
+// --outdir=<name> (optional): FXR-142, wie in guards.mjs — Michaels laufende
+// `astro preview` haelt dist/downloads/fixedr-guide.pdf unter Windows gesperrt.
+const outdirArg = process.argv.find((a) => a.startsWith('--outdir='));
+const dist = join(root, outdirArg ? outdirArg.slice('--outdir='.length) : 'dist');
 if (!existsSync(dist)) {
   console.error('linkcheck: dist/ fehlt — erst bauen.');
   process.exit(1);
