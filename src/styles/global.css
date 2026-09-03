@@ -70,7 +70,7 @@ html {
 body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
 
 .wrap { width: 100%; max-width: 74rem; margin: 0 auto; padding: 0 1.88rem; }
-main { flex: 1; }
+main { flex: 1; display: flex; flex-direction: column; }
 main.narrow .wrap { max-width: 46rem; }
 
 h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; font-weight: 600; letter-spacing: -0.02em; }
@@ -377,7 +377,7 @@ details[open] summary { color: var(--brand); }
 
 /* ── Waitlist-Hero (Runde 13: Tinte, zweispaltig — Referenz `FixedR Web
    Waitlist.html`) ────────────────────────────────────────────────────────── */
-.waitlist-hero { position: relative; overflow: hidden; min-height: 640px; display: flex; align-items: center; padding: 0; }
+.waitlist-hero { position: relative; overflow: hidden; min-height: 640px; display: flex; align-items: center; padding: 0; flex: 1; }
 .waitlist-hero::before {
   content: ''; position: absolute; inset: 0; pointer-events: none;
   background-image:
@@ -423,12 +423,13 @@ form.waitlist .btn { width: 100%; text-align: center; padding: .88rem 1.4rem; }
 
 /* Dieselbe Form auf Tinte (Waitlist-Card): mono Feldlabel, dunkle Eingaben. */
 .waitlist-card label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-faint); }
-.waitlist-card input {
+.waitlist-card form.waitlist input[type="email"],
+.waitlist-card form.waitlist input[type="text"] {
   background: var(--ink); border: 1px solid var(--ink-line-2); border-radius: 8px;
   color: var(--on-ink); height: 44px; padding: 0 14px; font-size: 15px; font-family: inherit; width: 100%;
 }
-.waitlist-card input::placeholder { color: var(--on-ink-faint); }
-.waitlist-card input:focus { outline: 2px solid var(--brand-on-ink); border-color: transparent; }
+.waitlist-card form.waitlist input::placeholder { color: var(--on-ink-faint); }
+.waitlist-card form.waitlist input:focus { outline: 2px solid var(--brand-on-ink); border-color: transparent; }
 
 /* Plattform-Auswahl als Pillen (Korrektur FXR-142, Referenz-Waitlist-Karte). Radios
    bleiben echte Formularfelder (Tastatur/Screenreader), nur visuell verkleidet. */
