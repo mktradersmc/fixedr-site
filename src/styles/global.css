@@ -187,7 +187,7 @@ header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: va
 }
 
 /* ── Hero (Home) — Tinte, 48-px-Raster, großes „R" dahinter, Pille, Streifen. ── */
-.home-hero { position: relative; overflow: hidden; }
+.home-hero { position: relative; overflow: hidden; padding: 0; }
 .home-hero::before {
   content: ''; position: absolute; inset: 0; pointer-events: none;
   background-image:
@@ -246,7 +246,7 @@ header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: va
 }
 
 /* ── Vier Säulen (Home, direkt unter dem Hero) ─────────────── */
-.pillars { background: var(--bg); border-top: 1px solid var(--ink-line); }
+.pillars { background: var(--bg); border-top: 1px solid var(--ink-line); padding: 0; }
 .pillars .inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; padding: 56px 40px; }
 .pillars a { display: flex; flex-direction: column; gap: 8px; color: var(--text); }
 .pillars a:hover { color: var(--text); text-decoration: none; }
@@ -377,7 +377,7 @@ details[open] summary { color: var(--brand); }
 
 /* ── Waitlist-Hero (Runde 13: Tinte, zweispaltig — Referenz `FixedR Web
    Waitlist.html`) ────────────────────────────────────────────────────────── */
-.waitlist-hero { position: relative; overflow: hidden; min-height: 640px; display: flex; align-items: center; }
+.waitlist-hero { position: relative; overflow: hidden; min-height: 640px; display: flex; align-items: center; padding: 0; }
 .waitlist-hero::before {
   content: ''; position: absolute; inset: 0; pointer-events: none;
   background-image:
@@ -429,9 +429,26 @@ form.waitlist .btn { width: 100%; text-align: center; padding: .88rem 1.4rem; }
 }
 .waitlist-card input::placeholder { color: var(--on-ink-faint); }
 .waitlist-card input:focus { outline: 2px solid var(--brand-on-ink); border-color: transparent; }
+
+/* Plattform-Auswahl als Pillen (Korrektur FXR-142, Referenz-Waitlist-Karte). Radios
+   bleiben echte Formularfelder (Tastatur/Screenreader), nur visuell verkleidet. */
+.platform-pills { display: flex; gap: 6px; }
+.waitlist-card .pf-pill {
+  position: relative; flex: 1; height: 38px; display: flex; align-items: center;
+  justify-content: center; border-radius: 8px; font-size: 13px; font-weight: 500;
+  cursor: pointer; background: var(--ink); border: 1px solid var(--ink-line-2);
+  color: var(--on-ink-muted); font-family: var(--font-text); text-transform: none;
+  letter-spacing: normal;
+}
+.pf-pill input {
+  position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; width: auto;
+}
+.pf-pill:has(input:checked) { background: var(--brand-on-ink); border-color: var(--brand-on-ink); color: #fff; }
+.pf-pill:has(input:focus-visible) { outline: 2px solid var(--brand-on-ink); outline-offset: 2px; }
 .waitlist-card .btn { width: 100%; text-align: center; height: 46px; padding: 0; display: flex; align-items: center; justify-content: center; background: var(--brand-on-ink); }
 .waitlist-card .btn:hover { background: #1f6fd6; }
 .waitlist-card .fine { font-size: 12px; line-height: 1.5; color: var(--on-ink-faint); text-align: center; margin: 0; }
+.waitlist-card .fine a { color: var(--brand-on-ink); }
 
 /* ── Blog ─────────────────────────────────────────────────── */
 .post-list { list-style: none; padding: 0; }
@@ -446,8 +463,11 @@ article.post {
   display: flex; flex-direction: column; gap: 18px;
   font-size: 17px; line-height: 1.7; color: var(--text);
 }
-article.post h1 { font-size: 2.3rem; }
-article.post h2 { font-size: 28px; line-height: 1.15; letter-spacing: -.025em; margin-top: 22px; }
+article.post h1 { font-size: 2.3rem; margin: 0; }
+article.post h2 { font-size: 28px; line-height: 1.15; letter-spacing: -.025em; margin: 22px 0 0; }
+article.post h3 { margin: 0; }
+article.post p, article.post ul, article.post ol, article.post details { margin: 0; }
+article.post hr { margin: 24px 0 6px; }
 article.post > p { color: var(--muted); }
 article.post > p:first-of-type { color: var(--text); }
 article.post img, article.post svg { max-width: 100%; }
@@ -533,6 +553,19 @@ footer.site .inner {
 .chips span { padding: .35rem .65rem; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--line); color: var(--faint); }
 .chips span.on { background: var(--brand); border-color: var(--brand); color: #fff; }
 
+/* Pille "PAYOUT * PAUSED" (Korrektur FXR-142, Referenz-Karte 1 "One order, every
+   account"). */
+.pill-tag {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border-radius: 999px; background: var(--brand-soft);
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .06em;
+  color: var(--brand);
+}
+
+/* Balkenbild (Korrektur FXR-142, Referenz-Karte 3 "One order, every account"). */
+.risk-bars { display: flex; align-items: flex-end; gap: 5px; height: 30px; }
+.risk-bars span { flex: 1; border-radius: 2px; background: var(--brand-line); }
+
 /* ── R-Kalender ───────────────────────────────────────────────── */
 .cal { display: flex; flex-direction: column; gap: .8rem; }
 .cal .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
@@ -555,20 +588,24 @@ footer.site .inner {
 .cal .foot .m { font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
 .cal .foot .sum { font-size: 1.3rem; font-weight: 500; letter-spacing: -.025em; color: var(--brand); }
 
-/* ── Layout-Mosaik ────────────────────────────────────────────── */
-.mosaic { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: repeat(3, 42px); gap: 8px; }
-.mosaic span { border-radius: 6px; background: var(--surface); border: 1px solid var(--line); }
-.mosaic span.main {
-  grid-row: span 2; background: var(--brand-soft); border-color: var(--brand-line);
-  display: grid; place-items: center;
-  font-family: var(--font-mono); font-size: .95rem; font-weight: 600; color: var(--brand);
+/* -- Layout-Mosaik (Korrektur FXR-142, 2026-09-03: 1:1 aus der Referenz) --------
+   Tinte-Flaeche mit eigenem Innenrand (kein .illu-box-Wrapper mehr), grosse Kachel
+   links ueber 2 Zeilen (blau umrandet, aktiv), zwei kleine Kacheln rechts (neutral
+   umrandet auf --ink-2). */
+.mosaic-v2 {
+  background: var(--ink); border-radius: 14px; padding: 22px;
+  display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: repeat(2, 96px); gap: 8px;
 }
-/* Kacheln mit vergebener Rolle tragen dieselbe Farbe wie die große — sie sind EINE
-   synchronisierte Struktur. Kacheln ohne Rolle bleiben neutral. */
-.mosaic span.tagged {
-  background: var(--brand-soft); border-color: var(--brand-line);
-  display: grid; place-items: center;
-  font-family: var(--font-mono); font-size: .72rem; font-weight: 600; color: var(--brand);
+.mosaic-v2 span {
+  border-radius: 8px; background: var(--ink-2); border: 1px solid var(--ink-line-2);
+  display: flex; align-items: flex-start; padding: 10px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--on-ink-muted);
+}
+.mosaic-v2 span.big {
+  grid-row: span 2; border-color: var(--brand-on-ink); color: var(--brand-on-ink);
+}
+@media (max-width: 780px) {
+  .mosaic-v2 { grid-template-rows: repeat(2, 72px); }
 }
 
 @media (max-width: 780px) {
