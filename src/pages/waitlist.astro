@@ -1,17 +1,16 @@
 ---
-// Runde 13 (FXR-142): 1:1 nach `temp/export-web-v2/FixedR Web Waitlist.html` — zweispaltiger
-// Hero auf Tinte. Die Referenz zeigt nur ein Email-Feld + eine dekorative Plattform-Auswahl;
-// die echten drei Formularfelder (E-Mail, trades, firms — FXR-44/45-Segmentierung) bleiben,
-// nur im selben Karten-Look wie die Referenz, s. Protokoll.
+// Korrektur FXR-142 (Michael 2026-09-03): die Warteliste hatte noch die alte Ueberschrift
+// und einen abweichenden Feldsatz (trades/firms statt Plattform-Wahl). Jetzt 1:1 nach
+// `temp/export-web-v2/FixedR Web Waitlist.html` — Ueberschrift, Lede und die Plattform-
+// Auswahl (MetaTrader/NinjaTrader/Both) aus der Referenz, echtes E-Mail-Feld. Ohne
+// WAITLIST_ENDPOINT (E-C131 noch offen) oeffnet "Join the waitlist" den mailto-Fallback
+// mit E-Mail und Plattform vorbelegt statt eines POSTs — ehrlich (kein Formular, das ins
+// Leere sendet), aber optisch die Referenz. Review-Befund vom 03.09. (Danke-Seite darf
+// keinen Mailversand behaupten, den der Bau nicht ausloest) gilt unveraendert weiter.
 import Base from '../layouts/Base.astro';
 import { WAITLIST_ENDPOINT, WAITLIST_EMAIL } from '../config';
 
-// Austauschbarer Empfänger (E-C131): mit Endpoint = echtes Formular,
-// ohne = mailto:-Fallback. Kein JS, kein Drittanbieter-Script auf der Seite.
 const hasEndpoint = WAITLIST_ENDPOINT.length > 0;
-const mailtoHref = `mailto:${WAITLIST_EMAIL}?subject=${encodeURIComponent('FixedR waitlist')}&body=${encodeURIComponent(
-  'Hi,\n\nplease put me on the FixedR waitlist.\n\nWhat I trade (futures/forex/other): \nProp firm(s) I trade with: \n'
-)}`;
 ---
 <Base
   title="Waitlist"
@@ -22,56 +21,80 @@ const mailtoHref = `mailto:${WAITLIST_EMAIL}?subject=${encodeURIComponent('Fixed
     <div class="inner">
       <div class="intro">
         <p class="eyebrow">Founders circle</p>
-        <h1>Join the waitlist.</h1>
+        <h1>A small group of prop traders starts here, and shapes what comes next.</h1>
         <p class="lede">
-          FixedR is being rolled out deliberately: a small founders circle of prop traders
-          first, then the waitlist, in order of signup. No spam — you'll hear from us when
-          your spot opens.
+          FixedR is rolling out deliberately: a small group of prop traders first, then the
+          waitlist, in order of signup.
         </p>
       </div>
 
       <div class="waitlist-card">
-        {hasEndpoint ? (
-          <form class="waitlist" action={WAITLIST_ENDPOINT} method="POST">
-            {/* FXR-45: Redirect nach dem Absenden zur Danke-Seite. `_next` ist die
-                Formspree-Konvention; der Feldname ist Dienst-abhängig (② noch offen,
-                `FXR-44`) und muss beim Anbieter-Entscheid nachgezogen werden. */}
-            <input type="hidden" name="_next" value="/thanks" />
-            <label for="email">Email
-              <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com" />
-            </label>
-            <label for="trades">What do you trade? (optional)
-              <input type="text" id="trades" name="trades" placeholder="futures / forex / …" />
-            </label>
-            <label for="firms">Which prop firm(s)? (optional)
-              <input type="text" id="firms" name="firms" />
-            </label>
-            <button class="btn" type="submit">Join the waitlist</button>
-          </form>
-        ) : (
-          <>
-            <p><a class="btn" href={mailtoHref}>Join via email</a></p>
-            <p class="fine">
-              This opens your mail app with a prefilled message to {WAITLIST_EMAIL} — tell us
-              what you trade and which firms you trade with, if you like.
-            </p>
-            {/* mailto: löst keine Formular-Navigation aus — kein automatischer Redirect
-                möglich, deshalb ein manueller Weiterweg zur Danke-Seite. */}
-            <p class="fine">Already sent it? <a href="/thanks">Continue to your guide</a>.</p>
-          </>
-        )}
+        <form
+          class="waitlist waitlist-v2"
+          id="waitlist-form"
+          action={hasEndpoint ? WAITLIST_ENDPOINT : undefined}
+          method={hasEndpoint ? 'POST' : undefined}
+          data-mailto-fallback={hasEndpoint ? undefined : 'true'}
+          data-mailto-email={WAITLIST_EMAIL}
+        >
+          {/* FXR-45: Redirect nach dem Absenden zur Danke-Seite (nur mit echtem Endpoint —
+              `_next` ist die Formspree-Konvention, Feldname dienst-abhaengig, FXR-44). */}
+          {hasEndpoint && <input type="hidden" name="_next" value="/thanks" />}
+          <label for="email">Email
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com" />
+          </label>
+          <label>Platform
+            <span class="platform-pills" role="radiogroup" aria-label="Platform">
+              <label class="pf-pill">
+                <input type="radio" name="platform" value="MetaTrader" checked />
+                <span>MetaTrader</span>
+              </label>
+              <label class="pf-pill">
+                <input type="radio" name="platform" value="NinjaTrader" />
+                <span>NinjaTrader</span>
+              </label>
+              <label class="pf-pill">
+                <input type="radio" name="platform" value="Both" />
+                <span>Both</span>
+              </label>
+            </span>
+          </label>
+          <button class="btn" type="submit">Join the waitlist</button>
+        </form>
         <p class="fine">No newsletter. One mail when your seat opens.</p>
+        {!hasEndpoint && (
+          <p class="fine">Already sent it? <a href="/thanks">Continue to your guide</a>.</p>
+        )}
+        <p class="fine">
+          Your address goes on the waitlist, nothing else — details in the
+          <a href="/privacy">privacy policy</a>.
+        </p>
       </div>
     </div>
   </section>
 
-  <section>
-    <div class="wrap" style="max-width: 46rem;">
-      <p style="color: var(--muted); font-size: 0.9rem;">
-        What happens with your address: it goes on the waitlist, nothing else. No newsletter,
-        no sharing, and you can ask for removal any time. Details in the
-        <a href="/privacy">privacy policy</a>.
-      </p>
-    </div>
-  </section>
+  {!hasEndpoint && (
+    <script>
+      // Kein WAITLIST_ENDPOINT (E-C131): das Formular sendet nichts an einen Server, es
+      // oeffnet stattdessen den Mail-Client mit E-Mail + gewaehlter Plattform vorbelegt —
+      // dieselbe ehrliche Loesung wie zuvor am mailto-Knopf, jetzt am reference-genauen
+      // Formular. Kein Redirect zur Danke-Seite (mailto: loest keine Navigation aus).
+      const form = document.getElementById('waitlist-form');
+      if (form && form.hasAttribute('data-mailto-fallback')) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const email = document.getElementById('email').value.trim();
+          const platform = form.querySelector('input[name="platform"]:checked')?.value ?? '';
+          const to = form.getAttribute('data-mailto-email');
+          const body =
+            'Hi,\n\nplease put me on the FixedR waitlist.\n\n' +
+            `Email: ${email}\nPlatform: ${platform}\n`;
+          const href =
+            `mailto:${to}?subject=${encodeURIComponent('FixedR waitlist')}&body=${encodeURIComponent(body)}`;
+          window.location.href = href;
+        });
+      }
+    </script>
+  )}
+
 </Base>
