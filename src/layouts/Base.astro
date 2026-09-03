@@ -1,8 +1,10 @@
 ---
 // Grund-Layout: Head (SEO/OG), Kopfleiste, Fußzeile. Keine Tracker, keine externen
 // Ressourcen — Fonts kommen aus node_modules und werden von Astro lokal gebündelt.
+// Runde 13 (FXR-142): Kopfleiste/Fußzeile jetzt auf Tinte (Referenz `export-web-v2`).
 import '@fontsource-variable/geist';
 import '@fontsource-variable/geist-mono';
+import '@fontsource-variable/space-grotesk';
 import '../styles/global.css';
 import { SITE_TITLE, TAGLINE, DESCRIPTION } from '../config';
 
@@ -37,7 +39,7 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
-    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="theme-color" content="#06070a" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -53,11 +55,12 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
         <a class="logo" href="/" aria-label="FixedR home">
           {/* Die Aufstellung ist gezeichnet, nicht gesetzt: Bildmarke, Wortmarke und
               Untertitel liegen als Pfade vor, damit sie unabhängig von geladenen
-              Schriften sitzen. Deshalb steht die Tagline hier nicht als Text. */}
-          <img src="/wortmarke.svg" alt="FixedR — trade calm. by design." width="152" height="45" />
+              Schriften sitzen. Deshalb steht die Tagline hier nicht als Text. Auf
+              der jetzt dunklen Kopfleiste (Runde 13) braucht es die helle Variante. */}
+          <img src="/logo-full-on-dark.svg" alt="FixedR — trade calm. by design." width="140" height="41" />
         </a>
         <nav>
-          {/* product §3 Stufe 1: /product und /methodology sind die zwei
+          {/* product §3 Stufe 1: /product und /methodology sind die zwei
               Stockwerke des Angebots (R2), /trust die Vertrauensseite (§6). Reihenfolge
               folgt der Kaufentscheidung: was es tut, wie es bindet, warum man ihm traut. */}
           <a href="/product" aria-current={isActive('/product')}>Product</a>
@@ -66,6 +69,16 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
           <a href="/manifesto" aria-current={isActive('/manifesto')}>Manifesto</a>
           <a href="/faq" aria-current={isActive('/faq')}>FAQ</a>
           <a href="/blog" aria-current={isActive('/blog')}>Blog</a>
+          {/* Sprachwechsel (FXR-142, Referenz-Kommentar in export-web-v2: "Sprache als
+              schlichter Textlink wie die Navigation, nur die aktive Sprache steht; die
+              andere erscheint als Wechselziel"). Der Mechanismus selbst ist im Referenz-
+              Prototyp ein reiner UI-Zustand (er übersetzt keinen Seiteninhalt) — dasselbe
+              gilt hier: der Klick schaltet Label/Zustand um und merkt sich die Wahl
+              (localStorage), er übersetzt keinen Fließtext. Ob echte DE-Übersetzung
+              folgen soll, ist eine offene Frage an Michael (Protokoll). */}
+          <a href="#" class="lang-switch" data-lang-switch aria-label="Switch language">
+            <span class="active" data-lang-active>EN</span><span class="slash">/</span><span data-lang-other>DE</span>
+          </a>
           <a class="cta" href="/waitlist">Join the waitlist</a>
         </nav>
       </div>
@@ -73,21 +86,69 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
     <main class={narrow ? 'narrow' : undefined}>
       {bare ? <slot /> : <div class="wrap"><slot /></div>}
     </main>
-    <footer class="site">
+    <footer class="site ink">
       <div class="inner">
-        {/* Kanvas 2026-09-02: „© FixedR" ohne Jahr, mono. */}
-        <span class="copy mono">© FixedR</span>
-        <nav>
-          <a href="/product">Product</a>
-          <a href="/methodology">Methodology</a>
-          <a href="/trust">Trust</a>
-          <a href="/faq">FAQ</a>
-          <a href="/blog">Blog</a>
-          <a href="/imprint">Imprint</a>
-          <a href="/privacy">Privacy</a>
-        </nav>
-        <span class="notrack">This site sets no cookies and loads nothing from third parties.</span>
+        <div class="footer-cols">
+          <div class="brand-col">
+            <img src="/logo-full-on-dark.svg" alt="FixedR" width="128" height="38" />
+            <p>A trading cockpit for prop-firm accounts. Local-first, Windows, no cloud account.</p>
+          </div>
+          <nav>
+            <div class="group">
+              <span class="group-label">Product</span>
+              <a href="/product">Product</a>
+              <a href="/methodology">Methodology</a>
+              <a href="/trust">Trust</a>
+            </div>
+            <div class="group">
+              <span class="group-label">Read</span>
+              <a href="/manifesto">Manifesto</a>
+              <a href="/faq">FAQ</a>
+              <a href="/blog">Blog</a>
+            </div>
+            <div class="group">
+              <span class="group-label">Legal</span>
+              <a href="/imprint">Imprint</a>
+              <a href="/privacy">Privacy</a>
+            </div>
+          </nav>
+        </div>
+        <div class="footer-legal">
+          <span class="mono">© FixedR</span>
+          <span class="notrack">This site sets no cookies and loads nothing from third parties.</span>
+        </div>
       </div>
     </footer>
+    <script>
+      // Sprachwechsel: reiner UI-Zustand (kein Fließtext-Wechsel, s. Kommentar oben).
+      // Persistiert je Gerät über localStorage; jede Seite liest denselben Schlüssel,
+      // damit der Zustand über Seitenwechsel hinweg stabil bleibt (G4: "funktioniert
+      // auf jeder Seite").
+      const KEY = 'fixedr-lang';
+      const link = document.querySelector('[data-lang-switch]');
+      const activeEl = document.querySelector('[data-lang-active]');
+      const otherEl = document.querySelector('[data-lang-other]');
+      function apply(lang: string) {
+        if (activeEl) activeEl.textContent = lang;
+        if (otherEl) otherEl.textContent = lang === 'EN' ? 'DE' : 'EN';
+        document.documentElement.setAttribute('data-lang', lang.toLowerCase());
+      }
+      try {
+        apply(localStorage.getItem(KEY) === 'DE' ? 'DE' : 'EN');
+      } catch {
+        apply('EN');
+      }
+      link?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const current = activeEl?.textContent === 'DE' ? 'DE' : 'EN';
+        const next = current === 'EN' ? 'DE' : 'EN';
+        apply(next);
+        try {
+          localStorage.setItem(KEY, next);
+        } catch {
+          /* privater Modus o. Ä. — der Klick bleibt trotzdem sichtbar. */
+        }
+      });
+    </script>
   </body>
 </html>

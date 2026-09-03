@@ -24,13 +24,19 @@
   --brand-soft: #e4effb;
   --brand-line: #b3d3f4;
 
-  /* Tinte: die eine dunkle Fläche (Manifest-Band, Produktbühne). */
+  /* Tinte: die eine dunkle Fläche — seit Runde 13 (FXR-142) mehrere: Kopfleiste,
+     Hero, Manifest-Band, Kopfband jeder Unterseite, Fußzeile. --ink-2/--ink-line-2
+     sind die zweite Tiefenstufe (Pillen, Karten, Formularfelder AUF der Tinte). */
   --ink: #06070a;
+  --ink-2: #0c0e12;
   --ink-line: #1c2027;
-  --ink-dot: #2b313a;
+  --ink-line-2: #2b313a;
+  --ink-dot: #2b313a; /* Alias von --ink-line-2, hält .stage rückwärtskompatibel. */
   --on-ink: #f3f5f7;
   --on-ink-muted: #98a1ab;
-  --brand-on-ink: #6fa6e6;
+  --on-ink-faint: #6b747e;
+  --brand-on-ink: #2e86f6;
+  --pos: #22c55e;
 
   /* Reifegrad-Chip (Kanvas 2026-09-02: Pille mit Punkt). */
   --tag-built-bg: #e4effb; --tag-built-fg: #084fa6; --tag-built-ln: #b3d3f4; --tag-built-dot: #0a62cf;
@@ -46,6 +52,7 @@
   --radius-pill: 999px;
   --font-text: 'Geist Variable', system-ui, sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+  --font-display: 'Space Grotesk Variable', system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -66,10 +73,10 @@ body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
 main { flex: 1; }
 main.narrow .wrap { max-width: 46rem; }
 
-h1, h2, h3 { line-height: 1.15; font-weight: 600; letter-spacing: -0.02em; }
-h1 { font-size: 2.7rem; margin: 2rem 0 1rem; }
-h2 { font-size: 2rem; margin: 0 0 0.9rem; }
-h3 { font-size: 1.15rem; margin: 1.6rem 0 0.4rem; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; font-weight: 600; letter-spacing: -0.02em; }
+h1 { font-size: 2.7rem; letter-spacing: -.035em; margin: 2rem 0 1rem; }
+h2 { font-size: 2rem; letter-spacing: -.03em; margin: 0 0 0.9rem; }
+h3 { font-size: 1.15rem; letter-spacing: -.02em; margin: 1.6rem 0 0.4rem; }
 p { margin: 0.85rem 0; }
 
 a { color: var(--brand); text-decoration: none; font-weight: 500; }
@@ -89,50 +96,58 @@ blockquote {
   background: var(--bg-alt); border-radius: 0 8px 8px 0; color: var(--muted);
 }
 
-/* ── Kopfleiste ───────────────────────────────────────────── */
+/* ── Kopfleiste (Runde 13, FXR-142: auf Tinte, sticky, Blur, keine Unterkante —
+   Referenz `FixedR Web Home.html` §Kopfleiste) ────────────────────────────── */
 header.site {
-  border-bottom: 1px solid var(--line);
-  background: rgba(255, 255, 255, .9);
-  backdrop-filter: saturate(180%) blur(10px);
+  background: rgba(6, 7, 10, .86);
+  backdrop-filter: saturate(160%) blur(10px);
   position: sticky; top: 0; z-index: 20;
 }
 header.site .inner {
-  max-width: 74rem; margin: 0 auto; padding: 0.82rem 1.88rem;
-  display: flex; align-items: center; gap: 2.1rem;
+  max-width: 1200px; margin: 0 auto; padding: 18px 40px;
+  display: flex; align-items: center; gap: 32px;
 }
 header.site .logo { display: flex; align-items: center; }
-header.site .logo img { display: block; width: 152px; height: auto; }
-header.site nav { display: flex; align-items: center; gap: 1.76rem; margin-left: auto; }
-header.site nav a { color: var(--muted); font-size: 0.94rem; font-weight: 500; }
-header.site nav a:hover { color: var(--text); text-decoration: none; }
-/* Aktive Seite: Marke statt Neutral, wie im Kanvas auf /product, /methodology, /trust
-   (das Kanvas-Home-Artboard hebt uneinheitlich „Product" hervor, ohne dass Home selbst
-   ein Nav-Ziel ist — als Rausch-Rest gewertet, hier NICHT nachgebaut: nur echte
-   aktive Seiten werden markiert). */
-header.site nav a[aria-current='page'] { color: var(--brand); font-weight: 600; }
+header.site .logo img { display: block; width: 140px; height: auto; }
+header.site nav { display: flex; align-items: center; gap: 26px; margin-left: auto; font-size: 14px; font-weight: 500; }
+header.site nav a { color: var(--on-ink-muted); }
+header.site nav a:hover { color: var(--on-ink); text-decoration: none; }
+header.site nav a[aria-current='page'] { color: var(--brand-on-ink); font-weight: 600; }
+/* Sprachwechsel: Textlink wie die Navigation, nur die aktive Sprache ist betont
+   (Referenz-Kommentar: "nur die aktive Sprache steht; die andere erscheint als
+   Wechselziel"). Kein <select>, kein Formular — ein einzelner Link, der den
+   Zustand umschaltet (Base.astro, Skript unten). */
+header.site .lang-switch {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--on-ink-faint); font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em;
+}
+header.site .lang-switch:hover { color: var(--on-ink); text-decoration: none; }
+header.site .lang-switch .active { color: var(--on-ink-muted); }
+header.site .lang-switch .slash { opacity: .5; }
 header.site nav a.cta {
-  background: var(--brand); color: #fff; border-radius: var(--radius-sm);
-  padding: 0.42rem 0.95rem; font-weight: 600;
+  padding: 8px 16px; background: var(--brand-on-ink); color: #fff;
+  border-radius: 6px; font-weight: 600;
 }
-header.site nav a.cta:hover { background: var(--brand-hover); color: #fff; }
+header.site nav a.cta:hover { background: #1f6fd6; color: #fff; }
 
-@media (max-width: 640px) {
-  header.site .inner { padding: 0.7rem 1.1rem; gap: 0.7rem; }
-  header.site .logo img { width: 116px; }
-  header.site nav { gap: 0; }
-  header.site nav a:not(.cta) { display: none; }
-  header.site nav a.cta { padding: 0.55rem 0.9rem; font-size: 0.88rem; }
+@media (max-width: 780px) {
+  header.site .inner { padding: 14px 20px; gap: 14px; }
+  header.site .logo img { width: 112px; }
+  header.site nav { gap: 14px; }
+  header.site nav a:not(.cta):not(.lang-switch) { display: none; }
+  header.site nav a.cta { padding: 9px 14px; font-size: 13px; }
 }
 
-/* ── Abschnitte ───────────────────────────────────────────── */
-section { padding: 4.5rem 0; }
+/* ── Abschnitte (80px oben/unten, wie im Referenz-Raster) ────── */
+section { padding: 80px 0; }
 section.alt { background: var(--bg-alt); border-block: 1px solid var(--line); }
-.section-head { max-width: 42rem; margin-bottom: 2.5rem; }
-.section-head.center { margin-inline: auto; text-align: center; }
-.section-head p { color: var(--muted); font-size: 1.08rem; }
+.section-head { max-width: 42rem; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; }
+.section-head.center { margin-inline: auto; text-align: center; align-items: center; gap: 14px; max-width: 44rem; }
+.section-head h2 { font-size: 40px; line-height: 1.1; letter-spacing: -.03em; margin: 0; text-wrap: pretty; }
+.section-head p { color: var(--muted); font-size: 18px; line-height: 1.6; margin: 0; text-wrap: pretty; }
 .eyebrow {
-  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600;
-  letter-spacing: .08em; text-transform: uppercase; color: var(--brand);
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--brand);
   margin-bottom: 0.6rem;
 }
 
@@ -141,82 +156,207 @@ section.alt { background: var(--bg-alt); border-block: 1px solid var(--line); }
 .group-head { display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap; margin-bottom: 1rem; }
 .group-head h2 { margin: 0; }
 
-/* ── Seiten-Hero (Product/Methodology/Trust/Waitlist) ────────── */
-.page-hero { padding: 3.9rem 0 1.2rem; text-align: center; }
-.page-hero .wrap { max-width: 46rem; }
-.page-hero .eyebrow { margin-bottom: 0; }
-.page-hero h1 { margin: 0.9rem 0 0.7rem; font-size: 2.35rem; line-height: 1.16; letter-spacing: -.03em; }
-.page-hero .lede { margin-top: 0; font-size: 1.06rem; color: var(--muted); }
-.page-hero.tint { background: var(--bg-alt); border-bottom: 1px solid var(--line); padding-bottom: 2.8rem; }
-
-/* ── Hero (Home) ──────────────────────────────────────────── */
-.hero { padding: 4.47rem 0 0; text-align: center; }
-.hero h1 { font-size: 3.29rem; line-height: 1.08; letter-spacing: -.035em; margin: 1.18rem auto 1.29rem; max-width: 22ch; }
-.hero .lede { max-width: 40rem; margin: 0 auto; font-size: 1.18rem; color: var(--muted); }
-.hero .actions { margin: 1.9rem 0 0.8rem; display: flex; gap: 1.3rem; justify-content: center; align-items: center; flex-wrap: wrap; }
-.hero .meta { color: var(--faint); font-size: .88rem; margin-top: 1.06rem; }
-.hero .meta strong { color: var(--muted); font-weight: 600; }
-
-/* Produktbühne — der dunkle Rahmen, in dem Screenshot/Mockup als „Bildschirm" sitzt.
-   Der Rahmen bleibt der Platzhalter (Beschriftung in der Leiste), solange kein echtes
-   Bildschirmfoto vorliegt — CockpitMock.astro darf als Inhalt stehen (FXR-26). */
-.stage {
-  margin: 2.82rem auto 0; max-width: 62rem;
-  background: var(--ink); border: 1px solid var(--ink-line); border-bottom: none;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0; box-shadow: var(--shadow-stage);
-  overflow: hidden;
+/* ── Kopfband (PageHead.astro) — dasselbe dunkle Band auf jeder Unterseite:
+   Eyebrow, H1, Lede, mittig, max. 760px (Referenz `FixedR Web Manifesto.html`).
+   Ersetzt die alte helle .page-hero. Trägt zusätzlich die Klasse `.ink`, deshalb
+   gelten Eyebrow-/Ghost-Knopf-Regeln aus dem Ink-Block weiter unten automatisch. */
+header.page-head {
+  position: relative; overflow: hidden;
 }
-.stage .bar {
-  display: flex; align-items: center; gap: .4rem;
-  padding: .65rem .95rem; border-bottom: 1px solid var(--ink-line);
+header.page-head::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(#111722 1px, transparent 1px),
+    linear-gradient(90deg, #111722 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 10%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 10%, transparent 70%);
 }
-.stage .bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--ink-dot); display: block; }
-.stage .bar span {
-  margin-left: .6rem; font-family: var(--font-mono);
-  font-size: .76rem; color: var(--on-ink-muted);
+header.page-head .inner {
+  position: relative; max-width: 760px; margin: 0 auto; padding: 72px 40px 64px;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px;
 }
-.stage .body { margin: 0.82rem; border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); }
+header.page-head .eyebrow { margin-bottom: 0; }
+header.page-head h1 { font-size: 52px; line-height: 1.05; letter-spacing: -.035em; margin: 0; text-wrap: pretty; }
+header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: var(--on-ink-muted); text-wrap: pretty; }
 
-/* ── Knöpfe ───────────────────────────────────────────────── */
+@media (max-width: 780px) {
+  header.page-head .inner { padding: 48px 20px 40px; gap: 12px; }
+  header.page-head h1 { font-size: 34px; }
+  header.page-head .lede { font-size: 16px; }
+}
+
+/* ── Hero (Home) — Tinte, 48-px-Raster, großes „R" dahinter, Pille, Streifen. ── */
+.home-hero { position: relative; overflow: hidden; }
+.home-hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(#111722 1px, transparent 1px),
+    linear-gradient(90deg, #111722 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 20%, #000 20%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 50% 20%, #000 20%, transparent 70%);
+}
+.home-hero .big-r {
+  position: absolute; left: 50%; top: -60px; transform: translateX(-50%);
+  font-family: var(--font-display); font-size: 520px; line-height: .8; font-weight: 700;
+  letter-spacing: -.06em; color: #0a1d33; pointer-events: none; user-select: none;
+}
+.home-hero .inner {
+  position: relative; max-width: 1200px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: 36px; padding: 64px 40px 0;
+}
+.home-hero .intro { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; max-width: 860px; }
+.home-hero .pill {
+  display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--ink-line); background: var(--ink-2);
+  font-family: var(--font-mono); font-size: 12px; color: var(--on-ink-muted);
+}
+.home-hero .pill .dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--pos);
+  animation: puls 2s ease-in-out infinite;
+}
+@keyframes puls { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+.home-hero h1 {
+  font-size: 68px; line-height: 1.02; letter-spacing: -.035em; margin: 0; max-width: 16ch; text-wrap: pretty;
+}
+.home-hero h1 .accent { color: var(--brand-on-ink); }
+.home-hero .lede { max-width: 40rem; margin: 0; font-size: 19px; line-height: 1.6; color: var(--on-ink-muted); text-wrap: pretty; }
+.home-hero .lede strong { color: var(--on-ink); font-weight: 600; }
+.home-hero .actions { display: flex; gap: 12px; align-items: center; }
+.home-hero .meta { font-size: 14px; color: var(--on-ink-faint); }
+.home-hero .meta strong { font-weight: 600; color: var(--on-ink-muted); }
+
+/* Der Streifen: 1120×420, oben gerundet, unten abgeschnitten, blauer Schein nach oben. */
+.home-hero .stripe-wrap { position: relative; width: 100%; display: flex; justify-content: center; margin-top: 8px; }
+.home-hero .stripe {
+  height: 420px; width: 1120px; max-width: 100%; overflow: hidden;
+  border-radius: 14px 14px 0 0; border: 1px solid var(--ink-line-2); border-bottom: none;
+  background: var(--ink); box-shadow: 0 -30px 120px -40px rgba(46, 134, 246, .45);
+}
+.home-hero .stripe img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+@media (max-width: 780px) {
+  .home-hero .inner { padding: 40px 20px 0; gap: 24px; }
+  .home-hero .big-r { font-size: 280px; top: -20px; }
+  .home-hero h1 { font-size: 34px; }
+  .home-hero .lede { font-size: 16px; }
+  .home-hero .actions { flex-direction: column; align-items: stretch; width: 100%; }
+  .home-hero .stripe { height: 220px; }
+}
+
+/* ── Vier Säulen (Home, direkt unter dem Hero) ─────────────── */
+.pillars { background: var(--bg); border-top: 1px solid var(--ink-line); }
+.pillars .inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; padding: 56px 40px; }
+.pillars a { display: flex; flex-direction: column; gap: 8px; color: var(--text); }
+.pillars a:hover { color: var(--text); text-decoration: none; }
+.pillars .nr { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--brand); }
+.pillars .nr .ln { height: 1px; flex: 1; background: currentColor; opacity: .25; }
+.pillars h3 { font-size: 19px; margin: 0; }
+.pillars p { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0; }
+@media (max-width: 780px) { .pillars .inner { grid-template-columns: 1fr 1fr; gap: 24px; padding: 40px 20px; } }
+
+/* ── Pricing (Home) ─────────────────────────────────────────── */
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; }
+.price-card {
+  display: flex; flex-direction: column; gap: 18px; padding: 32px 28px; border-radius: 16px;
+  background: var(--bg); border: 1px solid var(--line);
+}
+.price-card.hervor {
+  background: var(--ink); color: var(--on-ink); border: none;
+  box-shadow: 0 30px 60px -30px rgba(6, 7, 10, .6); transform: translateY(-8px);
+}
+.price-card .head { display: flex; justify-content: space-between; align-items: center; }
+.price-card .name { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
+.price-card .badge {
+  padding: 3px 9px; border-radius: 999px; background: var(--brand-on-ink); color: #fff;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em;
+}
+.price-card .price { display: flex; align-items: baseline; gap: 6px; }
+.price-card .price .amount { font-family: var(--font-display); font-size: 48px; line-height: 1; font-weight: 600; letter-spacing: -.03em; }
+.price-card .price .per { font-size: 14px; opacity: .6; }
+.price-card .satz { font-size: 15px; line-height: 1.6; opacity: .75; text-wrap: pretty; min-height: 48px; }
+.price-card .knopf {
+  padding: 12px 0; text-align: center; border-radius: 8px; font-weight: 600;
+  background: var(--text); color: #fff;
+}
+.price-card.hervor .knopf { background: var(--brand-on-ink); color: #fff; }
+.price-card .knopf:hover { text-decoration: none; opacity: .92; }
+.price-card .points { display: flex; flex-direction: column; gap: 10px; padding-top: 18px; border-top: 1px solid var(--line); }
+.price-card.hervor .points { border-top-color: var(--ink-line); }
+.price-card .points span { display: flex; gap: 10px; font-size: 14px; }
+.price-card .points .check { color: var(--brand-on-ink); font-weight: 700; }
+.price-placeholder {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; color: var(--faint);
+  padding: 5px 10px; border: 1px dashed var(--brand-line); border-radius: 4px;
+}
+@media (max-width: 780px) {
+  .pricing-grid { grid-template-columns: 1fr; }
+  .price-card.hervor { transform: none; }
+}
+
+/* ── Fußzeile (dreispaltig, Runde 13) ────────────────────────── */
+.footer-cols { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.footer-cols .brand-col { display: flex; flex-direction: column; gap: 12px; }
+.footer-cols .brand-col img { display: block; width: 128px; height: auto; }
+.footer-cols .brand-col p { font-size: 14px; max-width: 32ch; line-height: 1.55; color: var(--on-ink-faint); margin: 0; }
+.footer-cols nav { display: flex; gap: 40px; font-size: 14px; flex-wrap: wrap; }
+.footer-cols .group { display: flex; flex-direction: column; gap: 9px; }
+.footer-cols .group-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-faint); }
+.footer-cols .group a { color: var(--on-ink-muted); font-weight: 400; }
+.footer-legal {
+  display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+  padding-top: 20px; border-top: 1px solid var(--ink-line); font-size: 13px; color: var(--on-ink-faint);
+}
+.footer-legal .notrack { margin-left: auto; }
+@media (max-width: 780px) {
+  .footer-cols { flex-direction: column; gap: 28px; }
+  .footer-cols nav { gap: 24px; }
+  .footer-legal .notrack { margin-left: 0; }
+}
+
+/* ── Knöpfe (Metrik aus Referenz: 14px/26px, 8px Radius, 16px Schrift) ────── */
 .btn {
   display: inline-block; background: var(--brand); color: #ffffff;
-  font-weight: 650; border-radius: var(--radius-sm); padding: 0.76rem 1.65rem; border: none;
-  font-size: 1.0rem; cursor: pointer; box-shadow: var(--shadow);
+  font-weight: 600; border-radius: 8px; padding: 14px 26px; border: none;
+  font-size: 16px; cursor: pointer; box-shadow: none;
 }
 .btn:hover { background: var(--brand-hover); text-decoration: none; }
 .btn.ghost { background: #fff; color: var(--text); border: 1px solid var(--line); box-shadow: none; }
 .btn.ghost:hover { border-color: #C3CCDA; background: var(--bg-alt); }
 
-/* ── Karten / Raster ──────────────────────────────────────── */
-.grid { display: grid; gap: 1.18rem; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+/* ── Karten / Raster (Metrik aus Referenz-Export: 14px Radius, 28px Innenrand,
+   16px Kartenabstand) ────────────────────────────────────────────────────── */
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
 .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .card {
   background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow);
+  border-radius: 14px; padding: 28px; box-shadow: none;
 }
+.card:hover { border-color: var(--brand-line); box-shadow: 0 20px 40px -24px rgba(10, 98, 207, .3); }
 .card.tint { background: var(--bg-alt); box-shadow: none; }
 .card.span-2 { grid-column: 1 / -1; }
-.card h3 { margin: 1rem 0 .4rem; }
-.card p { color: var(--muted); font-size: .97rem; margin: 0; }
+.card h3 { margin: 1rem 0 .4rem; font-size: 21px; }
+.card p { color: var(--muted); font-size: 15px; margin: 0; }
 .card svg { display: block; }
 .card .illu {
   background: var(--bg-alt); border: 1px solid var(--line);
   border-radius: 8px; padding: .7rem;
 }
 
-/* Feature-Zeilen (Bild | Text, abwechselnd) */
+/* Feature-Zeilen (Bild | Text, abwechselnd; Metrik: 56px Lücke, 44px Bandabstand) */
 .feature-row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem;
-  align-items: center; padding: 3rem 0; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 56px;
+  align-items: center; padding: 44px 0; border-top: 1px solid var(--line);
 }
 .feature-row:first-of-type { border-top: none; }
 .feature-row.flip .illu-box { order: 2; }
 .feature-row .illu-box {
   background: var(--bg-alt); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 1.6rem; box-shadow: var(--shadow);
+  border-radius: 14px; padding: 30px; box-shadow: none;
 }
-.feature-row h2 { font-size: 1.65rem; }
-.feature-row p { color: var(--muted); }
+.feature-row h2 { font-size: 30px; line-height: 1.15; letter-spacing: -.025em; }
+.feature-row p { color: var(--muted); font-size: 17px; line-height: 1.65; }
 
 .r-value { font-family: var(--font-mono); color: var(--brand); font-weight: 600; }
 
@@ -235,10 +375,44 @@ details {
 details summary { cursor: pointer; font-weight: 600; }
 details[open] summary { color: var(--brand); }
 
+/* ── Waitlist-Hero (Runde 13: Tinte, zweispaltig — Referenz `FixedR Web
+   Waitlist.html`) ────────────────────────────────────────────────────────── */
+.waitlist-hero { position: relative; overflow: hidden; min-height: 640px; display: flex; align-items: center; }
+.waitlist-hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(#111722 1px, transparent 1px),
+    linear-gradient(90deg, #111722 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
+}
+.waitlist-hero .inner {
+  position: relative; max-width: 1200px; margin: 0 auto; width: 100%;
+  padding: 72px 40px; display: grid; grid-template-columns: 1fr 440px; gap: 64px; align-items: center;
+}
+.waitlist-hero .intro { display: flex; flex-direction: column; gap: 18px; }
+.waitlist-hero h1 { font-size: 52px; line-height: 1.05; letter-spacing: -.035em; margin: 0; text-wrap: pretty; }
+.waitlist-hero .lede { margin: 0; font-size: 18px; line-height: 1.6; color: var(--on-ink-muted); text-wrap: pretty; }
+.waitlist-card {
+  display: flex; flex-direction: column; gap: 14px; padding: 28px;
+  border-radius: 14px; background: var(--ink-2); border: 1px solid var(--ink-line-2);
+}
+@media (max-width: 900px) {
+  .waitlist-hero .inner { grid-template-columns: 1fr; padding: 48px 20px; gap: 32px; }
+  .waitlist-hero h1 { font-size: 34px; }
+}
+/* Einspaltige Abwandlung (thanks.astro, "nach dem Warteliste-Muster" ohne Formular). */
+.waitlist-hero.single .inner {
+  grid-template-columns: 1fr; max-width: 640px; text-align: center;
+}
+.waitlist-hero.single .intro { align-items: center; }
+.waitlist-hero.single .waitlist-card { width: 100%; }
+
 /* ── Formulare ────────────────────────────────────────────── */
 .waitlist-intro { max-width: 26rem; }
 form.waitlist { display: flex; flex-direction: column; gap: 1rem; max-width: 26rem; }
-form.waitlist label { font-size: .88rem; color: var(--muted); font-weight: 500; }
+form.waitlist label { display: flex; flex-direction: column; gap: 6px; font-size: .88rem; color: var(--muted); font-weight: 500; }
 form.waitlist input {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
   color: var(--text); padding: .82rem .95rem; font-size: 1rem;
@@ -247,48 +421,66 @@ form.waitlist input {
 form.waitlist input:focus { outline: 2px solid var(--brand); border-color: transparent; }
 form.waitlist .btn { width: 100%; text-align: center; padding: .88rem 1.4rem; }
 
+/* Dieselbe Form auf Tinte (Waitlist-Card): mono Feldlabel, dunkle Eingaben. */
+.waitlist-card label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-faint); }
+.waitlist-card input {
+  background: var(--ink); border: 1px solid var(--ink-line-2); border-radius: 8px;
+  color: var(--on-ink); height: 44px; padding: 0 14px; font-size: 15px; font-family: inherit; width: 100%;
+}
+.waitlist-card input::placeholder { color: var(--on-ink-faint); }
+.waitlist-card input:focus { outline: 2px solid var(--brand-on-ink); border-color: transparent; }
+.waitlist-card .btn { width: 100%; text-align: center; height: 46px; padding: 0; display: flex; align-items: center; justify-content: center; background: var(--brand-on-ink); }
+.waitlist-card .btn:hover { background: #1f6fd6; }
+.waitlist-card .fine { font-size: 12px; line-height: 1.5; color: var(--on-ink-faint); text-align: center; margin: 0; }
+
 /* ── Blog ─────────────────────────────────────────────────── */
 .post-list { list-style: none; padding: 0; }
 .post-list li { border-bottom: 1px solid var(--line); padding: 1.4rem 0; }
 .post-list .date { font-family: var(--font-mono); color: var(--muted); font-size: .82rem; }
 .post-list h2 { margin: .3rem 0; font-size: 1.3rem; }
 .post-list p { color: var(--muted); margin: .3rem 0 0; }
-article.post { font-size: 1.06rem; }
+/* Langtext-Vorlage (Manifest-Muster, Referenz `FixedR Web Manifesto.html`): 720px,
+   17px/1.7, H2 28px. Der Kopf sitzt im PageHead-Kopfband, nicht mehr hier. */
+article.post {
+  max-width: 720px; margin: 0 auto; padding: 56px 40px 80px;
+  display: flex; flex-direction: column; gap: 18px;
+  font-size: 17px; line-height: 1.7; color: var(--text);
+}
 article.post h1 { font-size: 2.3rem; }
+article.post h2 { font-size: 28px; line-height: 1.15; letter-spacing: -.025em; margin-top: 22px; }
+article.post > p { color: var(--muted); }
+article.post > p:first-of-type { color: var(--text); }
 article.post img, article.post svg { max-width: 100%; }
 .post-meta { font-family: var(--font-mono); color: var(--muted); font-size: .86rem; }
 
-/* ── Fußzeile ─────────────────────────────────────────────── */
+/* ── Fußzeile (Runde 13: Tinte, dreispaltig — Referenz-Metrik, .footer-cols/
+   .footer-legal oben tragen die Innenteile) ─────────────────────────────── */
 footer.site {
-  border-top: 1px solid var(--line); background: var(--bg-alt);
-  color: var(--muted); font-size: .87rem; margin-top: 0;
+  border-top: 1px solid var(--ink-line); margin-top: 0; font-size: .87rem;
 }
 footer.site .inner {
-  max-width: 74rem; margin: 0 auto; padding: 1.76rem 1.88rem;
-  display: flex; gap: 1.29rem; flex-wrap: wrap; align-items: center;
+  max-width: 1200px; margin: 0 auto; padding: 40px 40px 28px;
+  display: flex; flex-direction: column; gap: 28px;
 }
-footer.site .copy { font-family: var(--font-mono); font-size: .76rem; color: var(--faint); }
-footer.site nav { display: flex; gap: 1.29rem; flex-wrap: wrap; }
-footer.site a { color: var(--muted); font-weight: 400; font-size: .82rem; }
-footer.site .notrack { margin-left: auto; font-size: .82rem; }
 
 /* ── Die eine dunkle Fläche ───────────────────────────────────
    Genau EIN Band der Seite ist dunkel: das Manifest. Es ist die These, nicht ein
    weiterer Abschnitt — die Farbe trägt den Bruch, nicht eine Überschriftgröße. */
-section.ink {
+.ink, section.ink {
   background: var(--ink); color: var(--on-ink);
-  border-block: 1px solid var(--ink-line);
 }
-section.ink .section-head { max-width: 50rem; }
-section.ink .eyebrow { color: var(--brand-on-ink); }
-section.ink .section-head p { color: var(--on-ink-muted); }
-section.ink .btn.ghost {
-  background: transparent; color: var(--on-ink); border-color: var(--ink-line);
+.ink .section-head { max-width: 50rem; }
+.ink .eyebrow { color: var(--brand-on-ink); }
+.ink .section-head p { color: var(--on-ink-muted); }
+.ink .btn.ghost {
+  background: transparent; color: var(--on-ink); border: 1px solid var(--ink-line-2); box-shadow: none;
 }
-section.ink .btn.ghost:hover {
+.ink .btn.ghost:hover {
   background: transparent; border-color: var(--brand-on-ink); color: var(--brand-on-ink);
 }
-section.ink .reifegrad-built {
+.ink .btn:not(.ghost) { background: var(--brand-on-ink); }
+.ink .btn:not(.ghost):hover { background: #1f6fd6; }
+.ink .reifegrad-built {
   background: var(--tag-built-bg-ink); border-color: var(--tag-built-ln-ink); color: var(--tag-built-fg-ink);
 }
 
@@ -381,21 +573,12 @@ section.ink .reifegrad-built {
 
 @media (max-width: 780px) {
   html { font-size: 16px; }
-  .page-hero { padding-top: 2.6rem; }
-  .page-hero h1 { font-size: 1.9rem; }
-  .hero { padding-top: 1.9rem; }
-  .hero h1 { font-size: 1.9rem; margin: 0.9rem 0 0.9rem; }
-  .hero .lede { font-size: 1rem; }
-  .hero .actions { flex-direction: column; align-items: stretch; gap: .9rem; }
-  .hero .actions .btn { width: 100%; text-align: center; }
-  .stage { margin-top: 1.9rem; }
-  .stage .body { margin: 0.6rem; }
   h1 { font-size: 1.8rem; } h2 { font-size: 1.5rem; }
   .grid.cols-2 { grid-template-columns: 1fr; }
   .feature-row { grid-template-columns: 1fr; gap: 1.6rem; padding: 2.2rem 0; }
   .feature-row.flip .illu-box { order: 0; }
   section { padding: 3rem 0; }
-  footer.site .notrack { margin-left: 0; }
+  .footer-legal .notrack { margin-left: 0; }
 }
 
 /* ── Reifegrad-Chip (FXR-26 Kanvas 2026-09-02) ────────────────

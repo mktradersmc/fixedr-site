@@ -1,0 +1,23 @@
+---
+// PageHead — das dunkle Kopfband, mit dem jede Unterseite beginnt (FXR-142, Referenz
+// `FixedR Web Manifesto.html`): Eyebrow, H1, Lede, mittig, max. 760px, mit demselben
+// 48-px-Raster wie der Home-Hero. Der Bau-Wächter (tools/guards.mjs --dist) verlangt
+// `header.page-head` mit Eyebrow/H1/Lede auf jeder gebauten Seite außer der Druckseite
+// — dieses Element ist der einzige Ort, der es erzeugt.
+interface Props {
+  eyebrow: string;
+  lede?: string;
+}
+const { eyebrow, lede } = Astro.props;
+---
+<header class="page-head ink">
+  <div class="inner">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1><slot /></h1>
+    {Astro.slots.has('lede') ? (
+      <p class="lede"><slot name="lede" /></p>
+    ) : (
+      lede && <p class="lede">{lede}</p>
+    )}
+  </div>
+</header>
