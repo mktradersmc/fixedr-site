@@ -96,10 +96,15 @@ blockquote {
   background: var(--bg-alt); border-radius: 0 8px 8px 0; color: var(--muted);
 }
 
-/* ── Kopfleiste (Runde 13, FXR-142: auf Tinte, sticky, Blur, keine Unterkante —
-   Referenz `FixedR Web Home.html` §Kopfleiste) ────────────────────────────── */
+/* -- Kopfleiste (Runde 13, FXR-142: auf Tinte, sticky, Blur, keine Unterkante --
+   Referenz `FixedR Web Home.html` Kopfleiste; Hintergrund korrigiert per
+   `FixedR Web Home-new-header.html`, Michael 2026-09-03 07:35 -- ueber weissen
+   Abschnitten mischte die vorige flache Deckung zu Grau; jetzt zwei Gradient-Ebenen,
+   Blur bleibt fuer den Scroll-Effekt.) ------------------------------------------ */
 header.site {
-  background: rgba(6, 7, 10, .86);
+  background:
+    linear-gradient(180deg, rgba(46, 134, 246, .16) 0%, rgba(46, 134, 246, .06) 40%, rgba(46, 134, 246, 0) 75%),
+    linear-gradient(180deg, rgba(6, 7, 10, .94) 0%, rgba(6, 7, 10, .98) 30%, #06070a 75%);
   backdrop-filter: saturate(160%) blur(10px);
   position: sticky; top: 0; z-index: 20;
 }
