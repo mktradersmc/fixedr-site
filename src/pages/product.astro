@@ -3,6 +3,7 @@
 // Der Reifegrad IST die Gliederung (Befund B, product\10 §1): "In the build today" und
 // "On the way" sind zwei getrennte Gruppen, nicht eine Liste mit Sternchen.
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 import ReifegradChip from '../components/ReifegradChip.astro';
 import StopShield from '../components/illus/StopShield.astro';
 import Distribution from '../components/illus/Distribution.astro';
@@ -15,22 +16,22 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
 <Base
   title="Product"
   description="What FixedR does the day you connect an account: mandatory stop-loss, position size from risk, R-only display, multi-account distribution, synchronised multi-timeframe layouts, and what's still being built."
+  bare
 >
   {/* H1/Eyebrow nach Kanvas 2026-09-02 ("Everything here starts working the day you
       connect an account." → "Two groups. Not a feature list with asterisks."). Der
       Absatz bleibt: er trägt den Querverweis auf /methodology, den das Kanvas nicht
-      abbildet — s. Protokoll. */}
-  <div class="page-hero tint" style="padding-top: 0;">
-    <div class="wrap" style="padding: 0;">
-      <p class="eyebrow">What it does on your first trade</p>
-      <h1>Two groups. Not a feature list with asterisks.</h1>
-      <p class="lede" style="max-width: 44rem; margin-left: auto; margin-right: auto;">
-        This is the first of two things FixedR does. The mechanics below run today — no setup
-        beyond connecting your accounts. The second layer, the process that carries you across
-        months rather than a single trade, lives on <a href="/methodology">Methodology</a>.
-      </p>
-    </div>
-  </div>
+      abbildet — s. Protokoll. Runde 13 (FXR-142): jetzt im Kopfband (PageHead). */}
+  <PageHead eyebrow="What it does on your first trade">
+    Two groups. Not a feature list with asterisks.
+    <Fragment slot="lede">
+      This is the first of two things FixedR does. The mechanics below run today — no setup
+      beyond connecting your accounts. The second layer, the process that carries you across
+      months rather than a single trade, lives on <a href="/methodology">Methodology</a>.
+    </Fragment>
+  </PageHead>
+
+  <div class="wrap">
 
   <!-- In the build today — Gruppenkopf nach Kanvas: H2 + Pille statt Eyebrow + Zweit-H2. -->
   <section style="padding-top: 2.5rem;">
@@ -216,4 +217,5 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
       exclusively for prop-firm accounts. <a href="/waitlist">Join the waitlist →</a>
     </p>
   </section>
+  </div>
 </Base>

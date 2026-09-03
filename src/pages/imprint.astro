@@ -1,14 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 // ⚠️ PLATZHALTER — Publikations-Gate G4: Diese Seite braucht Michaels Impressums-Entscheid
 // (Adresse!). Der Marker unten wird von tools/deploy-gate.mjs erkannt und VERWEIGERT den
 // Deploy, solange er existiert. Marker erst entfernen, wenn das echte Impressum drinsteht.
 ---
-<Base title="Imprint" description="Imprint / legal notice for fixedr.com." narrow>
-  <h1>Imprint</h1>
+<Base title="Imprint" description="Imprint / legal notice for fixedr.com." bare>
+  <PageHead eyebrow="Legal">Imprint</PageHead>
+  <article class="post">
   {/* HTML-Kommentare überleben den Astro-Build NICHT — der Marker muss als Attribut in dist/ ankommen */}
   <div class="callout" data-blocker="WPAC26-PLACEHOLDER-DO-NOT-PUBLISH">
     <p><strong>Placeholder.</strong> The legal notice (provider identification pursuant to
     § 5 DDG) is added before this site goes public. This build is for local review only.</p>
   </div>
+  </article>
 </Base>

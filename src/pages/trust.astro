@@ -2,24 +2,24 @@
 // /trust — product\10 §6: vier Punkte, die kein größerer Anbieter glaubwürdig kopiert.
 // Kein Vergleich mit größeren Anbietern (R1) — die LAGE wird beschrieben, kein Name genannt.
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 import ReifegradChip from '../components/ReifegradChip.astro';
 ---
 <Base
   title="Trust"
   description="What stays on your machine, what leaves it, and why: local-only trading data, a licence check you can verify, and the stop-loss that stays with your broker no matter what happens to us."
-  narrow
+  bare
 >
   {/* Eyebrow ergänzt nach Kanvas 2026-09-02 ("Why trust a one-person team"). Die H1
       bleibt: der Kanvas-H1 ("Four things worth knowing …") würde den direkt folgenden
-      Absatz ("That question is fair …") beziehungslos machen — s. Protokoll. */}
-  <p class="eyebrow">Why trust a one-person team</p>
-  <h1>Why hand a one-person company your trading?</h1>
-  <p style="color: var(--muted); font-size: 1.08rem;">
-    That question is fair, and the honest answer isn't a promise — it's an architecture you
-    can check. Your tool is tied to an account that belongs to someone else; that's true no
-    matter who built it. Here's what changes when almost nothing leaves your machine.
-  </p>
+      Absatz ("That question is fair …") beziehungslos machen — s. Protokoll. Runde 13
+      (FXR-142): jetzt im Kopfband (PageHead), Langtext-Muster wie Manifesto. */}
+  <PageHead
+    eyebrow="Why trust a one-person team"
+    lede="That question is fair, and the honest answer isn't a promise — it's an architecture you can check. Your tool is tied to an account that belongs to someone else; that's true no matter who built it. Here's what changes when almost nothing leaves your machine."
+  >Why hand a one-person company your trading?</PageHead>
 
+  <article class="post">
   <h2>What stays on your machine, what leaves it</h2>
   <p>
     Nearly everything FixedR does runs locally: broker connections, market data, the
@@ -114,4 +114,5 @@ import ReifegradChip from '../components/ReifegradChip.astro';
       <a href="/product">Product</a>. <a href="/waitlist">Join the waitlist →</a>
     </p>
   </section>
+  </article>
 </Base>

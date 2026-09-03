@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -10,10 +11,9 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await post.render();
 ---
-<Base title={post.data.title} description={post.data.description} narrow>
+<Base title={post.data.title} description={post.data.description} bare>
+  <PageHead eyebrow={post.data.date.toISOString().slice(0, 10)}>{post.data.title}</PageHead>
   <article class="post">
-    <p class="post-meta">{post.data.date.toISOString().slice(0, 10)}</p>
-    <h1>{post.data.title}</h1>
     <Content />
     <hr />
     <p>

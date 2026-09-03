@@ -1,10 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 ---
-<Base title="Not found" description="Page not found." narrow>
-  <section class="hero">
-    <h1><span class="r-value">-1R</span></h1>
-    <p class="lede">This page hit its stop. The loss is contained — that's the point.</p>
-    <p><a class="btn" href="/">Back to the cockpit</a></p>
-  </section>
+<Base title="Not found" description="Page not found." bare>
+  <PageHead eyebrow="-1R">
+    This page hit its stop.
+    <Fragment slot="lede">The loss is contained — that's the point.</Fragment>
+  </PageHead>
+  <div class="wrap" style="text-align: center; padding: 48px 0;">
+    <a class="btn" href="/">Back to the cockpit</a>
+  </div>
 </Base>

@@ -1,13 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 ---
 <Base
   title="FAQ"
   description="Frequently asked questions about FixedR: prop-only policy, MetaTrader and NinjaTrader support, local-first data, R-only display."
-  narrow
+  bare
 >
-  <h1>FAQ</h1>
+  <PageHead eyebrow="Questions, answered plainly">FAQ</PageHead>
 
+  <article class="post">
   <details>
     <summary>Why is FixedR only for prop-firm accounts?</summary>
     <p>
@@ -87,4 +89,5 @@ import Base from '../layouts/Base.astro';
       order of signup.
     </p>
   </details>
+  </article>
 </Base>
