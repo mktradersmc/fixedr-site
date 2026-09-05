@@ -19,11 +19,16 @@ export const CLAIM_RULES = [
     passes: ['+2.4 R', 'the $ symbol never appears next to a number'],
   },
   {
+    // FXR-164 (Michael 2026-09-05: "Bitte Preise auch übernehmen"): genau drei Beträge
+    // sind jetzt erlaubt — €19/€39/€69, aus der Vorlage `FixedR Web Home.html` gemessen,
+    // ausdrücklich als "Vorschlag" markiert (FXR-74 entscheidet noch nicht endgültig).
+    // Jedes ANDERE Eurozeichen (andere Zahl, andere Reihenfolge Zahl-vor-Zeichen) bleibt
+    // gesperrt — die Ausnahme ist eng auf die drei Preiskarten-Werte geschnitten.
     id: 'eurozeichen',
-    re: /€/,
-    why: 'Eurozeichen (keine Geldbeträge, EN-Site)',
-    trips: ['39 € pro Monat'],
-    passes: ['no currency signs anywhere'],
+    re: /€(?!(?:19|39|69)\b)/,
+    why: 'Eurozeichen außerhalb der drei erlaubten Preise €19/€39/€69 (FXR-164; FXR-74 offen)',
+    trips: ['39 € pro Monat', '€100 per month', '€199'],
+    passes: ['no currency signs anywhere', 'Basic is listed at €19 / month', '€39 / month', '€69 / month'],
   },
   {
     id: 'waehrungsbetrag',

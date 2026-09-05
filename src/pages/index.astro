@@ -25,14 +25,16 @@ const pillars = [
   { nr: '04', title: 'Journal', text: 'Every trade documented on the way through: setup, rule compliance, outcome. Nothing to fill in afterwards.' },
 ];
 
-// Keine Zahl, kein Währungszeichen (E-C009/`preisnennung`-Wächter: die Website nennt
-// KEINE Preise, solange FXR-74 nicht entschieden ist — ausdrücklich Nicht-Ziel dieses
-// Tickets). Die Referenz zeigt Beispielzahlen "als Vorschlag"; hier bleibt der Rahmen
-// (Karten, Schnitt, Reihenfolge) exakt, der Betrag ist TBD statt eines Vorgriffs.
+// FXR-164 (Michael 2026-09-05: "Bitte Preise auch übernehmen"): Beträge aus der Vorlage
+// `temp/export-web-v3/FixedR Web Home.html` übernommen (headless gemessen, Abschnitt
+// Pricing, monatlich: Basic 19, Advanced 39, Pro 69, jeweils mit Euro-Zeichen). Der
+// E-C009/`preisnennung`-Wächter erlaubt jetzt genau diese drei Beträge (guards-rules.mjs,
+// FXR-164) — FXR-74 (Paket-/Preisentscheidung) ist weiter NICHT entschieden, deshalb
+// bleibt der Hinweis "Vorschlag" auf der Seite stehen (s. Ticket "Offen für Michael").
 const packages = [
-  { name: 'Basic', price: 'TBD', note: 'One account, the whole cockpit.', points: ['1 account', 'Mandatory stop, size from risk', 'R journal and calendar', 'Multi-timeframe workspaces'], featured: false, cta: 'Start with Basic' },
-  { name: 'Advanced', price: 'TBD', note: 'Several accounts, one order ticket.', points: ['Up to 3 accounts', 'Distribute a trade across accounts', 'Payout protection', 'Multi-monitor layouts'], featured: true, cta: 'Join the waitlist' },
-  { name: 'Pro', price: 'TBD', note: 'For the trader running a book.', points: ['Unlimited accounts', 'Backtest sessions with replay', 'Risk that follows a rule', 'Priority support'], featured: false, cta: 'Talk to us' },
+  { name: 'Basic', price: '€19', note: 'One account, the whole cockpit.', points: ['1 account', 'Mandatory stop, size from risk', 'R journal and calendar', 'Multi-timeframe workspaces'], featured: false, cta: 'Start with Basic' },
+  { name: 'Advanced', price: '€39', note: 'Several accounts, one order ticket.', points: ['Up to 3 accounts', 'Distribute a trade across accounts', 'Payout protection', 'Multi-monitor layouts'], featured: true, cta: 'Join the waitlist' },
+  { name: 'Pro', price: '€69', note: 'For the trader running a book.', points: ['Unlimited accounts', 'Backtest sessions with replay', 'Risk that follows a rule', 'Priority support'], featured: false, cta: 'Talk to us' },
 ];
 ---
 <Base bare>
