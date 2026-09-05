@@ -4,10 +4,19 @@
 // (Distribution/RCalendar) sind unveraendert aus FXR-26 uebernommen — ihre Daten
 // decken sich bereits mit der Referenz. LayoutMosaic + die Kartenfuellungen 'One
 // order' sind Korrektur FXR-142 (2026-09-03): 1:1 aus der Referenz gebaut.
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import Base from '../layouts/Base.astro';
 import Distribution from '../components/illus/Distribution.astro';
 import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
 import RCalendar from '../components/illus/RCalendar.astro';
+
+// FXR-164 (Michael 2026-09-05: "das müssen wir noch produzieren"): der Produktfilm
+// existiert noch nicht. Die Einbindung ist vorbereitet (stumm, Schleife, Poster =
+// Screenshot) und schaltet sich nur frei, wenn die Datei tatsächlich im Bau liegt —
+// ohne Datei bleibt die Bühne beim Standbild, ohne Konsolenfehler.
+const heroVideoPath = fileURLToPath(new URL('../../public/videos/product-loop.mp4', import.meta.url));
+const heroVideoExists = existsSync(heroVideoPath);
 
 const pillars = [
   { nr: '01', title: 'The R view', text: 'Risk fixed before entry, results as multiples of it. Money never appears on screen.' },
@@ -48,9 +57,40 @@ const packages = [
           runs on your machine · no cloud account
         </p>
       </div>
+      {/* FXR-164 (Michael 2026-09-05): Bühne mit Hover-Verwandlung, gemessen headless an
+          `temp/export-web-v3/FixedR Web Home.html` (README-Nachtrag "Runde 15: Hero-Film
+          und Kopfleiste"). Ruhe 1120×420/Ecken oben 14px/Inhalt 0,70; Hover 1200×675/alle
+          Ecken 14px/Inhalt 0,75; Übergang 0,6s. Ohne Zeigegerät steht der Schleier von
+          Anfang an (@media (hover: none)). Der Film selbst fehlt noch — heroVideoExists
+          ist ohne Datei false, dann bleibt es beim Standbild, ohne Konsolenfehler. */}
       <div class="stripe-wrap">
-        <div class="stripe">
-          <img src="/screens/trading-dark.png" alt="FixedR trading cockpit, dark mode" width="1600" height="1000" />
+        <div class="stage">
+          <div class="stage-content">
+            {heroVideoExists ? (
+              <video
+                class="stage-video"
+                autoplay
+                muted
+                loop
+                playsinline
+                poster="/screens/trading-dark.png"
+                aria-hidden="true"
+              >
+                <source src="/videos/product-loop.mp4" type="video/mp4" />
+              </video>
+            ) : (
+              <img src="/screens/trading-dark.png" alt="FixedR trading cockpit, dark mode" width="1600" height="1000" />
+            )}
+          </div>
+          <div class="stage-veil">
+            <span class="play-btn" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+            </span>
+            <span class="stage-caption">
+              <span class="stage-title">One trade, in R, start to finish.</span>
+              <span class="stage-sub">45 s · no sound needed</span>
+            </span>
+          </div>
         </div>
       </div>
     </div>

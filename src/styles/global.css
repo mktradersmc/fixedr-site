@@ -242,14 +242,53 @@ header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: va
 .home-hero .meta { font-size: 14px; color: var(--on-ink-faint); }
 .home-hero .meta strong { font-weight: 600; color: var(--on-ink-muted); }
 
-/* Der Streifen: 1120×420, oben gerundet, unten abgeschnitten, blauer Schein nach oben. */
+/* Bühne mit Hover-Verwandlung (FXR-164, README-Nachtrag "Runde 15: Hero-Film und
+   Kopfleiste", headless gemessen an `temp/export-web-v3/FixedR Web Home.html`):
+   Ruhe 1120×420, Ecken oben 14px, unten offen, Inhalt skaliert 0,70, Blauschein von
+   unten. Hover 1200×675, alle Ecken 14px, Inhalt 0,75, Schein wandert unter die
+   Fläche, Übergang 0,6s cubic-bezier(.2,.7,.2,1) auf Höhe/Breite/Radius/Schatten. */
 .home-hero .stripe-wrap { position: relative; width: 100%; display: flex; justify-content: center; margin-top: 8px; }
-.home-hero .stripe {
-  height: 420px; width: 1120px; max-width: 100%; overflow: hidden;
+.home-hero .stage {
+  position: relative; height: 420px; width: 1120px; max-width: 100%; overflow: hidden;
   border-radius: 14px 14px 0 0; border: 1px solid var(--ink-line-2); border-bottom: none;
   background: var(--ink); box-shadow: 0 -30px 120px -40px rgba(46, 134, 246, .45);
+  transition: height .6s cubic-bezier(.2, .7, .2, 1), width .6s cubic-bezier(.2, .7, .2, 1),
+    border-radius .6s, box-shadow .6s;
 }
-.home-hero .stripe img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+/* Inhaltsskalierung: die Vorlage transformiert eine fest aufgelöste Live-Komponente
+   (1600×1000, scale .70→.75) — bei uns ist der Inhalt ein Rasterbild/Video, das
+   denselben Ausschnitt (oben, abgeschnitten unten) responsiv über `object-fit: cover`
+   erreicht, nicht nur bei exakt 1120/1200px Breite. Bewusste Abweichung, visuell
+   deckungsgleich (FXR-164, Bericht). */
+.home-hero .stage-content { width: 100%; height: 100%; }
+.home-hero .stage-content img,
+.home-hero .stage-content video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+/* Schleier: unsichtbar/durchklickbar in Ruhe, blendet beim Überfahren ein (Hover — kein
+   Klassenzustand nötig, reines CSS :hover auf `.stage`). */
+.home-hero .stage-veil {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 22px; background: rgba(6, 7, 10, 0); opacity: 0;
+  pointer-events: none; backdrop-filter: blur(0); transition: opacity .5s ease, background .5s ease, backdrop-filter .5s ease;
+}
+.home-hero .play-btn {
+  width: 72px; height: 72px; display: grid; place-items: center; border-radius: 50%;
+  background: var(--brand-on-ink); color: #fff; box-shadow: 0 20px 60px -10px rgba(46, 134, 246, .7);
+  cursor: pointer;
+}
+.home-hero .stage-caption { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.home-hero .stage-title { font-family: var(--font-display); font-size: 22px; font-weight: 600; letter-spacing: -.02em; color: var(--on-ink); }
+.home-hero .stage-sub { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: var(--on-ink-muted); }
+
+.home-hero .stage:hover {
+  width: 1200px; height: 675px; border-radius: 14px; box-shadow: 0 30px 120px -40px rgba(46, 134, 246, .7);
+}
+.home-hero .stage:hover .stage-veil {
+  background: rgba(6, 7, 10, .55); opacity: 1; pointer-events: auto; backdrop-filter: blur(6px);
+}
+/* Ohne Zeigegerät gibt es kein :hover — der Schleier mit Knopf steht von Anfang an. */
+@media (hover: none) {
+  .home-hero .stage-veil { background: rgba(6, 7, 10, .55); opacity: 1; pointer-events: auto; backdrop-filter: blur(6px); }
+}
 
 @media (max-width: 780px) {
   .home-hero .inner { padding: 40px 20px 0; gap: 24px; }
@@ -257,7 +296,10 @@ header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: va
   .home-hero h1 { font-size: 34px; }
   .home-hero .lede { font-size: 16px; }
   .home-hero .actions { flex-direction: column; align-items: stretch; width: 100%; }
-  .home-hero .stripe { height: 220px; }
+  .home-hero .stage,
+  .home-hero .stage:hover { height: 220px; width: 100%; }
+  .home-hero .play-btn { width: 56px; height: 56px; }
+  .home-hero .stage-title { font-size: 18px; }
 }
 
 /* ── Vier Säulen (Home, direkt unter dem Hero) ─────────────── */
