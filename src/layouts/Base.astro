@@ -83,9 +83,13 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
               Der Mechanismus bleibt unverändert (data-lang-switch, localStorage, reiner
               UI-Zustand ohne Fließtext-Übersetzung) — nur die Gestalt wird zum
               Segmentschalter statt Textlink ("EN / DE"). Ob echte DE-Übersetzung folgen
-              soll, ist weiter eine offene Frage an Michael (Protokoll). */}
+              soll, ist weiter eine offene Frage an Michael (Protokoll).
+              FXR-164 (Michael 2026-09-05, "die sprachen ... die reihenfolge nicht
+              wechseln"): EN steht fest links, DE fest rechts — beide Glieder tragen ihre
+              Sprache als eigenes, unveränderliches Element (data-lang-en/-de). Nur die
+              Klasse "active" wandert per Skript zwischen ihnen, nie der Text. */}
           <a href="#" class="lang-switch" data-lang-switch aria-label="Switch language">
-            <span class="seg active" data-lang-active>EN</span><span class="seg" data-lang-other>DE</span>
+            <span class="seg active" data-lang-en>EN</span><span class="seg" data-lang-de>DE</span>
           </a>
           <a class="cta" href="/waitlist">Join the waitlist</a>
         </span>
@@ -132,13 +136,17 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
       // Persistiert je Gerät über localStorage; jede Seite liest denselben Schlüssel,
       // damit der Zustand über Seitenwechsel hinweg stabil bleibt (G4: "funktioniert
       // auf jeder Seite").
+      // FXR-164 (Michael, "die reihenfolge nicht wechseln"): EN und DE bleiben feste
+      // Elemente an fester Position — apply() setzt/entfernt nur die Klasse "active",
+      // nie den Text. Vorher wanderte per textContent-Tausch die gewählte Sprache
+      // immer an die erste (linke) Stelle, wodurch EN/DE die Plätze tauschten.
       const KEY = 'fixedr-lang';
       const link = document.querySelector('[data-lang-switch]');
-      const activeEl = document.querySelector('[data-lang-active]');
-      const otherEl = document.querySelector('[data-lang-other]');
+      const enEl = document.querySelector('[data-lang-en]');
+      const deEl = document.querySelector('[data-lang-de]');
       function apply(lang: string) {
-        if (activeEl) activeEl.textContent = lang;
-        if (otherEl) otherEl.textContent = lang === 'EN' ? 'DE' : 'EN';
+        enEl?.classList.toggle('active', lang === 'EN');
+        deEl?.classList.toggle('active', lang === 'DE');
         document.documentElement.setAttribute('data-lang', lang.toLowerCase());
       }
       try {
@@ -148,7 +156,7 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
       }
       link?.addEventListener('click', (e) => {
         e.preventDefault();
-        const current = activeEl?.textContent === 'DE' ? 'DE' : 'EN';
+        const current = deEl?.classList.contains('active') ? 'DE' : 'EN';
         const next = current === 'EN' ? 'DE' : 'EN';
         apply(next);
         try {

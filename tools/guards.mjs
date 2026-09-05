@@ -150,6 +150,65 @@ if (distMode) {
   }
 }
 
+// ── FXR-164 (Michael 2026-09-05): Sprachschalter EN|DE fest an Position — die alte
+// Fassung tauschte per textContent, welches Glied die aktive Sprache trägt, wodurch
+// die gewählte Sprache immer an die erste (linke) Stelle wanderte. Anwesenheits- UND
+// Verbotsregel zugleich: jede Seite muss die zwei ortsfesten Marker tragen und darf
+// die alten textContent-Tausch-Marker nicht mehr enthalten (Rotprobe: alter Stand,
+// `git show HEAD~3:src/layouts/Base.astro`, trug data-lang-active/data-lang-other).
+let sprachschalterGeprueft = 0;
+if (distMode) {
+  for (const file of walk(scanDir, exts)) {
+    // print.html geht bewusst OHNE Base.astro (Druckseite ohne Kopfleiste, s. Kommentar
+    // dort) — dieselbe Ausnahme wie beim Kopfband-Wächter oben.
+    if (basename(file) === 'print.html') continue;
+    sprachschalterGeprueft++;
+    const rel = relative(root, file);
+    const html = readFileSync(file, 'utf8');
+    if (!html.includes('data-lang-en') || !html.includes('data-lang-de')) {
+      findings.push(
+        `${rel} — [sprachschalter-position-fehlt] Seite ohne ortsfeste Sprachglieder ` +
+          `data-lang-en/data-lang-de (FXR-164: EN links, DE rechts, fest).`
+      );
+    }
+    if (html.includes('data-lang-active') || html.includes('data-lang-other')) {
+      findings.push(
+        `${rel} — [sprachschalter-alter-tausch] Seite trägt noch die alten Marker ` +
+          `data-lang-active/data-lang-other (FXR-164: das war der textContent-Tausch, ` +
+          `der die Reihenfolge EN/DE beim Klick vertauschte).`
+      );
+    }
+  }
+  if (sprachschalterGeprueft === 0) {
+    findings.push('[sprachschalter-position-fehlt] dist/ enthält keine prüfbare .html-Datei — Prüfung konnte nichts messen.');
+  }
+}
+
+// ── FXR-164 (Michael 2026-09-05, "das bild in dem frame beim hover vergrößert"): der
+// Inhalt der Hero-Bühne muss beim Hover zusätzlich zum Rahmen selbst größer werden —
+// gemessen am Prototyp (`temp/export-web-v3/FixedR Web Home.html`, headless gerendert):
+// Inhalt skaliert 0,70 in Ruhe auf 0,75 beim Hover, Faktor 15/14 ≈ 1,0714. Geprüft wird
+// das gebündelte CSS, nicht eine Quelldatei, weil erst der Bau zeigt, ob die Regel im
+// ausgelieferten Bundle ankommt (Rotprobe: alter Stand kannte gar keine
+// `.stage-content`-Transform-Regel, nur den Rahmen wuchs).
+let buehneCssGeprueft = 0;
+if (distMode) {
+  const astroDir = join(scanDir, '_astro');
+  const cssFiles = existsSync(astroDir) ? readdirSync(astroDir).filter((n) => n.endsWith('.css')) : [];
+  const STAGE_HOVER_SCALE_RE = /\.stage:hover\s*\.stage-content\s*\{[^}]*transform:\s*scale\(1\.0714\)/;
+  buehneCssGeprueft = cssFiles.length;
+  const gefunden = cssFiles.some((name) => STAGE_HOVER_SCALE_RE.test(readFileSync(join(astroDir, name), 'utf8')));
+  if (cssFiles.length === 0) {
+    findings.push('[buehne-inhalt-skaliert-fehlt] dist/_astro/ enthält keine .css-Datei — Prüfung konnte nichts messen.');
+  } else if (!gefunden) {
+    findings.push(
+      `dist/_astro/*.css — [buehne-inhalt-skaliert-fehlt] keine Hover-Regel ` +
+        `".stage:hover .stage-content { transform: scale(1.0714) }" im gebauten CSS ` +
+        `(FXR-164: der Bild-Inhalt der Bühne muss beim Hover mitwachsen, nicht nur der Rahmen).`
+    );
+  }
+}
+
 const wo = distMode ? 'dist/ (ausgeliefertes HTML)' : 'src/ (Quellen)';
 if (findings.length) {
   console.error(`WÄCHTER ROT in ${wo} — ${findings.length} Fund(e):\n`);
@@ -158,4 +217,8 @@ if (findings.length) {
 }
 const noindexSatz = distMode ? ` + noindex-Anwesenheit über ${noindexGeprueft} Seite(n)` : '';
 const kopfbandSatz = distMode ? ` + Kopfband/Hero-Anwesenheit über ${kopfbandGeprueft} Seite(n)` : '';
-console.log(`Wächter grün: ${ALL_RULES.length} Regeln über ${dateien} Datei(en) in ${wo}${noindexSatz}${kopfbandSatz}.`);
+const sprachschalterSatz = distMode ? ` + Sprachschalter-Position über ${sprachschalterGeprueft} Seite(n)` : '';
+const buehneSatz = distMode ? ` + Bühne-Inhaltsskalierung über ${buehneCssGeprueft} CSS-Datei(en)` : '';
+console.log(
+  `Wächter grün: ${ALL_RULES.length} Regeln über ${dateien} Datei(en) in ${wo}${noindexSatz}${kopfbandSatz}${sprachschalterSatz}${buehneSatz}.`
+);
