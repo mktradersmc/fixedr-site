@@ -209,20 +209,34 @@ if (distMode) {
    * gibt beide Auslöser — `:hover` (auch ohne JavaScript) und die Klasse (auch beim
    * Scrollen). Ein fehlender Auslöser ist ein Fund, nicht bloß eine andere Schreibweise.
    */
-  const SCALE_RE = /\.stage-content\s*\{[^}]*transform:\s*scale\(1\.0714\)/;
+  /*
+   * ⚠️ 2026-09-06, zweite Fassung. Die erste maß `scale(1.0714)` — meinen eigenen
+   * Ersatzwert, nicht den der Vorlage. Die Vorlage skaliert eine FESTE Fläche von
+   * 1600×1000 von .700 auf .750 (1600·.7 = 1120 = Rahmen in Ruhe, 1600·.75 = 1200 =
+   * Rahmen offen). Genau diese feste Fläche ist der Grund, warum sie flüssig läuft.
+   * Gemessen wird deshalb jetzt beides: der Ruhewert und der offene Wert.
+   */
+  const SCALE_RE = /\.stage-content\s*\{[^}]*transform:\s*scale\(\.?0?\.?7\)/;
+  const SCALE_OPEN_RE = /\.stage-content\s*\{\s*transform:\s*scale\(\.?0?\.?75\)/;
   const HOVER_TRIGGER_RE = /\.stage:hover\s*\.stage-content/;
   const CLASS_TRIGGER_RE = /\.stage\.is-hover\s*\.stage-content/;
   buehneCssGeprueft = cssFiles.length;
   const lies = (name) => readFileSync(join(astroDir, name), 'utf8');
   const skaliert = cssFiles.some((n) => SCALE_RE.test(lies(n)));
+  const skaliertOffen = cssFiles.some((n) => SCALE_OPEN_RE.test(lies(n)));
   const hoverAusloeser = cssFiles.some((n) => HOVER_TRIGGER_RE.test(lies(n)));
   const klassenAusloeser = cssFiles.some((n) => CLASS_TRIGGER_RE.test(lies(n)));
   if (cssFiles.length === 0) {
     findings.push('[buehne-inhalt-skaliert-fehlt] dist/_astro/ enthält keine .css-Datei — Prüfung konnte nichts messen.');
   } else if (!skaliert) {
     findings.push(
-      `dist/_astro/*.css — [buehne-inhalt-skaliert-fehlt] der Inhalt der Bühne skaliert nicht ` +
-        `auf scale(1.0714) (FXR-164: der Bild-Inhalt muss mitwachsen, nicht nur der Rahmen).`
+      `dist/_astro/*.css — [buehne-inhalt-skaliert-fehlt] der Inhalt der Bühne steht in Ruhe nicht ` +
+        `auf scale(.7) (Vorlage: feste Fläche 1600×1000, 1600·.7 = 1120 = Rahmenbreite).`
+    );
+  } else if (!skaliertOffen) {
+    findings.push(
+      `dist/_astro/*.css — [buehne-inhalt-offen-fehlt] der Inhalt wächst nicht auf scale(.75) ` +
+        `(Vorlage: 1600·.75 = 1200 = geöffnete Rahmenbreite; der Bild-Inhalt muss mitwachsen).`
     );
   } else if (!hoverAusloeser) {
     findings.push(
