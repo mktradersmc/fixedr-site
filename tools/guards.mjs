@@ -195,16 +195,45 @@ let buehneCssGeprueft = 0;
 if (distMode) {
   const astroDir = join(scanDir, '_astro');
   const cssFiles = existsSync(astroDir) ? readdirSync(astroDir).filter((n) => n.endsWith('.css')) : [];
-  const STAGE_HOVER_SCALE_RE = /\.stage:hover\s*\.stage-content\s*\{[^}]*transform:\s*scale\(1\.0714\)/;
+  /*
+   * ⚠️ 2026-09-06 NEU GEFASST, nicht aufgeweicht.
+   *
+   * Die Regel maß die AUFRUFFORM: exakt `.stage:hover .stage-content{...scale(1.0714)}`.
+   * Michael hat gemeldet, dass die Bühne beim Scrollen kalt bleibt — Chrome rechnet
+   * `:hover` während des Bildlaufs nicht neu. Der Auslöser ist deshalb um eine Klasse
+   * ergänzt (`.stage.is-hover`), die ein Skript setzt, und damit wurde aus dem einzelnen
+   * Selektor eine Gruppe. Die alte Zeichenkette traf sie nicht mehr, obwohl die Zusage
+   * unverändert galt.
+   *
+   * Gemessen wird jetzt die Zusage in zwei Teilen: der Inhalt skaliert auf 1.0714, UND es
+   * gibt beide Auslöser — `:hover` (auch ohne JavaScript) und die Klasse (auch beim
+   * Scrollen). Ein fehlender Auslöser ist ein Fund, nicht bloß eine andere Schreibweise.
+   */
+  const SCALE_RE = /\.stage-content\s*\{[^}]*transform:\s*scale\(1\.0714\)/;
+  const HOVER_TRIGGER_RE = /\.stage:hover\s*\.stage-content/;
+  const CLASS_TRIGGER_RE = /\.stage\.is-hover\s*\.stage-content/;
   buehneCssGeprueft = cssFiles.length;
-  const gefunden = cssFiles.some((name) => STAGE_HOVER_SCALE_RE.test(readFileSync(join(astroDir, name), 'utf8')));
+  const lies = (name) => readFileSync(join(astroDir, name), 'utf8');
+  const skaliert = cssFiles.some((n) => SCALE_RE.test(lies(n)));
+  const hoverAusloeser = cssFiles.some((n) => HOVER_TRIGGER_RE.test(lies(n)));
+  const klassenAusloeser = cssFiles.some((n) => CLASS_TRIGGER_RE.test(lies(n)));
   if (cssFiles.length === 0) {
     findings.push('[buehne-inhalt-skaliert-fehlt] dist/_astro/ enthält keine .css-Datei — Prüfung konnte nichts messen.');
-  } else if (!gefunden) {
+  } else if (!skaliert) {
     findings.push(
-      `dist/_astro/*.css — [buehne-inhalt-skaliert-fehlt] keine Hover-Regel ` +
-        `".stage:hover .stage-content { transform: scale(1.0714) }" im gebauten CSS ` +
-        `(FXR-164: der Bild-Inhalt der Bühne muss beim Hover mitwachsen, nicht nur der Rahmen).`
+      `dist/_astro/*.css — [buehne-inhalt-skaliert-fehlt] der Inhalt der Bühne skaliert nicht ` +
+        `auf scale(1.0714) (FXR-164: der Bild-Inhalt muss mitwachsen, nicht nur der Rahmen).`
+    );
+  } else if (!hoverAusloeser) {
+    findings.push(
+      `dist/_astro/*.css — [buehne-ausloeser-hover-fehlt] die Skalierung hängt nicht mehr an ` +
+        `":hover" — ohne JavaScript bliebe die Bühne dann tot.`
+    );
+  } else if (!klassenAusloeser) {
+    findings.push(
+      `dist/_astro/*.css — [buehne-ausloeser-klasse-fehlt] die Skalierung hängt nicht an ` +
+        `".stage.is-hover" (2026-09-06, Michael: „beim reinscrollen passiert das nicht" — ` +
+        `Chrome rechnet :hover während des Bildlaufs nicht neu, deshalb der Klassenzustand).`
     );
   }
 }

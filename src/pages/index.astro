@@ -323,3 +323,50 @@ const packages = [
     </div>
   </section>
 </Base>
+
+<script>
+  /*
+   * Michael, 2026-09-06: „in unserer variante passiert das beim reinscrollen nicht. erst
+   * wenn ich dann stoppe und die maus bewege."
+   *
+   * ⭐ Der Unterschied liegt nicht im Effekt, sondern in seinem AUSLÖSER. Die Vorlage hält
+   * den Zustand in JavaScript (`hoverRein`/`hoverRaus` setzen dort einen Zustandswert),
+   * unsere Fassung hatte ihn allein an CSS `:hover` gehängt. Und `:hover` rechnet Chrome
+   * beim Scrollen NICHT neu — die Auswertung wird bis zur nächsten Mausbewegung
+   * aufgeschoben. Scrollt die Bühne unter den ruhenden Zeiger, bleibt sie deshalb kalt.
+   *
+   * Deshalb hier: die letzte bekannte Zeigerposition merken und den Zustand bei jeder
+   * Bewegung UND bei jedem Bildlauf neu bestimmen. `:hover` bleibt in der CSS-Datei
+   * daneben stehen — ohne JavaScript funktioniert die Bühne dann wie zuvor.
+   */
+  const stage = document.querySelector<HTMLElement>('.home-hero .stage');
+  if (stage && window.matchMedia('(hover: hover)').matches) {
+    let pointerX = -1;
+    let pointerY = -1;
+
+    const evaluate = () => {
+      if (pointerX < 0) return; // Der Zeiger war noch nie über dem Fenster.
+      const box = stage.getBoundingClientRect();
+      const inside = pointerX >= box.left && pointerX <= box.right
+        && pointerY >= box.top && pointerY <= box.bottom;
+      stage.classList.toggle('is-hover', inside);
+    };
+
+    window.addEventListener('mousemove', (event) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      evaluate();
+    }, { passive: true });
+
+    // Der eigentliche Punkt: auch ohne Mausbewegung neu bestimmen.
+    window.addEventListener('scroll', evaluate, { passive: true });
+    window.addEventListener('resize', evaluate, { passive: true });
+
+    // Verlässt der Zeiger das Fenster, ist er sicher nicht mehr über der Bühne.
+    document.addEventListener('mouseleave', () => {
+      pointerX = -1;
+      pointerY = -1;
+      stage.classList.remove('is-hover');
+    });
+  }
+</script>
