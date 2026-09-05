@@ -2,6 +2,9 @@
 // Grund-Layout: Head (SEO/OG), Kopfleiste, Fußzeile. Keine Tracker, keine externen
 // Ressourcen — Fonts kommen aus node_modules und werden von Astro lokal gebündelt.
 // Runde 13 (FXR-142): Kopfleiste/Fußzeile jetzt auf Tinte (Referenz `export-web-v2`).
+// FXR-164 (Michael 2026-09-05: "Header muss in allen Ansichten gleich sein"): Kopfleiste
+// jetzt drei Zonen (Marke/Menü/Aktionen), gemessen an `temp/export-web-v3/FixedR Web
+// Home.html` (Runde 15). Ausschließlich hier geändert — keine Sonderfassung je Seite.
 import '@fontsource-variable/geist';
 import '@fontsource-variable/geist-mono';
 import '@fontsource-variable/space-grotesk';
@@ -21,7 +24,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 // Aktive Seite in der Kopfleiste (Kanvas 2026-09-02): Marke statt Neutral auf dem
 // Nav-Ziel, das der aktuellen Seite entspricht. Nur /product, /methodology, /trust
 // tragen ein eigenes Nav-Ziel — Home hat keins, deshalb bleibt dort alles neutral.
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+// FXR-164 (gefunden beim Sichtprüfen): `build.format: 'file'` (astro.config.mjs) liefert
+// Astro.url.pathname WÄHREND des Baus mit ".html"-Endung (z. B. "/product.html" statt
+// "/product") — der Vergleich unten traf deshalb auf JEDER Seite ins Leere, kein
+// aria-current wurde je gesetzt. Erst die Endung abschneiden, dann vergleichen.
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
 const isActive = (href: string) => (path === href ? 'page' : undefined);
 ---
 <!doctype html>
@@ -69,18 +76,19 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
           <a href="/manifesto" aria-current={isActive('/manifesto')}>Manifesto</a>
           <a href="/faq" aria-current={isActive('/faq')}>FAQ</a>
           <a href="/blog" aria-current={isActive('/blog')}>Blog</a>
-          {/* Sprachwechsel (FXR-142, Referenz-Kommentar in export-web-v2: "Sprache als
-              schlichter Textlink wie die Navigation, nur die aktive Sprache steht; die
-              andere erscheint als Wechselziel"). Der Mechanismus selbst ist im Referenz-
-              Prototyp ein reiner UI-Zustand (er übersetzt keinen Seiteninhalt) — dasselbe
-              gilt hier: der Klick schaltet Label/Zustand um und merkt sich die Wahl
-              (localStorage), er übersetzt keinen Fließtext. Ob echte DE-Übersetzung
-              folgen soll, ist eine offene Frage an Michael (Protokoll). */}
+        </nav>
+        <span class="head-actions">
+          {/* Sprachwechsel (FXR-164, gemessen an `FixedR Web Home.html`: Höhe 26px,
+              Innenrand 0 9px, Rahmenradius außen 6px/innen 4px, Geist Mono 12/600).
+              Der Mechanismus bleibt unverändert (data-lang-switch, localStorage, reiner
+              UI-Zustand ohne Fließtext-Übersetzung) — nur die Gestalt wird zum
+              Segmentschalter statt Textlink ("EN / DE"). Ob echte DE-Übersetzung folgen
+              soll, ist weiter eine offene Frage an Michael (Protokoll). */}
           <a href="#" class="lang-switch" data-lang-switch aria-label="Switch language">
-            <span class="active" data-lang-active>EN</span><span class="slash">/</span><span data-lang-other>DE</span>
+            <span class="seg active" data-lang-active>EN</span><span class="seg" data-lang-other>DE</span>
           </a>
           <a class="cta" href="/waitlist">Join the waitlist</a>
-        </nav>
+        </span>
       </div>
     </header>
     <main class={narrow ? 'narrow' : undefined}>
