@@ -1,24 +1,89 @@
 ---
+// Blog-Artikel — Kanvas v7 (`temp/export-web-v7/Blog Post.html`), FXR-239.
+//
+// Aufbau: Kopfband mit Pfad „Blog / Datum", H1 52/500 (max 22ch), `description` als
+// Lede → Zweispalter wie die übrigen Textseiten, links sticky „In this post" mit einem
+// Inhaltsverzeichnis aus den H2 der Datei, rechts der Text → Fuß mit Haarlinie und den
+// beiden Verweisen → „Keep reading" mit zwei weiteren Beiträgen.
+//
+// Das Verzeichnis wird NICHT gepflegt, sondern aus `post.render()` gelesen: es kann
+// dadurch nicht veralten, wenn jemand eine Überschrift ändert.
 import Base from '../../layouts/Base.astro';
-import PageHead from '../../components/PageHead.astro';
 import { getCollection } from 'astro:content';
+import '../../styles/text.css';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post, posts } }));
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { post, posts } = Astro.props;
+const { Content, headings } = await post.render();
+
+// Nur die H2 stehen im Verzeichnis — H3 würden die Randspalte überfüllen.
+const kapitel = headings.filter((h) => h.depth === 2);
+
+// Lesezeit aus dem Rohtext, nicht geschätzt: 200 Wörter je Minute, auf halbe Minuten
+// gerundet wäre Scheingenauigkeit — deshalb auf volle Minuten.
+const woerter = post.body.split(/\s+/).filter(Boolean).length;
+const minuten = Math.max(1, Math.round(woerter / 200));
+
+// Zwei weitere Beiträge, neueste zuerst, ohne den aktuellen.
+const weitere = posts
+  .filter((p) => p.slug !== post.slug)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 2);
+
+const datum = post.data.date.toISOString().slice(0, 10);
 ---
 <Base title={post.data.title} description={post.data.description} bare>
-  <PageHead eyebrow={post.data.date.toISOString().slice(0, 10)}>{post.data.title}</PageHead>
-  <article class="post">
-    <Content />
-    <hr />
-    <p>
-      <a href="/blog">← All posts</a> ·
-      <a href="/waitlist">Join the FixedR waitlist</a>
-    </p>
-  </article>
+  <header class="text-head">
+    <span class="raster" aria-hidden="true"></span>
+    <div class="inner">
+      <p class="pfad">
+        <a href="/blog">Blog</a><span class="sep">/</span><span>{datum}</span>
+      </p>
+      <h1 class="artikel">{post.data.title}</h1>
+      <p class="lede">{post.data.description}</p>
+    </div>
+  </header>
+
+  <div class="text-body">
+    <aside>
+      <span class="name">In this post</span>
+      <span class="ln" aria-hidden="true"></span>
+      {kapitel.map((k, i) => (
+        <a class="kapitel" href={`#${k.slug}`}>
+          <span class="nr">{String(i + 1).padStart(2, '0')}</span>
+          <span>{k.text}</span>
+        </a>
+      ))}
+      <span class="ln" aria-hidden="true"></span>
+      <span class="hinweis">Reading time · about {minuten} minutes</span>
+    </aside>
+
+    {/* `post-body` trägt die Auszeichnung für das, was Markdown erzeugt: der erste
+        Absatz als Lead, die folgenden gedämpft, H2 als Sprungziele. */}
+    <article class="post-body">
+      <Content />
+      <span class="ln" aria-hidden="true"></span>
+      <p class="abschluss">
+        <a href="/blog">← All posts</a> · <a href="/waitlist">Join the FixedR waitlist</a>
+      </p>
+    </article>
+  </div>
+
+  <section class="weiterlesen">
+    <div class="inner">
+      <span class="label">Keep reading</span>
+      <div class="karten">
+        {weitere.map((p) => (
+          <a href={`/blog/${p.slug}`}>
+            <span class="datum">{p.data.date.toISOString().slice(0, 10)}</span>
+            <span class="t">{p.data.title}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
 </Base>

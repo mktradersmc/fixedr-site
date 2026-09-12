@@ -1,0 +1,124 @@
+---
+// FeaturePage — das Gerüst der acht Seiten unter /product/ (FXR-239).
+//
+// Aufbau und Werte aus dem Kanvas-Entwurf `temp/export-web-v5`: vier Bänder —
+// Kopfband (Tinte, rechts das Lane-Symbol groß) · Claim + Produkt-Ausschnitt ·
+// Blöcke (Nummer + Überschrift links, Text rechts) · Weiterlesen + der eine Abruf.
+//
+// Die Seiten selbst sind dadurch reine Verweise: `<FeaturePage slug="accounts" />`.
+// Inhalt steht in `content/produktseiten.ts`, ebenfalls aus dem Entwurf erzeugt —
+// so kann eine neunte Seite nicht versehentlich ein anderes Gerüst bekommen.
+import Base from './Base.astro';
+import Icon from '../components/Icon.astro';
+import Ausschnitt from '../components/Ausschnitt.astro';
+import { FEATURE_PAGES, bySlug } from '../content/produktnavigation';
+import { SEITEN } from '../content/produktseiten';
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+
+const meta = bySlug(slug);
+const seite = SEITEN[slug];
+if (!meta || !seite) {
+  // Gleiche Regel wie bei Icon.astro und dem ReifegradChip: ein Verweis, den es nicht
+  // gibt, bricht den Bau. Sonst entstünde eine Seite, die im Banner fehlt — oder eine
+  // ohne Inhalt, die trotzdem ausgeliefert wird.
+  throw new Error(
+    `FeaturePage: "${slug}" fehlt in ${!meta ? 'produktnavigation.ts' : 'produktseiten.ts'} — ` +
+      `erst dort eintragen, dann die Seite bauen.`,
+  );
+}
+
+// Nummerierung der Blöcke und der Punkte darin, wie im Entwurf: zweistellig ab 01.
+const bloecke = seite.bloecke.map((b, i) => ({
+  nr: String(i + 1).padStart(2, '0'),
+  h2: b.h2,
+  ps: b.ps,
+  punkte: (b.punkte ?? []).map((p, j) => ({ nr: String(j + 1).padStart(2, '0'), ...p })),
+}));
+
+// Weiterlesen: der Vorgänger, der Nachfolger, dann die Nabe. Reihenfolge aus
+// FEATURE_PAGES — die Banner-Reihenfolge ist damit auch die Lesereihenfolge.
+const i = FEATURE_PAGES.findIndex((p) => p.slug === slug);
+const nachbarn: { k: string; t: string; href: string }[] = [];
+if (i > 0) {
+  const v = FEATURE_PAGES[i - 1];
+  nachbarn.push({ k: `← ${v.lane}`, t: v.title, href: `/product/${v.slug}` });
+}
+if (i >= 0 && i < FEATURE_PAGES.length - 1) {
+  const n = FEATURE_PAGES[i + 1];
+  nachbarn.push({ k: `${n.lane} →`, t: n.title, href: `/product/${n.slug}` });
+}
+nachbarn.push({ k: 'All eight', t: 'Everything the cockpit does', href: '/product' });
+---
+<Base title={meta.title} description={seite.lede} bare>
+  {/* Kopfband. Die Klasse `feat-head` erfüllt zugleich die Kopfband-Pflicht des
+      dist-Wächters (G2) — er verlangt auf jeder gebauten Seite außer der Druckseite
+      eine Kopffläche. Deshalb steht sie in der Liste in tools/guards.mjs. */}
+  <header class="feat-head">
+    <span class="raster" aria-hidden="true"></span>
+    <div class="inner">
+      <div class="txt">
+        <p class="eyebrow"><span class="pre">Product /</span>{seite.eyebrow}</p>
+        <h1>{seite.h1}</h1>
+        <p class="lede">{seite.lede}</p>
+      </div>
+      <span class="mark" aria-hidden="true"><Icon name={meta.icon} size={72} stroke={1.2} /></span>
+    </div>
+  </header>
+
+  <section class="feat-claim">
+    <div class="inner" data-reveal>
+      <p>{seite.claim}</p>
+      <Ausschnitt slug={slug} tabs={seite.tabs} chrom={seite.chrom} />
+    </div>
+  </section>
+
+  <section class="feat-blocks">
+    <div class="inner">
+      {bloecke.map((b) => (
+        <div class="feat-block" data-reveal>
+          <div class="head">
+            <span class="nr">{b.nr}</span>
+            <h2>{b.h2}</h2>
+          </div>
+          <div class="body">
+            {b.ps.map((p) => <p>{p}</p>)}
+            {b.punkte.length > 0 && (
+              <ul class="feat-points">
+                {b.punkte.map((x) => (
+                  <li>
+                    <span class="nr">{x.nr}</span>
+                    <span><strong>{x.b}</strong> {x.t}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {/* R3 („ein Ziel, ein Knopf"): die Seite endet auf der Warteliste. Alles andere
+      bleibt Textlink, damit die eine Kennzahl nicht verwässert. */}
+  <section class="feat-next">
+    <div class="inner">
+      <span class="label">Keep reading</span>
+      <div class="karten">
+        {nachbarn.map((n) => (
+          <a href={n.href}>
+            <span class="k">{n.k}</span>
+            <span class="t">{n.t}</span>
+          </a>
+        ))}
+      </div>
+      <p class="abruf">
+        FixedR is in a closed founders phase. <a href="/waitlist"><strong>Join the waitlist</strong></a>
+        to get in line, or read <a href="/manifesto">why it shows you no money</a>.
+      </p>
+    </div>
+  </section>
+</Base>

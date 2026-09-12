@@ -1,121 +1,159 @@
 ---
-// Startseite — Runde 13 (FXR-142): 1:1 nach `temp/export-web-v2/FixedR Web Home.html`
-// (README, Abschnittsreihenfolge und Wortlaut sind die Vorgabe). Bild-Komponenten
-// (Distribution/RCalendar) sind unveraendert aus FXR-26 uebernommen — ihre Daten
-// decken sich bereits mit der Referenz. LayoutMosaic + die Kartenfuellungen 'One
-// order' sind Korrektur FXR-142 (2026-09-03): 1:1 aus der Referenz gebaut.
+// Startseite — Kanvas-Entwurf `temp/export-web-v6` (FXR-239, 2026-09-12).
+//
+// v6 macht aus der Abschnittsfolge einen ROTEN FADEN: Hero → vier Kacheln 01–04, die
+// in den Hero ragen und weich zu ihrem Akt springen → Akt 01 (drei Regeln, Einleitung
+// bleibt beim Scrollen stehen) → Akt 02 (vier Schritte links, EINE feste Bühne rechts,
+// deren Lage mit dem Schritt wechselt) → Akt 03/04 → Pricing → These und Founders auf
+// einer gemeinsamen dunklen Fläche.
+//
+// Entfallen gegenüber v5: Kennzahlenband, die drei Konto-Karten, „These" als eigener
+// Abschnitt, die Founders-Karte mit App-Ausschnitt. Das ist Absicht, nicht Verlust.
+//
+// Gestalt in `styles/home.css` — Werte dort aus dem Export abgeschrieben.
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import Base from '../layouts/Base.astro';
-import Distribution from '../components/illus/Distribution.astro';
-import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
-import RCalendar from '../components/illus/RCalendar.astro';
+import '../styles/home.css';
 
-// FXR-164 (Michael 2026-09-05: "das müssen wir noch produzieren"): der Produktfilm
-// existiert noch nicht. Die Einbindung ist vorbereitet (stumm, Schleife, Poster =
-// Screenshot) und schaltet sich nur frei, wenn die Datei tatsächlich im Bau liegt —
-// ohne Datei bleibt die Bühne beim Standbild, ohne Konsolenfehler.
-const heroVideoPath = fileURLToPath(new URL('../../public/videos/product-loop.mp4', import.meta.url));
-const heroVideoExists = existsSync(heroVideoPath);
+// FXR-164: der Produktfilm existiert noch nicht. Ohne Datei bleibt es beim Standbild,
+// ohne Konsolenfehler — die Einbindung ist vorbereitet (stumm, Schleife, Poster).
+const heroVideoExists = existsSync(
+  fileURLToPath(new URL('../../public/videos/product-loop.mp4', import.meta.url)),
+);
+const SCREEN = '/20261109_Lander_Screen.png';
 
-const pillars = [
-  { nr: '01', title: 'The R view', text: 'Risk fixed before entry, results as multiples of it. Money never appears on screen.' },
-  { nr: '02', title: 'Safety guard', text: "Your firm's rules — drawdown, daily loss, flatten time — enforced before the order leaves, on every account at once." },
-  { nr: '03', title: 'Backtest', text: 'Replay any market at your pace, trade it as if live, and see the result in R before it costs anything.' },
-  { nr: '04', title: 'Journal', text: 'Every trade documented on the way through: setup, rule compliance, outcome. Nothing to fill in afterwards.' },
+// Der rote Faden. Jede Kachel springt zu `[data-akt]` — Text unverändert aus v5.
+const saeulen = [
+  { nr: '01', titel: 'The R view', text: 'Risk fixed before entry, results as multiples of it. Money never appears on screen.' },
+  { nr: '02', titel: 'Safety guard', text: "Your firm's rules — drawdown, daily loss, flatten time — enforced before the order leaves, on every account at once." },
+  { nr: '03', titel: 'Backtest', text: 'Replay any market at your pace, trade it as if live, and see the result in R before it costs anything.' },
+  { nr: '04', titel: 'Journal', text: 'Every trade documented on the way through: setup, rule compliance, outcome. Nothing to fill in afterwards.' },
 ];
 
-// FXR-164 (Michael 2026-09-05: "Bitte Preise auch übernehmen"): Beträge aus der Vorlage
-// `temp/export-web-v3/FixedR Web Home.html` übernommen (headless gemessen, Abschnitt
-// Pricing, monatlich: Basic 19, Advanced 39, Pro 69, jeweils mit Euro-Zeichen). Der
-// E-C009/`preisnennung`-Wächter erlaubt jetzt genau diese drei Beträge (guards-rules.mjs,
-// FXR-164) — FXR-74 (Paket-/Preisentscheidung) ist weiter NICHT entschieden, deshalb
-// bleibt der Hinweis "Vorschlag" auf der Seite stehen (s. Ticket "Offen für Michael").
-const packages = [
-  { name: 'Basic', price: '€19', note: 'One account, the whole cockpit.', points: ['1 account', 'Mandatory stop, size from risk', 'R journal and calendar', 'Multi-timeframe workspaces'], featured: false, cta: 'Start with Basic' },
-  { name: 'Advanced', price: '€39', note: 'Several accounts, one order ticket.', points: ['Up to 3 accounts', 'Distribute a trade across accounts', 'Payout protection', 'Multi-monitor layouts'], featured: true, cta: 'Join the waitlist' },
-  { name: 'Pro', price: '€69', note: 'For the trader running a book.', points: ['Unlimited accounts', 'Backtest sessions with replay', 'Risk that follows a rule', 'Priority support'], featured: false, cta: 'Talk to us' },
+const buehneTitel = ['One ticket · three accounts', 'Roles, not windows', 'Payout protection', 'Your month in R'];
+
+const verteilung = [
+  { konto: 'FTMO 100k', wert: '4.2', ok: true },
+  { konto: 'Apex 150k', wert: '6.1', ok: true },
+  { konto: 'TopStep 50k', wert: 'not configured', ok: false },
+];
+
+// Balken der Zeitrahmen-Lage: deterministisch aus dem Index, damit jeder Bau gleich
+// aussieht und ein Bildvergleich überhaupt etwas wert ist.
+const balken = (n: number, basis: number, faktor: number, spanne: number, markiert = false) =>
+  Array.from({ length: n }, (_, j) => {
+    const hoch = markiert && j % 3 === 0;
+    return `flex:1;height:${basis + ((j * faktor) % spanne)}%;border-radius:2px;background:${hoch ? 'var(--brand-on-ink)' : 'var(--ink-line-2)'};opacity:${hoch ? 0.8 : 1}`;
+  });
+const balkenH = balken(14, 35, 37, 60, true);
+const balkenM = balken(10, 30, 53, 65);
+const balkenL = balken(10, 25, 29, 70);
+
+const werte = [0, 1.2, -0.4, 2.1, 0, 0, 0, 0.8, 1.9, -1, 0.5, 3.2, 0, 0, -0.6, 2.4, 1.1, 0, 0.9, 1.4, 0, 0, -0.3, 1.8, 2.6, 0.7, -1.2, 0];
+const monatDunkel = werte.map((w) => {
+  const leer = w === 0;
+  const stark = w >= 1.8;
+  return {
+    wert: leer ? '' : (w > 0 ? '+' : '−') + Math.abs(w).toFixed(1),
+    stil: `display:grid;place-items:center;height:38px;border-radius:8px;font-family:var(--font-mono);font-size:11px;font-weight:500;background:${leer ? 'var(--ink-3)' : w > 0 ? (stark ? 'var(--brand-on-ink)' : 'rgba(46,134,246,.22)') : 'var(--ink-3)'};border:1px solid ${leer ? 'var(--ink-line)' : 'transparent'};color:${w > 0 ? (stark ? '#fff' : 'var(--brand-on-ink)') : 'var(--on-ink-muted)'}`,
+  };
+});
+
+// Akt 03: Kerzen der Replay-Karte, ebenfalls deterministisch.
+const kerzen = Array.from({ length: 26 }, (_, i) => {
+  const y = 26 + Math.sin(i * 0.55) * 12 + i * 0.9 + (i % 3) * 4;
+  const hh = 10 + ((i * 7) % 18);
+  const auf = (i * 7) % 5 < 3;
+  const c = auf ? 'var(--on-ink-muted)' : 'var(--ink-line-2)';
+  return `position:absolute;left:${4 + i * 3.6}%;top:${y}%;width:1.9%;height:${hh}%;border-radius:1px;background:${c};box-shadow:0 -${hh * 0.25}px 0 0 ${c},0 ${hh * 0.2}px 0 0 ${c};opacity:${auf ? 0.85 : 1}`;
+});
+
+const plan = [['Setup', 'Pullback'], ['Entry', '17,830'], ['Stop', '17,812 · 1.0 R'], ['Target', '17,866 · 2.0 R']].map(([k, v]) => ({ k, v }));
+const ergebnis = [
+  ['Closed', '17,861', 'color:var(--on-ink)'],
+  ['Result', '+1.7 R', 'color:var(--brand-on-ink);font-weight:600'],
+  ['Stop moved', 'no', 'color:var(--on-ink)'],
+  ['Rule check', 'held', 'color:var(--on-ink)'],
+].map(([k, v, stil]) => ({ k, v, stil }));
+
+// FXR-164 (Michael 2026-09-05, „Bitte Preise auch übernehmen"): €19/39/69 als
+// Vorschlag; der Hinweis bleibt stehen, solange FXR-74 nicht entschieden ist.
+const pakete = [
+  { name: 'Basic', preis: '€19', satz: 'One account, the whole cockpit.', punkte: ['1 account', 'Mandatory stop, size from risk', 'R journal and calendar', 'Multi-timeframe workspaces'], hervor: false, cta: 'Start with Basic' },
+  { name: 'Advanced', preis: '€39', satz: 'Several accounts, one order ticket.', punkte: ['Up to 3 accounts', 'Distribute a trade across accounts', 'Payout protection', 'Multi-monitor layouts'], hervor: true, cta: 'Join the waitlist' },
+  { name: 'Pro', preis: '€69', satz: 'For the trader running a book.', punkte: ['Unlimited accounts', 'Backtest sessions with replay', 'Risk that follows a rule', 'Priority support'], hervor: false, cta: 'Talk to us' },
 ];
 ---
 <Base bare>
-  <!-- Hero -->
-  <section class="home-hero ink">
-    <span class="big-r" aria-hidden="true">R</span>
+  <!-- ═══ Hero ═══ -->
+  <section class="home-hero">
+    <span class="raster" aria-hidden="true"></span>
+    <span class="big-r-wrap" aria-hidden="true"><span class="big-r">R</span></span>
     <div class="inner">
       <div class="intro">
-        <span class="pill"><span class="dot"></span>For prop traders · Windows app · founders circle open</span>
+        <p class="eyebrow">For prop traders · Windows · founders circle open</p>
         <h1>Loud charts. Calm numbers. <span class="accent">Trade in R.</span></h1>
         <p class="lede">
           Money changes scale with every account and pulls at you on every trade.
           <strong>R does neither.</strong> One unit from your first evaluation to the account
           that pays out.
         </p>
-        <div class="actions">
+        <span class="actions">
           <a class="btn" href="/waitlist">Join the waitlist</a>
           <a class="btn ghost" href="/manifesto">Why no money?</a>
-        </div>
+        </span>
         <p class="meta">
-          Works with <strong>MetaTrader</strong> &amp; <strong>NinjaTrader</strong> ·
-          runs on your machine · no cloud account
+          <span class="lbl">WORKS WITH</span>
+          <span class="chip">MetaTrader</span>
+          <span class="chip">NinjaTrader</span>
+          <span class="rest">· runs on your machine · no cloud account</span>
         </p>
       </div>
-      {/* FXR-164 (Michael 2026-09-05): Bühne mit Hover-Verwandlung, gemessen headless an
-          `temp/export-web-v3/FixedR Web Home.html` (README-Nachtrag "Runde 15: Hero-Film
-          und Kopfleiste"). Ruhe 1120×420/Ecken oben 14px/Inhalt 0,70; Hover 1200×675/alle
-          Ecken 14px/Inhalt 0,75; Übergang 0,6s. Ohne Zeigegerät steht der Schleier von
-          Anfang an (@media (hover: none)). Der Film selbst fehlt noch — heroVideoExists
-          ist ohne Datei false, dann bleibt es beim Standbild, ohne Konsolenfehler. */}
-      <div class="stripe-wrap">
-        <div class="stage">
-          <div class="stage-content">
-            {heroVideoExists ? (
-              <video
-                class="stage-video"
-                autoplay
-                muted
-                loop
-                playsinline
-                poster="/screens/trading-dark.png"
-                aria-hidden="true"
-              >
-                <source src="/videos/product-loop.mp4" type="video/mp4" />
-              </video>
-            ) : (
-              <img src="/screens/trading-dark.png" alt="FixedR trading cockpit, dark mode" width="1600" height="1000" />
-            )}
-          </div>
-          <div class="stage-veil">
-            <span class="play-btn" aria-hidden="true">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
-            </span>
-            <span class="stage-caption">
-              <span class="stage-title">One trade, in R, start to finish.</span>
-              <span class="stage-sub">45 s · no sound needed</span>
-            </span>
-          </div>
+      {/* Michael 2026-09-11: die Karte nimmt ihre Höhe vom Bild, damit jeder Screenshot
+          vollständig und randlos sitzt — kein festes Verhältnis, kein `scale` auf dem
+          Inhalt. Das bewacht `tools/guards.mjs`. */}
+      <div class="stage">
+        <div class="stage-content">
+          {heroVideoExists ? (
+            <video class="stage-video" autoplay muted loop playsinline poster={SCREEN} aria-hidden="true">
+              <source src="/videos/product-loop.mp4" type="video/mp4" />
+            </video>
+          ) : (
+            <img src={SCREEN} alt="The FixedR cockpit: two synchronised M15 charts with sessions and pivot levels, dark mode" width="2880" height="1662" />
+          )}
+        </div>
+        <div class="stage-veil">
+          <span class="play-btn" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+          </span>
+          <span class="stage-caption">
+            <span class="stage-title">One trade, in R, start to finish.</span>
+            <span class="stage-sub">45 s · no sound needed</span>
+          </span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Vier Säulen -->
-  <section class="pillars">
+  <!-- ═══ Roter Faden: 01–04, jede Kachel springt zu ihrem Akt ═══ -->
+  <section class="faden">
     <div class="inner">
-      {pillars.map((p) => (
-        <a href="/product">
+      {saeulen.map((p, i) => (
+        <a href={`#akt-${i + 1}`} data-faden={i + 1}>
           <span class="nr"><span>{p.nr}</span><span class="ln"></span></span>
-          <h3>{p.title}</h3>
-          <p>{p.text}</p>
+          <span class="t">{p.titel}</span>
+          <span class="d">{p.text}</span>
         </a>
       ))}
     </div>
   </section>
 
-  <!-- Die Regeln greifen vor dem Trade -->
-  <section class="alt">
-    <div class="wrap">
-      <div class="section-head center">
-        <p class="eyebrow">The journal fills itself</p>
+  <!-- ═══ 01 · The R view: drei Regeln, Einleitung bleibt stehen ═══ -->
+  <section class="akt1" data-akt="1" id="akt-1">
+    <div class="inner">
+      <div class="lead" data-reveal>
+        <span class="eyebrow">01 · The R view</span>
         <h2>The rules apply before the trade exists.</h2>
         <p>
           FixedR sits where the decision happens. It places the order, sizes it from your risk,
@@ -123,250 +161,336 @@ const packages = [
           trade exists — there's no review afterwards where a rule could have quietly bent.
         </p>
       </div>
-      <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="card">
-          <div class="token">
-            <span class="bars"><b></b><b></b><b></b></span>
-            <span class="lbl">STOP · REQUIRED</span>
-          </div>
-          <h3>Mandatory stop-loss</h3>
-          <p>No stop, no trade. Risk is fixed before entry — not renegotiated with yourself while the position runs.</p>
-        </div>
-        <div class="card">
-          <div class="token">
-            <span class="lbl">RISK</span><span class="val brand">1 R</span>
-            <span class="arrow">→</span>
-            <span class="lbl">SIZE</span><span class="val">4.2</span>
-          </div>
-          <h3>Position size from risk</h3>
-          <p>You set the risk, FixedR computes the size from your stop distance. Backwards from the usual — and the only sane direction.</p>
-        </div>
-        <div class="card">
-          <div class="token">
-            <span class="val">+2.4 R</span>
-            <span class="masked" aria-label="a currency amount, deliberately hidden">
-              <span class="cur">$</span><i></i><i class="sep"></i><i></i><i></i><i></i>
+      <div class="regeln">
+        <div class="regel" data-reveal>
+          <span class="kreis">01</span>
+          <span class="txt">
+            <span class="t">Mandatory stop-loss</span>
+            <span class="d">No stop, no trade. Risk is fixed before entry — not renegotiated with yourself while the position runs.</span>
+            <span class="bild" style="align-items:center;gap:10px;font-size:12px;letter-spacing:.06em;color:var(--faint)">
+              <span style="display:flex;align-items:center;gap:4px">
+                <span style="width:3px;height:22px;background:var(--brand)"></span>
+                <span style="width:3px;height:14px;background:var(--brand-line)"></span>
+                <span style="width:3px;height:14px;background:var(--brand-line)"></span>
+              </span>STOP · REQUIRED
             </span>
-          </div>
-          <h3>Money stays out of sight</h3>
-          <p>Results, targets, drawdown headroom — all in R. No money mode, no toggle. The absence is the feature.</p>
+          </span>
         </div>
+        <div class="regel" data-reveal>
+          <span class="kreis">02</span>
+          <span class="txt">
+            <span class="t">Position size from risk</span>
+            <span class="d">You set the risk, FixedR computes the size from your stop distance. Backwards from the usual — and the only sane direction.</span>
+            <span class="bild" style="align-items:baseline;gap:12px">
+              <span style="font-size:12px;letter-spacing:.06em;color:var(--faint)">RISK</span>
+              <span style="font-size:22px;font-weight:600;color:var(--brand)">1 R</span>
+              <span style="font-size:12px;color:var(--faint)">→</span>
+              <span style="font-size:12px;letter-spacing:.06em;color:var(--faint)">SIZE</span>
+              <span style="font-size:22px;font-weight:600">4.2</span>
+            </span>
+          </span>
+        </div>
+        <div class="regel" data-reveal>
+          <span class="kreis">03</span>
+          <span class="txt">
+            <span class="t">Money stays out of sight</span>
+            <span class="d">Results, targets, drawdown headroom — all in R. No money mode, no toggle. The absence is the feature.</span>
+            {/* ⚠️ Der unscharfe Betrag IST hier das Argument: das R steht scharf, der
+                Geldwert unlesbar daneben. Der Claim-Wächter `dollarbetrag` sperrt sonst
+                jeden Geldbetrag; für genau diese eine Stelle gibt es eine eng
+                geschnittene Ausnahme in `guards-rules.mjs`. Offener Punkt in FXR-239 —
+                Michael entscheidet, ob die Ausnahme bleibt. */}
+            <span class="bild" style="align-items:baseline;gap:12px">
+              <span style="font-size:22px;font-weight:600">+2.4 R</span>
+              <span class="verwischt" aria-hidden="true">$1,240</span>
+            </span>
+          </span>
+        </div>
+        <span class="schluss-linie"></span>
       </div>
     </div>
   </section>
 
-  <!-- Feature-Bänder -->
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Built for funded accounts</p>
+  <!-- ═══ 02 · Safety guard: vier Schritte, eine feste Bühne ═══ -->
+  <section class="akt2" data-akt="2" id="akt-2">
+    <div class="kopf">
+      <div class="txt" data-reveal>
+        <span class="eyebrow">02 · Safety guard</span>
         <h2>One trade, every account, one set of rules.</h2>
       </div>
-
-      <div class="feature-row">
-        <div class="illu-box"><Distribution /></div>
-        <div>
-          <h2>Distribute a trade across accounts</h2>
+    </div>
+    <div class="inner">
+      <div class="schritte">
+        <div class="schritt" data-schritt="0" data-aktiv>
+          <h3>Distribute a trade across accounts</h3>
+          <p>Trading several funded accounts means executing the same idea several times, by hand, under time pressure. In FixedR you place it once and it goes out by your configuration.</p>
+          <p>And a hard promise: <strong>without configuration, nothing is guessed.</strong> An unconfigured account stops the distribution with a loud error instead of quietly doing something almost right.</p>
+        </div>
+        <div class="schritt" data-schritt="1">
+          <h3>Timeframes that stay in sync</h3>
           <p>
-            Trading several funded accounts means executing the same idea several times, by hand,
-            under time pressure. In FixedR you place it once and it goes out by your configuration.
+            Put the same symbol on several timeframes side by side, and give each chart a role —
+            <span class="rolle">HTF</span>, <span class="rolle">MTF</span>, <span class="rolle">LTF</span>.
+            The synchronisation follows the role, not the window.
           </p>
-          <p>
-            And a hard promise: <strong>without configuration, nothing is guessed.</strong> An
-            unconfigured account stops the distribution with a loud error instead of quietly
-            doing something almost right.
-          </p>
+          <p>That is the difference between an arrangement of windows and a named analysis structure: the charts belong together because you said what each one is for.</p>
+        </div>
+        <div class="schritt" data-schritt="2">
+          <h3>Protect the payout</h3>
+          <p>Once an account is eligible for a payout, the money stops being hypothetical — and that's exactly when accounts get blown. FixedR can pause trading on that account until you've taken the money out. Every other risk tool protects you from a loss; this one protects a win.</p>
+        </div>
+        <div class="schritt" data-schritt="3">
+          <h3>Your month in R</h3>
+          <p>Because R is defined by your own risk, the record stays comparable across accounts, account sizes and years. Scale from a 10k account to a 100k and the calendar reads exactly the same — that's the point.</p>
         </div>
       </div>
 
-      <div class="feature-row">
-        <LayoutMosaic />
-        <div>
-          <h2>Timeframes that stay in sync</h2>
-          <p>
-            Put the same symbol on several timeframes side by side, and give each chart a
-            role — <span class="r-value">HTF</span>, <span class="r-value">MTF</span>,
-            <span class="r-value">LTF</span>. The synchronisation follows the role, not the
-            window.
-          </p>
-          <p>
-            That is the difference between an arrangement of windows and a named analysis
-            structure: the charts belong together because you said what each one is for.
-          </p>
-        </div>
-      </div>
+      <div class="buehne-wrap">
+        <div class="buehne-sticky">
+          <div class="buehne">
+            <span class="raster" aria-hidden="true"></span>
+            <span class="titel" data-buehne-titel>{buehneTitel[0]}</span>
+            <span class="fortschritt" aria-hidden="true">
+              {[0, 1, 2, 3].map((i) => <span data-punkt={i} data-an={i === 0 ? '' : undefined}></span>)}
+            </span>
 
-      <div class="feature-row">
-        <div class="illu-box"><RCalendar /></div>
-        <div>
-          <h2>Your month in R</h2>
-          <p>
-            Because R is defined by your own risk, the record stays comparable across accounts,
-            account sizes and years. Scale from a 10k account to a 100k and the calendar reads
-            exactly the same — that's the point.
-          </p>
+            <div class="lage" data-lage="0" data-an>
+              <div class="mono" style="width:440px;display:flex;flex-direction:column;gap:12px;font-size:13px">
+                <span style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-radius:8px;background:var(--brand-on-ink);color:#fff"><span>MES · SHORT</span><span style="font-weight:600">1 R</span></span>
+                <span style="display:flex;flex-direction:column;gap:8px;padding-left:22px;border-left:1px solid var(--ink-line-2)">
+                  {verteilung.map((v) => (
+                    <span style="display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-radius:8px;background:var(--ink-2);border:1px solid var(--ink-line-2);color:var(--on-ink-muted)">
+                      <span style="color:var(--on-ink)">{v.konto}</span>
+                      <span style={v.ok ? 'color:var(--brand-on-ink);font-weight:600' : 'color:#e0a34a;font-size:11px'}>{v.wert}</span>
+                    </span>
+                  ))}
+                </span>
+              </div>
+            </div>
+
+            <div class="lage" data-lage="1">
+              <div style="width:480px;display:grid;grid-template-columns:2fr 1fr;grid-template-rows:repeat(2,150px);gap:10px">
+                <span class="mono" style="grid-row:span 2;border-radius:8px;background:var(--ink-2);border:1px solid var(--brand-on-ink);display:flex;flex-direction:column;justify-content:space-between;padding:14px;font-size:12px;color:var(--brand-on-ink)">
+                  <span>HTF · H4</span>
+                  <span style="display:flex;align-items:flex-end;gap:4px;height:60%">{balkenH.map((b) => <span style={b}></span>)}</span>
+                </span>
+                <span class="mono" style="border-radius:8px;background:var(--ink-2);border:1px solid var(--ink-line-2);display:flex;flex-direction:column;justify-content:space-between;padding:14px;font-size:12px;color:var(--on-ink-muted)">
+                  <span>MTF · M15</span>
+                  <span style="display:flex;align-items:flex-end;gap:3px;height:50%">{balkenM.map((b) => <span style={b}></span>)}</span>
+                </span>
+                <span class="mono" style="border-radius:8px;background:var(--ink-2);border:1px solid var(--ink-line-2);display:flex;flex-direction:column;justify-content:space-between;padding:14px;font-size:12px;color:var(--on-ink-muted)">
+                  <span>LTF · M1</span>
+                  <span style="display:flex;align-items:flex-end;gap:3px;height:50%">{balkenL.map((b) => <span style={b}></span>)}</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="lage" data-lage="2">
+              <div class="mono" style="width:440px;display:flex;flex-direction:column;gap:12px;font-size:13px">
+                <span style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:8px;background:var(--ink-2);border:1px solid var(--ink-line-2)">
+                  <span style="display:flex;flex-direction:column;gap:4px">
+                    <span style="color:var(--on-ink)">Apex 150k</span>
+                    <span style="font-size:11px;color:var(--on-ink-faint)">Eligible since Tue · target reached</span>
+                  </span>
+                  <span style="padding:5px 10px;border-radius:5px;background:var(--ink-3);border:1px solid #e0a34a;color:#e0a34a;font-size:11px;letter-spacing:.08em">PAUSED</span>
+                </span>
+                <span style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                  <span style="padding:14px 16px;border-radius:8px;background:var(--ink-2);border:1px solid var(--ink-line-2);display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:10px;letter-spacing:.1em;color:var(--on-ink-faint)">MONTH</span>
+                    <span style="font-family:var(--font-display);font-size:24px;font-weight:600;color:var(--brand-on-ink)">+8.2 R</span>
+                  </span>
+                  <span style="padding:14px 16px;border-radius:8px;background:var(--ink-2);border:1px solid var(--ink-line-2);display:flex;flex-direction:column;gap:4px">
+                    <span style="font-size:10px;letter-spacing:.1em;color:var(--on-ink-faint)">TO LIMIT</span>
+                    <span style="font-family:var(--font-display);font-size:24px;font-weight:600;color:var(--on-ink)">4.1 R</span>
+                  </span>
+                </span>
+                <span style="font-size:12px;color:var(--on-ink-faint);text-align:center;padding-top:4px;font-family:var(--font-text)">Resumes when the payout is confirmed out.</span>
+              </div>
+            </div>
+
+            <div class="lage" data-lage="3">
+              <div style="width:440px;display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:8px;background:var(--ink-2);border:1px solid var(--ink-line-2)">
+                <span style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+                  {monatDunkel.map((t) => <span style={t.stil}>{t.wert}</span>)}
+                </span>
+                <span style="display:flex;align-items:baseline;justify-content:space-between;padding-top:14px;border-top:1px solid var(--ink-line-2)">
+                  <span class="mono" style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--on-ink-faint)">May · all accounts</span>
+                  <span style="font-family:var(--font-display);font-size:26px;font-weight:600;color:var(--brand-on-ink)">+11.4 R</span>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Ein Auftrag, jedes Konto -->
-  <section class="alt">
-    <div class="wrap">
-      <div class="section-head center">
-        <p class="eyebrow">One order, every account</p>
-        <h2>Your risk rules apply to you, across every account you trade.</h2>
+  <!-- ═══ 03 · Backtest und 04 · Journal ═══ -->
+  <section class="akt34" data-akt="3" id="akt-3">
+    <div class="inner">
+      <div class="spalte" data-reveal>
+        <div class="bild">
+          {kerzen.map((c) => <span style={c}></span>)}
+          <span style="position:absolute;left:62%;top:0;bottom:44px;width:1px;background:var(--brand-on-ink);opacity:.8"></span>
+          <span style="position:absolute;left:62%;right:0;top:0;bottom:44px;background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(46,134,246,.07) 6px 7px)"></span>
+          <span class="mono" style="position:absolute;left:calc(62% + 10px);top:14px;padding:3px 8px;border-radius:4px;background:var(--brand-on-ink);color:#fff;font-size:10px;font-weight:600;letter-spacing:.08em">FUTURE HIDDEN</span>
+          <span class="mono" style="position:absolute;left:0;right:0;bottom:0;height:44px;display:flex;align-items:center;gap:8px;padding:0 14px;border-top:1px solid var(--ink-line);background:var(--ink-2);font-size:11px;color:var(--on-ink-muted)">
+            <span style="width:26px;height:26px;display:grid;place-items:center;border-radius:6px;background:var(--brand-on-ink);color:#fff;font-size:11px">▶</span>
+            <span>×4</span>
+            <span style="margin-left:auto;color:var(--brand-on-ink);font-weight:600">+3.1 R</span>
+          </span>
+        </div>
+        <span class="eyebrow">03 · Backtest</span>
+        <h2>Trade the past at your own pace.</h2>
         <p>
-          Risk tools usually live inside a single platform, tied to a single login — each
-          account enforcing its own rules alone, with no picture of you as a trader across all
-          of them. FixedR connects your accounts at once, so the rules apply to the trader, not
-          to whichever login happens to be open.
+          A backtest is only worth something if the trade goes in the way a real one does. So in
+          FixedR it does — same order ticket, same mandatory stop, same size computed from your
+          risk, same result in R.
         </p>
       </div>
-      <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="card">
-          <span class="pill-tag">PAYOUT &middot; PAUSED</span>
-          <h3>Protect the payout</h3>
-          <p>
-            Once an account is eligible for a payout, the money stops being hypothetical — and
-            that's exactly when accounts get blown. FixedR can pause trading on that account
-            until you've taken the money out. Every other risk tool protects you from a loss;
-            this one protects a win.
-          </p>
-        </div>
-        <div class="card">
-          <div class="chips">
-            <span class="on">FTMO</span><span class="on">Apex</span><span>TopStep</span>
-          </div>
-          <h3>Pick the accounts</h3>
-          <p>
-            Send a trade to all your accounts, or to the ones you choose. Different firms,
-            different platforms, one order ticket — sized correctly for each account rather
-            than copied blindly.
-          </p>
-        </div>
-        <div class="card">
-          <span class="risk-bars" aria-hidden="true">
-            {[10,14,18,22,26,30,24,16,12].map((h, i) => (
-              <span style={`height:${h}px${i === 5 ? ';background:var(--brand)' : ''}`}></span>
-            ))}
+      <div class="spalte" data-akt="4" id="akt-4" data-reveal>
+        <div class="bild mono" style="display:grid;grid-template-columns:1fr 1fr;font-size:12px;color:var(--on-ink-muted)">
+          <span style="padding:18px;border-right:1px solid var(--ink-line);display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:10px;letter-spacing:.1em;color:var(--on-ink-faint)">PLAN · AT ENTRY</span>
+            {plan.map((z) => <span style="display:flex;justify-content:space-between;gap:8px"><span>{z.k}</span><span style="color:var(--on-ink)">{z.v}</span></span>)}
           </span>
-          <h3>Risk that follows a rule</h3>
-          <p>
-            One R doesn't have to be the same fraction forever. Let it follow the state of the
-            account — smaller in drawdown, larger near target — written down as a rule in the
-            account profile, not decided in the moment.
-          </p>
+          <span style="padding:18px;display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:10px;letter-spacing:.1em;color:var(--on-ink-faint)">OUTCOME · AT CLOSE</span>
+            {ergebnis.map((z) => <span style="display:flex;justify-content:space-between;gap:8px"><span>{z.k}</span><span style={z.stil}>{z.v}</span></span>)}
+          </span>
         </div>
+        <span class="eyebrow">04 · Journal</span>
+        <h2>The journal fills itself, because the order was set here first.</h2>
+        <p>
+          A journal that requires typing gets filled for a week and then stops. One that fills
+          itself is still there in month three. The plan was the order ticket; the outcome is the
+          trade as it closed.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- Pakete -->
-  <section>
-    <div class="wrap">
-      <div class="section-head center">
-        <p class="eyebrow">Pricing</p>
+  <!-- ═══ Pakete ═══ -->
+  <section class="preise">
+    <div class="inner">
+      <div class="kopf" data-reveal>
+        <span class="eyebrow">Pricing</span>
         <h2>Three tiers. One set of rules.</h2>
-        <span class="price-placeholder">SCHNITT UND PREISE — VORSCHLAG</span>
+        <span class="vorschlag">SCHNITT UND PREISE — VORSCHLAG</span>
       </div>
-      <div class="pricing-grid">
-        {packages.map((p) => (
-          <div class={`price-card ${p.featured ? 'hervor' : ''}`}>
-            <span class="head">
+      <div class="karten" data-reveal>
+        {pakete.map((p) => (
+          <div class:list={['karte', p.hervor && 'hervor']}>
+            <span class="zeile">
               <span class="name">{p.name}</span>
-              {p.featured && <span class="badge">MOST TRADERS</span>}
+              {p.hervor && <span class="marke">MOST TRADERS</span>}
             </span>
-            <span class="price">
-              <span class="amount">{p.price}</span><span class="per">/ month</span>
-            </span>
-            <span class="satz">{p.note}</span>
+            <span class="preis"><b>{p.preis}</b><span>/ month</span></span>
+            <span class="satz">{p.satz}</span>
+            <ul>{p.punkte.map((x) => <li><span class="hak">✓</span>{x}</li>)}</ul>
             <a class="knopf" href="/waitlist">{p.cta}</a>
-            <span class="points">
-              {p.points.map((pt) => <span><span class="check">✓</span>{pt}</span>)}
-            </span>
           </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- These: Tinte -->
-  <section class="ink">
-    <div class="wrap">
-      <div class="section-head center">
-        <p class="eyebrow">What's on the screen</p>
-        <h2>There's no money in this account. Only a number and a scale.</h2>
-        <p>
-          The balance of a funded account is notional — it isn't your money, and often not
-          literal capital at all. What's real is your distance to the drawdown limit and to the
-          target, both defined in percent. A currency display suggests a concreteness that
-          doesn't exist. So we removed it.
-        </p>
+  <!-- ═══ These und Founders: eine dunkle Fläche ═══ -->
+  <section class="schluss">
+    <span class="raster" aria-hidden="true"></span>
+    <div class="inner">
+      <div class="these" data-reveal>
+        <div class="spalte">
+          <span class="eyebrow">What's on the screen</span>
+          <h2>There's no money in this account. Only a number and a scale.</h2>
+        </div>
+        <div class="spalte">
+          <p>
+            The balance of a funded account is notional — it isn't your money, and often not
+            literal capital at all. What's real is your distance to the drawdown limit and to the
+            target, both defined in percent. A currency display suggests a concreteness that
+            doesn't exist. So we removed it.
+          </p>
+          <a class="ghost" href="/manifesto">Read the manifesto →</a>
+        </div>
       </div>
-      <p style="text-align: center; margin-top: 10px;"><a class="btn ghost" href="/manifesto">Read the manifesto</a></p>
-    </div>
-  </section>
-
-  <!-- Founders circle -->
-  <section class="alt">
-    <div class="wrap">
-      <div class="section-head center">
-        <p class="eyebrow">Founders circle</p>
-        <h2>A small group of prop traders starts here, and shapes what comes next.</h2>
-        <p>
-          FixedR is rolling out deliberately: a small group of prop traders first, then the
-          waitlist, in order of signup.
-        </p>
+      <div class="founders" data-reveal>
+        <div class="spalte">
+          <span class="eyebrow">Founders circle</span>
+          <h2>A small group of prop traders starts here, and shapes what comes next.</h2>
+          <p style="font-size:17px;line-height:1.65;color:var(--on-ink-muted);margin:0">
+            FixedR is rolling out deliberately: a small group of prop traders first, then the
+            waitlist, in order of signup.
+          </p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <span class="feld">you@example.com</span>
+          <a class="knopf" href="/waitlist">Join the waitlist</a>
+          <span class="klein">No newsletter. One mail when your seat opens.</span>
+        </div>
       </div>
-      <p style="text-align: center; margin-top: 10px;"><a class="btn" href="/waitlist">Join the waitlist</a></p>
     </div>
   </section>
 </Base>
 
 <script>
-  /*
-   * Michael, 2026-09-06: „in unserer variante passiert das beim reinscrollen nicht. erst
-   * wenn ich dann stoppe und die maus bewege."
-   *
-   * ⭐ Der Unterschied liegt nicht im Effekt, sondern in seinem AUSLÖSER. Die Vorlage hält
-   * den Zustand in JavaScript (`hoverRein`/`hoverRaus` setzen dort einen Zustandswert),
-   * unsere Fassung hatte ihn allein an CSS `:hover` gehängt. Und `:hover` rechnet Chrome
-   * beim Scrollen NICHT neu — die Auswertung wird bis zur nächsten Mausbewegung
-   * aufgeschoben. Scrollt die Bühne unter den ruhenden Zeiger, bleibt sie deshalb kalt.
-   *
-   * Deshalb hier: die letzte bekannte Zeigerposition merken und den Zustand bei jeder
-   * Bewegung UND bei jedem Bildlauf neu bestimmen. `:hover` bleibt in der CSS-Datei
-   * daneben stehen — ohne JavaScript funktioniert die Bühne dann wie zuvor.
-   */
-  const stage = document.querySelector<HTMLElement>('.home-hero .stage');
-  if (stage && window.matchMedia('(hover: hover)').matches) {
-    let pointerX = -1;
-    let pointerY = -1;
+  // ── Akt 02: welche Lage die Bühne zeigt ──────────────────────────────────
+  // Der Entwurf bestimmt den aktiven Schritt per IntersectionObserver mit
+  // `rootMargin: -40% 0 -50%` — ein schmales Band in der Bildschirmmitte. Nur was
+  // DORT steht, gilt als aktiv; dadurch wechselt die Bühne, wenn der Schritt gelesen
+  // wird, und nicht schon beim Hereinscrollen.
+  const schritte = document.querySelectorAll<HTMLElement>('[data-schritt]');
+  const lagen = document.querySelectorAll<HTMLElement>('[data-lage]');
+  const punkte = document.querySelectorAll<HTMLElement>('[data-punkt]');
+  const titel = document.querySelector<HTMLElement>('[data-buehne-titel]');
+  const TITEL = ['One ticket · three accounts', 'Roles, not windows', 'Payout protection', 'Your month in R'];
 
-    const evaluate = () => {
-      if (pointerX < 0) return; // Der Zeiger war noch nie über dem Fenster.
-      const box = stage.getBoundingClientRect();
-      const inside = pointerX >= box.left && pointerX <= box.right
-        && pointerY >= box.top && pointerY <= box.bottom;
-      stage.classList.toggle('is-hover', inside);
+  if (schritte.length && lagen.length) {
+    const zeige = (n: number) => {
+      schritte.forEach((el, i) => el.toggleAttribute('data-aktiv', i === n));
+      // Eine schon gezeigte Lage weicht nach OBEN, eine kommende steht unten —
+      // deshalb gibt es neben „an" auch „vor". Ohne das läge der Wechsel in beide
+      // Richtungen gleich und die Bewegung verlöre ihre Richtung.
+      lagen.forEach((el, i) => {
+        el.toggleAttribute('data-an', i === n);
+        el.toggleAttribute('data-vor', i < n);
+      });
+      punkte.forEach((el, i) => el.toggleAttribute('data-an', i === n));
+      if (titel) titel.textContent = TITEL[n] ?? TITEL[0];
     };
+    const io = new IntersectionObserver(
+      (es) => es.forEach((e) => { if (e.isIntersecting) zeige(Number((e.target as HTMLElement).dataset.schritt)); }),
+      { rootMargin: '-40% 0px -50% 0px' },
+    );
+    schritte.forEach((el) => io.observe(el));
+  }
 
-    window.addEventListener('mousemove', (event) => {
-      pointerX = event.clientX;
-      pointerY = event.clientY;
-      evaluate();
-    }, { passive: true });
-
-    // Der eigentliche Punkt: auch ohne Mausbewegung neu bestimmen.
-    window.addEventListener('scroll', evaluate, { passive: true });
-    window.addEventListener('resize', evaluate, { passive: true });
-
-    // Verlässt der Zeiger das Fenster, ist er sicher nicht mehr über der Bühne.
-    document.addEventListener('mouseleave', () => {
-      pointerX = -1;
-      pointerY = -1;
-      stage.classList.remove('is-hover');
+  // ── Roter Faden: weicher Sprung zum Akt, 80 px Versatz für die Kopfleiste ──
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('[data-faden]')) {
+    a.addEventListener('click', (e) => {
+      const ziel = document.querySelector<HTMLElement>(`[data-akt="${a.dataset.faden}"]`);
+      if (!ziel) return;
+      e.preventDefault();
+      window.scrollTo({ top: ziel.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
     });
+  }
+
+  // ── Film-Schleier: Zeigerposition über der Bildkarte ──────────────────────
+  // BEFUND FXR-164 (Michael 2026-09-06): Chrome rechnet `:hover` während des
+  // Bildlaufs nicht neu — „beim reinscrollen passiert das nicht". Deshalb neben
+  // `:hover` eine Klasse, die die Position bei Bewegung UND beim Scrollen prüft.
+  const stage = document.querySelector<HTMLElement>('.home-hero .stage');
+  if (stage) {
+    let px = -1;
+    let py = -1;
+    const pruefe = () => {
+      if (px < 0) return;
+      const b = stage.getBoundingClientRect();
+      stage.classList.toggle('is-hover', px >= b.left && px <= b.right && py >= b.top && py <= b.bottom);
+    };
+    window.addEventListener('mousemove', (e) => { px = e.clientX; py = e.clientY; pruefe(); }, { passive: true });
+    window.addEventListener('scroll', pruefe, { passive: true });
+    window.addEventListener('resize', pruefe, { passive: true });
+    document.addEventListener('mouseleave', () => { px = -1; py = -1; stage.classList.remove('is-hover'); });
   }
 </script>

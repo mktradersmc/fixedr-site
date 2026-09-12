@@ -122,7 +122,10 @@ if (distMode) {
 const RETIRED_COLOR_VALUES = ['#6fa6e6'];
 let kopfbandGeprueft = 0;
 if (distMode) {
-  const HEAD_RE = /class="[^"]*\b(?:page-head|home-hero|waitlist-hero)\b[^"]*"/;
+  // FXR-239: `feat-head` ist das Kopfband der acht Feature-Seiten (Kanvas v5). Es trägt
+  // dieselbe Zusage wie `page-head` — Eyebrow, H1, Lede auf Tinte — nur in eigener
+  // Gestalt. Die Regel prüft die Zusage, nicht den Klassennamen einer Bauform.
+  const HEAD_RE = /class="[^"]*\b(?:page-head|home-hero|waitlist-hero|feat-head|text-head)\b[^"]*"/;
   for (const file of walk(scanDir, exts)) {
     const rel = relative(root, file);
     const fileBasename = basename(file);
@@ -184,70 +187,64 @@ if (distMode) {
   }
 }
 
-// ── FXR-164 (Michael 2026-09-05, "das bild in dem frame beim hover vergrößert"): der
-// Inhalt der Hero-Bühne muss beim Hover zusätzlich zum Rahmen selbst größer werden —
-// gemessen am Prototyp (`temp/export-web-v3/FixedR Web Home.html`, headless gerendert):
-// Inhalt skaliert 0,70 in Ruhe auf 0,75 beim Hover, Faktor 15/14 ≈ 1,0714. Geprüft wird
-// das gebündelte CSS, nicht eine Quelldatei, weil erst der Bau zeigt, ob die Regel im
-// ausgelieferten Bundle ankommt (Rotprobe: alter Stand kannte gar keine
-// `.stage-content`-Transform-Regel, nur den Rahmen wuchs).
+// ── Hero-Bildkarte: der Screenshot wird VOLLSTAENDIG und RANDLOS gezeigt ──────────
+//
+// ⚠️ 2026-09-11, FUENFTE Fassung. Dieses Tor ist dreimal an einem Tag umgeschrieben
+// worden, weil sich die Zusage dreimal geaendert hat. Deshalb misst es jetzt nicht mehr
+// eine BAUFORM, sondern das, was ueber alle drei Runden gleich blieb: **es darf nichts
+// vom Screenshot verlorengehen.** Wer die naechste Bauform waehlt, muss dieses Tor nicht
+// anfassen, solange sie das einhaelt.
+//
+// Die Runden, als Beleg fuer die Regel dahinter:
+//   1. Runde 15 (FXR-164): Buehne WUCHS beim Ueberfahren; Tor mass die Bewegung.
+//   2. Kanvas v4: Verwandlung zurueckgenommen; Tor mass die feste Flaeche + scale(.45).
+//   3. Michael: „kann man es vollstaendig anzeigen?" — die feste Flaeche schnitt 22 %
+//      ab; Tor mass danach `inset: 0` + `object-fit: contain`.
+//   4. Michael: „koennen wir die karte in der hoehe verkleinern, sodass das bild passt?"
+//      — jetzt nimmt die Karte ihre Hoehe vom Bild, `object-fit` entfaellt ganz.
+//
+// Gemessen wird deshalb NEGATIV, an den zwei Wegen, auf denen ein Bild beschnitten wird:
+//   · ein `transform: scale(...)` auf `.stage-content` (Runde 2 — schnitt rechts/unten)
+//   · ein `object-fit: cover` auf Bild oder Film in der Karte (schneidet die Seiten)
+// Dazu positiv: der Filmschleier hat weiterhin BEIDE Ausloeser.
 let buehneCssGeprueft = 0;
 if (distMode) {
   const astroDir = join(scanDir, '_astro');
   const cssFiles = existsSync(astroDir) ? readdirSync(astroDir).filter((n) => n.endsWith('.css')) : [];
-  /*
-   * ⚠️ 2026-09-06 NEU GEFASST, nicht aufgeweicht.
-   *
-   * Die Regel maß die AUFRUFFORM: exakt `.stage:hover .stage-content{...scale(1.0714)}`.
-   * Michael hat gemeldet, dass die Bühne beim Scrollen kalt bleibt — Chrome rechnet
-   * `:hover` während des Bildlaufs nicht neu. Der Auslöser ist deshalb um eine Klasse
-   * ergänzt (`.stage.is-hover`), die ein Skript setzt, und damit wurde aus dem einzelnen
-   * Selektor eine Gruppe. Die alte Zeichenkette traf sie nicht mehr, obwohl die Zusage
-   * unverändert galt.
-   *
-   * Gemessen wird jetzt die Zusage in zwei Teilen: der Inhalt skaliert auf 1.0714, UND es
-   * gibt beide Auslöser — `:hover` (auch ohne JavaScript) und die Klasse (auch beim
-   * Scrollen). Ein fehlender Auslöser ist ein Fund, nicht bloß eine andere Schreibweise.
-   */
-  /*
-   * ⚠️ 2026-09-06, zweite Fassung. Die erste maß `scale(1.0714)` — meinen eigenen
-   * Ersatzwert, nicht den der Vorlage. Die Vorlage skaliert eine FESTE Fläche von
-   * 1600×1000 von .700 auf .750 (1600·.7 = 1120 = Rahmen in Ruhe, 1600·.75 = 1200 =
-   * Rahmen offen). Genau diese feste Fläche ist der Grund, warum sie flüssig läuft.
-   * Gemessen wird deshalb jetzt beides: der Ruhewert und der offene Wert.
-   */
-  const SCALE_RE = /\.stage-content\s*\{[^}]*transform:\s*scale\(\.?0?\.?7\)/;
-  const SCALE_OPEN_RE = /\.stage-content\s*\{\s*transform:\s*scale\(\.?0?\.?75\)/;
-  const HOVER_TRIGGER_RE = /\.stage:hover\s*\.stage-content/;
-  const CLASS_TRIGGER_RE = /\.stage\.is-hover\s*\.stage-content/;
+  const SCALE_RE = /\.stage-content\s*\{[^}]*transform:\s*scale\(/;
+  const COVER_RE = /\.stage-content[^{]*\{[^}]*object-fit:\s*cover/;
+  const HOVER_TRIGGER_RE = /\.stage:hover\s*\.stage-veil/;
+  const CLASS_TRIGGER_RE = /\.stage\.is-hover\s*\.stage-veil/;
   buehneCssGeprueft = cssFiles.length;
   const lies = (name) => readFileSync(join(astroDir, name), 'utf8');
-  const skaliert = cssFiles.some((n) => SCALE_RE.test(lies(n)));
-  const skaliertOffen = cssFiles.some((n) => SCALE_OPEN_RE.test(lies(n)));
+  const hatScale = cssFiles.some((n) => SCALE_RE.test(lies(n)));
+  const hatCover = cssFiles.some((n) => COVER_RE.test(lies(n)));
   const hoverAusloeser = cssFiles.some((n) => HOVER_TRIGGER_RE.test(lies(n)));
   const klassenAusloeser = cssFiles.some((n) => CLASS_TRIGGER_RE.test(lies(n)));
   if (cssFiles.length === 0) {
-    findings.push('[buehne-inhalt-skaliert-fehlt] dist/_astro/ enthält keine .css-Datei — Prüfung konnte nichts messen.');
-  } else if (!skaliert) {
+    findings.push('[buehne-inhalt-fehlt] dist/_astro/ enthält keine .css-Datei — Prüfung konnte nichts messen.');
+  } else if (hatScale) {
     findings.push(
-      `dist/_astro/*.css — [buehne-inhalt-skaliert-fehlt] der Inhalt der Bühne steht in Ruhe nicht ` +
-        `auf scale(.7) (Vorlage: feste Fläche 1600×1000, 1600·.7 = 1120 = Rahmenbreite).`
+      `dist/_astro/*.css — [buehne-inhalt-skaliert] auf ".stage-content" liegt ein ` +
+        `"transform: scale(...)". Eine skalierte feste Fläche ist größer als die Karte und ` +
+        `wird von ihr abgeschnitten — 2026-09-11 waren das 22 % (720×450 Fläche, 562×351 Karte).`
     );
-  } else if (!skaliertOffen) {
+  } else if (hatCover) {
     findings.push(
-      `dist/_astro/*.css — [buehne-inhalt-offen-fehlt] der Inhalt wächst nicht auf scale(.75) ` +
-        `(Vorlage: 1600·.75 = 1200 = geöffnete Rahmenbreite; der Bild-Inhalt muss mitwachsen).`
+      `dist/_astro/*.css — [buehne-bild-beschnitten] in der Bildkarte steht "object-fit: cover". ` +
+        `Damit verliert jeder Screenshot, dessen Seitenverhältnis nicht exakt dem der Karte ` +
+        `entspricht, seine Ränder — bei 2880×1662 wären das je ~110 px links und rechts, ` +
+        `mitten in die linke Leiste mit Logo und Bereichen.`
     );
   } else if (!hoverAusloeser) {
     findings.push(
-      `dist/_astro/*.css — [buehne-ausloeser-hover-fehlt] die Skalierung hängt nicht mehr an ` +
-        `":hover" — ohne JavaScript bliebe die Bühne dann tot.`
+      `dist/_astro/*.css — [buehne-ausloeser-hover-fehlt] der Filmschleier hängt nicht an ":hover" — ` +
+        `ohne JavaScript bliebe die Karte dann tot.`
     );
   } else if (!klassenAusloeser) {
     findings.push(
-      `dist/_astro/*.css — [buehne-ausloeser-klasse-fehlt] die Skalierung hängt nicht an ` +
-        `".stage.is-hover" (2026-09-06, Michael: „beim reinscrollen passiert das nicht" — ` +
-        `Chrome rechnet :hover während des Bildlaufs nicht neu, deshalb der Klassenzustand).`
+      `dist/_astro/*.css — [buehne-ausloeser-klasse-fehlt] der Filmschleier hängt nicht an ` +
+        `".stage.is-hover" (Chrome rechnet :hover während des Bildlaufs nicht neu).`
     );
   }
 }

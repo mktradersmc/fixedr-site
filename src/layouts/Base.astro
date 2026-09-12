@@ -9,7 +9,10 @@ import '@fontsource-variable/geist';
 import '@fontsource-variable/geist-mono';
 import '@fontsource-variable/space-grotesk';
 import '../styles/global.css';
+import '../styles/mega.css';
 import { SITE_TITLE, TAGLINE, DESCRIPTION } from '../config';
+import Icon from '../components/Icon.astro';
+import { BANNER_LANES, FEATURE_PAGES } from '../content/produktnavigation';
 
 interface Props {
   title?: string;
@@ -30,6 +33,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 // aria-current wurde je gesetzt. Erst die Endung abschneiden, dann vergleichen.
 const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
 const isActive = (href: string) => (path === href ? 'page' : undefined);
+// FXR-239: „Product" bleibt auch auf den acht Unterseiten das aktive Nav-Ziel — sonst
+// stünde man auf /product/metrics und die Leiste zeigte nirgends, wo man ist.
+const inProduct = path === '/product' || path.startsWith('/product/');
 ---
 <!doctype html>
 <html lang="en">
@@ -70,7 +76,15 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
           {/* product §3 Stufe 1: /product und /methodology sind die zwei
               Stockwerke des Angebots (R2), /trust die Vertrauensseite (§6). Reihenfolge
               folgt der Kaufentscheidung: was es tut, wie es bindet, warum man ihm traut. */}
-          <a href="/product" aria-current={isActive('/product')}>Product</a>
+          {/* FXR-239 — Form wortgleich nach `temp/export-web-v4`: der Klapp-Pfeil sitzt IM
+              Link (10×10, `margin-left:5px`, dreht 180°), es gibt keinen zweiten Knopf
+              daneben. „Product" bleibt damit ein Link und führt ohne JavaScript und mit
+              dem Finger auf die Nabe /product — dort stehen dieselben acht als Kacheln. */}
+          <span class="nav-item" data-mega-root>
+            <a href="/product" aria-current={inProduct ? 'page' : undefined} aria-expanded="false" aria-controls="product-mega" data-mega-link>
+              Product<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3.5l3 3 3-3"></path></svg>
+            </a>
+          </span>
           <a href="/methodology" aria-current={isActive('/methodology')}>Methodology</a>
           <a href="/trust" aria-current={isActive('/trust')}>Trust</a>
           <a href="/manifesto" aria-current={isActive('/manifesto')}>Manifesto</a>
@@ -94,16 +108,50 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
           <a class="cta" href="/waitlist">Join the waitlist</a>
         </span>
       </div>
+
+      {/* ── Produkt-Aufklappbanner ───────────────────────────────────────────
+          Form und Werte aus `temp/export-web-v5`: Overlay ueber volle Breite, vier
+          Lanes zu je einem Symbolkaestchen und einem Mono-Label, darunter die Punkte
+          mit eigenem Strichsymbol statt der Mono-Nummern aus v4. */}
+      <div class="mega" id="product-mega" hidden data-mega-panel>
+        <div class="inner">
+          {BANNER_LANES.map((lane) => (
+            <div class="mega-lane">
+              <span class="lane-head">
+                <span class="box"><Icon name={lane.icon} size={15} /></span>
+                <span class="name">{lane.name}</span>
+              </span>
+              {lane.items.map((item) => (
+                <a class="mega-item" href={`/product/${item.slug}`}>
+                  <span class="ic"><Icon name={item.icon} size={15} stroke={1.5} /></span>
+                  <span class="tx">
+                    <span class="t">{item.title}</span>
+                    <span class="d">{item.text}</span>
+                  </span>
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
     </header>
     <main class={narrow ? 'narrow' : undefined}>
       {bare ? <slot /> : <div class="wrap"><slot /></div>}
     </main>
     <footer class="site ink">
       <div class="inner">
+        {/* FXR-239 — Form wortgleich nach `temp/export-web-v4`: ein Raster über die
+            volle Inhaltsbreite, `minmax(0,1.4fr) repeat(4,minmax(0,1fr))`, Abstand 40.
+            Vorher war es ein `flex` mit `space-between`, das die Spalten
+            zusammendrängte statt sie über die Breite zu verteilen. Die Technik-Marken
+            unter dem Markentext gehören ebenfalls zur Vorlage. */}
         <div class="footer-cols">
           <div class="brand-col">
             <img src="/logo-full-on-dark.svg" alt="FixedR" width="128" height="38" />
             <p>A trading cockpit for prop-firm accounts. Local-first, Windows, no cloud account.</p>
+            <span class="tech">
+              <span>MetaTrader</span><span>NinjaTrader</span>
+            </span>
           </div>
           <nav>
             <div class="group">
@@ -111,6 +159,16 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
               <a href="/product">Product</a>
               <a href="/methodology">Methodology</a>
               <a href="/trust">Trust</a>
+            </div>
+            {/* FXR-239: die acht Feature-Seiten auch in der Fußzeile — auf dem Handy ist
+                sie heute der EINZIGE Weg dorthin (`header.site nav` ist unter 780px
+                ausgeblendet, ein Mobil-Menü gibt es noch nicht). Aus derselben Quelle
+                wie das Banner, damit keine dritte Liste entsteht. */}
+            <div class="group">
+              <span class="group-label">Features</span>
+              {FEATURE_PAGES.map((p) => (
+                <a href={`/product/${p.slug}`}>{p.title}</a>
+              ))}
             </div>
             <div class="group">
               <span class="group-label">Read</span>
@@ -125,6 +183,15 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
             </div>
           </nav>
         </div>
+        {/* FXR-239: dieser Absatz steht in `export-web-v4` und fehlte im Bau. Er ist
+            nicht Kosmetik — er sagt, dass FixedR keine Konten, Gelder oder Marktdaten
+            hält und keine Anlageberatung ist. Vorlage: 12px, `max-width: 90ch`. */}
+        <p class="footer-disclaimer">
+          FixedR is a local-first Windows application. It places orders through your own
+          MetaTrader or NinjaTrader installation and does not hold accounts, funds or market
+          data. Nothing on this site is investment advice. Prop-firm names are used to describe
+          compatibility and belong to their owners.
+        </p>
         <div class="footer-legal">
           <span class="mono">© FixedR</span>
           <span class="notrack">This site sets no cookies and loads nothing from third parties.</span>
@@ -132,6 +199,92 @@ const isActive = (href: string) => (path === href ? 'page' : undefined);
       </div>
     </footer>
     <script>
+      // ── Produkt-Aufklappbanner (FXR-239) ──────────────────────────────────────
+      // Mechanik wortgleich nach `temp/export-web-v4`: das Ueberfahren EINES Nav-Glieds
+      // entscheidet — „Product" oeffnet, jedes andere schliesst (sonst bliebe das Menue
+      // stehen, waehrend man schon auf „Trust" zeigt). Das Verlassen der ganzen
+      // Kopfleiste schliesst ebenfalls; dazwischen liegt eine Luecke, weshalb die Regel
+      // an der Kopfleiste haengt und nicht am Menue.
+      //
+      // Zwei Zusaetze, die die GESTALT nicht anfassen und nur Sackgassen vermeiden:
+      // Tastaturfokus oeffnet (sonst waeren die acht Ziele per Tab unerreichbar) und Esc
+      // schliesst. Mit dem Finger gibt es kein Ueberfahren — dort fuehrt „Product" als
+      // Link auf die Nabe /product, wo dieselben acht als Kacheln stehen.
+      const megaHeader = document.querySelector('header.site');
+      const megaPanel = document.querySelector<HTMLElement>('[data-mega-panel]');
+      const megaLink = document.querySelector<HTMLElement>('[data-mega-link]');
+      const megaRoot = document.querySelector<HTMLElement>('[data-mega-root]');
+      if (megaHeader && megaPanel && megaLink && megaRoot) {
+        const setMega = (open: boolean) => {
+          megaPanel.hidden = !open;
+          megaLink.setAttribute('aria-expanded', open ? 'true' : 'false');
+          if (open) megaRoot.setAttribute('data-open', '');
+          else megaRoot.removeAttribute('data-open');
+        };
+        // BEFUND (Ereignisfolge headless mitgeschrieben, 2026-09-11): `mouseenter` ist auf
+        // Touch NICHT leer — Chromium feuert es beim Tippen synthetisch. Ohne Pruefung des
+        // Zeigertyps oeffnete das Menue beim Antippen und verdeckte das Linkziel. Die
+        // Hover-Strecke gehoert ausschliesslich der echten Maus, Enter wie Leave.
+        for (const link of Array.from(megaHeader.querySelectorAll('nav a'))) {
+          link.addEventListener('pointerenter', (e) => {
+            if ((e as PointerEvent).pointerType !== 'mouse') return;
+            setMega(link === megaLink);
+          });
+        }
+        megaHeader.addEventListener('pointerleave', (e) => {
+          if ((e as PointerEvent).pointerType !== 'mouse') return;
+          setMega(false);
+        });
+        // Nur Tastaturfokus, nie Zeigerfokus: ein Tippen fokussiert den Link, bevor es ihm
+        // folgt — ein bedingungsloser Fokus-Oeffner haette dabei das Menue aufgeklappt.
+        megaLink.addEventListener('focus', () => {
+          try {
+            if (megaLink.matches(':focus-visible')) setMega(true);
+          } catch {
+            /* ohne :focus-visible lieber nicht oeffnen */
+          }
+        });
+        megaHeader.addEventListener('focusout', (e) => {
+          const to = (e as FocusEvent).relatedTarget as Node | null;
+          if (!to || !megaHeader.contains(to)) setMega(false);
+        });
+        document.addEventListener('keydown', (e) => {
+          if ((e as KeyboardEvent).key !== 'Escape' || megaPanel.hidden) return;
+          setMega(false);
+          megaLink.focus();
+        });
+      }
+
+      // ── Reveal beim Hereinscrollen (v6, alle Seiten) ─────────────────────────
+      // Vorlage `export-web-v6`: IntersectionObserver mit `rootMargin: 0 0 -12% 0`,
+      // Startzustand `opacity:0; translateY(28px)`, Uebergang .8s ease.
+      //
+      // ⚠️ Der Anfangszustand wird NUR fuer Elemente gesetzt, die beim Laden UNTERHALB
+      // des Fensters liegen (`top > innerHeight`). Alles im ersten Bildschirm bleibt
+      // sofort sichtbar — sonst waere der Hero beim Laden fuer eine Sekunde leer.
+      // Aus demselben Grund steht `opacity:0` nicht im CSS: ohne JavaScript soll die
+      // Seite vollstaendig da sein, nicht unsichtbar.
+      const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (revealEls.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const ioReveal = new IntersectionObserver(
+          (es) => es.forEach((e) => {
+            if (!e.isIntersecting) return;
+            const el = e.target as HTMLElement;
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+            ioReveal.unobserve(el);
+          }),
+          { rootMargin: '0px 0px -12% 0px' },
+        );
+        for (const el of revealEls) {
+          if (el.getBoundingClientRect().top > window.innerHeight) {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(28px)';
+          }
+          ioReveal.observe(el);
+        }
+      }
+
       // Sprachwechsel: reiner UI-Zustand (kein Fließtext-Wechsel, s. Kommentar oben).
       // Persistiert je Gerät über localStorage; jede Seite liest denselben Schlüssel,
       // damit der Zustand über Seitenwechsel hinweg stabil bleibt (G4: "funktioniert

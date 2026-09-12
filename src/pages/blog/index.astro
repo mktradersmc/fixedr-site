@@ -1,27 +1,31 @@
 ---
-import Base from '../../layouts/Base.astro';
-import PageHead from '../../components/PageHead.astro';
+// FXR-239 (Kanvas v7): neues Gerüst, KEIN geänderter Text.
+import TextPage from '../../layouts/TextPage.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 ---
-<Base
+<TextPage
   title="Blog"
   description="Essays on risk-first trading: R-denominated thinking, prop-firm psychology, and the discipline lessons trading can borrow from aviation."
+  eyebrow="Read"
+  h1="Blog"
+  seite="Blog"
+  hinweis="Five posts. Written for prop traders, not for search engines."
   bare
 >
-  <PageHead eyebrow="Read">Blog</PageHead>
-  <div class="wrap" style="max-width: 46rem; padding-top: 40px;">
-  <ul class="post-list">
-    {posts.map((post) => (
-      <li>
-        <span class="date">{post.data.date.toISOString().slice(0, 10)}</span>
-        <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
-        <p>{post.data.description}</p>
-      </li>
+  <div class="blog-raster">
+    {posts.map((post, i) => (
+      <a href={`/blog/${post.slug}`} class:list={[i === 0 && 'gross']}>
+        <span class="datum">{post.data.date.toISOString().slice(0, 10)}</span>
+        <span class="t">{post.data.title}</span>
+        <span class="d">{post.data.description}</span>
+        {/* Vorlage v7: der Lese-Hinweis sitzt am FUSS der Karte (`margin-top:auto`),
+            damit er bei unterschiedlich langen Beschreibungen auf einer Linie steht. */}
+        <span class="read" aria-hidden="true">Read →</span>
+      </a>
     ))}
-  </ul>
   </div>
-</Base>
+</TextPage>

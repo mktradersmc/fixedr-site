@@ -1,0 +1,62 @@
+---
+// TextPage — das Gerüst der Textseiten im neuen Auftritt (FXR-239, Kanvas v7):
+// Manifesto · Methodology · Trust · FAQ · Blog.
+//
+// v7 ändert an diesen Seiten KEIN WORT — gemessen: die acht FAQ-Antworten sind
+// zeichengleich mit dem Bestand. Es ist eine reine Umgestaltung, deshalb bringt
+// dieses Layout nur die Form mit und der Inhalt bleibt in den Seiten.
+//
+// Form: dunkles Kopfband (linksbündig, 1200er Raster, H1 56/500 max 20ch) →
+// Zweispalter mit sticky Randspalte links und Lesespalte rechts.
+//
+// Die Klasse `text-head` steht in der Kopfband-Liste von `tools/guards.mjs` (G2):
+// jede gebaute Seite muss eine Kopffläche tragen.
+import Base from './Base.astro';
+import '../styles/text.css';
+
+interface Props {
+  /** Kleine Zeile über der Überschrift, im Kopfband. */
+  eyebrow: string;
+  h1: string;
+  /** Optionaler Vorspann im Kopfband. */
+  lede?: string;
+  /** Name der Seite in der Randspalte — meist derselbe wie im Menü. */
+  seite: string;
+  /** Eine Zeile darunter: Lesezeit oder ein Hinweis. */
+  hinweis: string;
+  title: string;
+  description: string;
+  /** Seiten mit eigenen Bändern (Trust) setzen den Körper selbst. */
+  bare?: boolean;
+}
+const { eyebrow, h1, lede, seite, hinweis, title, description, bare = false } = Astro.props;
+---
+<Base title={title} description={description} bare>
+  <header class="text-head">
+    <span class="raster" aria-hidden="true"></span>
+    <div class="inner">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{h1}</h1>
+      {lede && <p class="lede">{lede}</p>}
+    </div>
+  </header>
+
+  {/* Bänder, die über die volle Breite laufen (Trust: „Stays / Leaves"), stehen
+      VOR dem Zweispalter — dafür der Slot. */}
+  <slot name="band" />
+
+  {bare ? (
+    <slot />
+  ) : (
+    <div class="text-body">
+      <aside>
+        <span class="name">{seite}</span>
+        <span class="ln" aria-hidden="true"></span>
+        <span class="hinweis">{hinweis}</span>
+      </aside>
+      <article>
+        <slot />
+      </article>
+    </div>
+  )}
+</Base>

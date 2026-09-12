@@ -1,0 +1,307 @@
+---
+// Produkt-Ausschnitte — einer je Feature-Seite (FXR-239, Kanvas `temp/export-web-v5`).
+//
+// Sie ersetzen die neun Schemagrafiken unter `components/illus/`. Michaels Befund vom
+// 2026-09-11: *„das ist für den prototyp in ordnung. aber es wirkt noch irgendwie
+// disconnected vom produkt. irgendwie generisch."* Ursache war nicht das fehlende Foto,
+// sondern eine eigene Bildsprache — Infografiken ÜBER das Produkt statt Ausschnitte
+// AUS ihm. Deshalb hier: Fensterchrom mit Reiterzeile und Statuszeile, Panels auf
+// --ink-2/--ink-3, Radien 8/12, Geist Mono 12, R-Werte als Badges in --brand-on-ink,
+// Warnzustand --warn.
+//
+// ⚠️ Kein Grün und kein Rot in den Kerzen: in dieser Marke gehören beide Farben der
+// Bewertung (Gewinn/Verlust). Hell = aufwärts, gedämpft = abwärts.
+//
+// Screenshots ersetzen das später, ohne das Layout anzufassen — der Rahmen passt.
+import { SEITEN } from '../content/produktseiten';
+
+interface Props {
+  slug: string;
+  tabs: string[];
+  chrom: string;
+}
+const { slug, tabs, chrom } = Astro.props;
+if (!Object.hasOwn(SEITEN, slug)) {
+  throw new Error(`Ausschnitt: "${slug}" ist keine bekannte Seite.`);
+}
+
+/* ── Bilddaten, Formeln wortgleich aus der Kanvas-Quelle ────────────────────────
+   Die Kerzen sind bewusst DETERMINISTISCH aus dem Index gerechnet (Sinus + Modulo)
+   statt zufällig: sonst sähe jeder Bau anders aus und ein Bildvergleich wäre wertlos. */
+const kerze = (n: number, top: number, left0: number, breite: number) =>
+  Array.from({ length: n }, (_, i) => {
+    const y = top + Math.sin(i * 0.55) * 12 + i * 0.9 + (i % 3) * 4;
+    const hh = 10 + ((i * 7) % 18);
+    const auf = (i * 7) % 5 < 3;
+    const farbe = auf ? 'var(--on-ink-muted)' : 'var(--ink-line-2)';
+    return `position:absolute;left:${left0 + i * breite}%;top:${y}%;width:${breite * 0.55}%;height:${hh}%;border-radius:1px;background:${farbe};box-shadow:0 -${hh * 0.25}px 0 0 ${farbe},0 ${hh * 0.2}px 0 0 ${farbe};opacity:${auf ? 0.85 : 1}`;
+  });
+const kerzen = kerze(28, 24, 4, 3.3);
+const kerzenKlein = kerze(16, 30, 6, 5.6);
+
+const fib = [['0.5', 30], ['0.618', 41], ['0.786', 56]].map(([name, y]) => ({
+  name,
+  stil: `position:absolute;left:52%;right:8%;top:${y}%;border-top:1px dashed var(--ink-line-2);display:flex;justify-content:flex-end;padding-top:2px`,
+}));
+
+const werkzeuge = [0, 1, 2, 3, 4, 5].map(
+  (i) => `width:24px;height:24px;border-radius:5px;background:${i === 0 ? 'var(--brand-on-ink)' : 'var(--ink-2)'};border:1px solid var(--ink-line-2)`,
+);
+
+const konten = [
+  ['FTMO 100k', 'Rule profile · FTMO Swing', '3 contracts', true],
+  ['Apex 150k', 'Rule profile · Apex PA', '4 contracts', true],
+  ['TopStep 50k', 'not configured', 'halted · no size guessed', false],
+].map(([name, regel, wert, ok]) => ({
+  name, regel, wert,
+  stil: `display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;background:var(--ink-3);border:1px solid ${ok ? 'var(--ink-line-2)' : 'var(--warn)'}`,
+  wertStil: ok ? 'color:var(--brand-on-ink);font-weight:600' : 'color:var(--warn);font-size:10px;text-align:right',
+}));
+
+const rollen = [
+  ['HTF', 'H4', true, 'grid-row:span 2'],
+  ['MTF', 'M15', false, ''],
+  ['LTF', 'M1', false, ''],
+].map(([rolle, tf, aktiv, extra], i) => ({
+  rolle, tf,
+  stil: `${extra};display:flex;flex-direction:column;justify-content:space-between;padding:10px;border-radius:8px;background:var(--ink-2);border:1px solid ${aktiv ? 'var(--brand-on-ink)' : 'var(--ink-line-2)'}`,
+  badge: `padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;letter-spacing:.06em;${aktiv ? 'background:var(--brand-on-ink);color:#fff' : 'background:var(--ink-3);border:1px solid var(--ink-line-2);color:var(--on-ink-muted)'}`,
+  balken: Array.from({ length: 12 }, (_, j) => `flex:1;height:${30 + ((j * 37 + i * 11) % 60)}%;border-radius:1px;background:${(j * 7) % 3 ? 'var(--ink-line-2)' : 'var(--on-ink-faint)'}`),
+}));
+
+const replayKnoepfe = [['⏮', false], ['▶', true], ['⏸', false], ['⏭', false], ['›|', false]].map(
+  ([icon, aktiv]) => ({
+    icon,
+    stil: `width:30px;height:30px;display:grid;place-items:center;border-radius:6px;font-size:12px;${aktiv ? 'background:var(--brand-on-ink);color:#fff' : 'background:var(--ink-3);border:1px solid var(--ink-line-2);color:var(--on-ink-muted)'}`,
+  }),
+);
+
+const plan = [['Setup', 'Pullback'], ['Entry', '17,830'], ['Stop', '17,812 · 1.0 R'], ['Target', '17,866 · 2.0 R']].map(([k, v]) => ({ k, v }));
+const ergebnis = [
+  ['Closed', '17,861', 'color:var(--on-ink)'],
+  ['Result', '+1.7 R', 'color:var(--brand-on-ink);font-weight:600'],
+  ['Stop moved', 'no', 'color:var(--on-ink)'],
+  ['Rule check', 'held', 'color:var(--on-ink)'],
+].map(([k, v, stil]) => ({ k, v, stil }));
+
+const kpis = [['WINRATE', '54%'], ['AVG R', '+0.62'], ['EXPECTANCY', '+0.34 R'], ['NET', '+6.8%']].map(
+  ([name, wert], i) => ({ name, wert, stil: `display:flex;flex-direction:column;gap:4px;padding:14px 16px;${i ? 'border-left:1px solid var(--ink-line)' : ''}` }),
+);
+
+const werte = [0, 1.2, -0.4, 2.1, 0, 0, 0, 0.8, 1.9, -1, 0.5, 3.2, 0, 0, -0.6, 2.4, 1.1, 0, 0.9, 1.4, 0, 0, -0.3, 1.8, 2.6, 0.7, -1.2, 0];
+const monat = werte.map((w) => {
+  const leer = w === 0;
+  const stark = w >= 1.8;
+  return {
+    wert: leer ? '' : (w > 0 ? '+' : '−') + Math.abs(w).toFixed(1),
+    stil: `display:grid;place-items:center;height:26px;border-radius:4px;font-size:10px;font-weight:500;background:${leer ? 'var(--ink-2)' : w > 0 ? (stark ? 'var(--brand-on-ink)' : 'rgba(46,134,246,.22)') : 'var(--ink-3)'};border:1px solid ${leer ? 'var(--ink-line)' : 'transparent'};color:${w > 0 ? (stark ? '#fff' : 'var(--brand-on-ink)') : 'var(--on-ink-muted)'}`,
+  };
+});
+
+const todos = [
+  ['Connect a demo account', true],
+  ['Size a first trade in R', true],
+  ['Read the limit display', false],
+  ['Attach a firm rule profile', false],
+  ['Pair your phone', false],
+  ['Save a workspace', false],
+].map(([name, ok]) => ({
+  name,
+  hak: ok ? '✓' : '',
+  stil: `display:flex;align-items:center;gap:9px;color:${ok ? 'var(--on-ink-faint)' : 'var(--on-ink)'};${ok ? 'text-decoration:line-through' : ''}`,
+  box: `width:15px;height:15px;display:grid;place-items:center;border-radius:4px;font-size:10px;${ok ? 'background:var(--brand-on-ink);color:#fff' : 'border:1px solid var(--ink-line-2)'}`,
+}));
+---
+<div class="ausschnitt">
+  <span class="chrom">
+    {tabs.filter(Boolean).map((name, i) => <span class:list={['tab', i === 0 && 'an']}>{name}</span>)}
+    <span class="rechts">{chrom}</span>
+  </span>
+
+  {slug === 'accounts' && (
+    <div style="display:grid;grid-template-columns:1fr 1.3fr;min-height:300px">
+      <div style="padding:16px;border-right:1px solid var(--ink-line);display:flex;flex-direction:column;gap:10px">
+        <span class="lbl">ORDER TICKET</span>
+        <span style="display:flex;justify-content:space-between;padding:10px 12px;border-radius:8px;background:var(--ink-3);border:1px solid var(--ink-line-2)"><span>MES · SHORT</span><span class="r">1.0 R</span></span>
+        <span class="zeile"><span>Stop</span><span>5,212.50</span></span>
+        <span class="zeile"><span>Target</span><span>5,188.00 · 2.4 R</span></span>
+        <span style="margin-top:auto;padding:10px;text-align:center;border-radius:8px;background:var(--brand-on-ink);color:#fff;font-weight:600;font-family:var(--font-text);font-size:13px">Send to 2 accounts</span>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
+        <span class="lbl">ACCOUNTS · SIZED PER ACCOUNT</span>
+        {konten.map((k) => (
+          <span style={k.stil}>
+            <span style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-weight:600;color:var(--on-ink)">{k.name}</span>
+              <span style="font-size:10px;color:var(--on-ink-faint)">{k.regel}</span>
+            </span>
+            <span style={k.wertStil}>{k.wert}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {slug === 'charts' && (
+    <div style="position:relative;height:320px;background:var(--ink)">
+      <span style="position:absolute;inset:0;background-image:linear-gradient(var(--ink-line) 1px,transparent 1px);background-size:100% 40px;opacity:.5"></span>
+      {kerzen.map((c) => <span style={c}></span>)}
+      <span style="position:absolute;left:8%;right:22%;top:44%;height:1px;background:var(--brand-on-ink);transform:rotate(-9deg);transform-origin:left center"></span>
+      {fib.map((f) => (
+        <span style={f.stil}><span style="padding:1px 6px;background:var(--ink-2);border:1px solid var(--ink-line-2);border-radius:3px;font-size:10px;color:var(--on-ink-muted)">{f.name}</span></span>
+      ))}
+      <span style="position:absolute;left:36%;top:18%;padding:6px 9px;border-radius:6px;background:var(--ink-2);border:1px solid var(--brand-on-ink);font-family:var(--font-text);font-size:11px;color:var(--on-ink);max-width:150px;line-height:1.4;white-space:normal">Note · sweep of Asia high, wait for close below</span>
+      <span style="position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:8px;background:var(--ink-2);border:1px solid var(--ink-line-2)">
+        <span class="lbl">POSITION</span>
+        <span style="display:flex;gap:10px;align-items:baseline"><span class="r">1.0 R</span><span style="color:var(--on-ink-faint)">→</span><span style="color:var(--on-ink)">4 contracts</span></span>
+      </span>
+      <span style="position:absolute;left:12px;bottom:12px;display:flex;gap:4px">{werkzeuge.map((w) => <span style={w}></span>)}</span>
+    </div>
+  )}
+
+  {slug === 'workspaces' && (
+    <div style="padding:12px;display:grid;grid-template-columns:1.5fr 1fr;grid-template-rows:repeat(2,140px);gap:8px;background:var(--ink)">
+      {rollen.map((r) => (
+        <span style={r.stil}>
+          <span style="display:flex;justify-content:space-between;align-items:center">
+            <span style={r.badge}>{r.rolle}</span>
+            <span style="color:var(--on-ink-faint)">{r.tf}</span>
+          </span>
+          <span style="display:flex;align-items:flex-end;gap:3px;height:60%;padding:0 4px">
+            {r.balken.map((b) => <span style={b}></span>)}
+          </span>
+        </span>
+      ))}
+    </div>
+  )}
+
+  {slug === 'backtesting' && (
+    <>
+      <div style="position:relative;height:250px;background:var(--ink)">
+        {kerzen.map((c) => <span style={c}></span>)}
+        <span style="position:absolute;left:62%;top:0;bottom:0;width:1px;background:var(--brand-on-ink);opacity:.7"></span>
+        <span style="position:absolute;left:62%;right:0;top:0;bottom:0;background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(46,134,246,.06) 6px 7px)"></span>
+        <span style="position:absolute;left:calc(62% + 8px);top:12px;padding:2px 7px;border-radius:3px;background:var(--brand-on-ink);color:#fff;font-size:10px;font-weight:600">FUTURE HIDDEN</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:1px solid var(--ink-line);background:var(--ink-2)">
+        {replayKnoepfe.map((k) => <span style={k.stil}>{k.icon}</span>)}
+        <span style="padding:5px 9px;border-radius:5px;border:1px solid var(--ink-line-2);color:var(--on-ink-muted)">×4</span>
+        <span style="color:var(--on-ink-faint);overflow:hidden;text-overflow:ellipsis;min-width:0">14 Jan · 09:32 · NQ, ES</span>
+        <span style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <span class="lbl">SESSION</span>
+          <span style="padding:4px 9px;border-radius:5px;background:var(--ink-3);border:1px solid var(--ink-line-2);color:var(--brand-on-ink);font-weight:600">+3.1 R</span>
+          <span style="color:var(--on-ink-faint)">· 7 trades</span>
+        </span>
+      </div>
+    </>
+  )}
+
+  {slug === 'journal' && (
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.1fr;min-height:300px">
+      <div style="padding:16px;border-right:1px solid var(--ink-line);display:flex;flex-direction:column;gap:10px">
+        <span class="lbl">PLAN · AT ENTRY</span>
+        {plan.map((z) => <span class="zeile"><span>{z.k}</span><span>{z.v}</span></span>)}
+        <span style="margin-top:auto;padding:5px 8px;border-radius:4px;background:var(--brand-soft);color:var(--brand);font-size:10px;font-weight:600;letter-spacing:.06em;align-self:flex-start">PULLBACK · TAG: LONDON</span>
+      </div>
+      <div style="padding:16px;border-right:1px solid var(--ink-line);display:flex;flex-direction:column;gap:10px">
+        <span class="lbl">OUTCOME · AT CLOSE</span>
+        {ergebnis.map((z) => (
+          <span style="display:flex;justify-content:space-between;gap:8px;color:var(--on-ink-muted)"><span>{z.k}</span><span style={z.stil}>{z.v}</span></span>
+        ))}
+        <span style="margin-top:auto;font-family:var(--font-text);font-size:11px;line-height:1.45;color:var(--on-ink-muted);border-left:2px solid var(--ink-line-2);padding-left:8px;white-space:normal">Note: took it a candle early. Plan held.</span>
+      </div>
+      <div style="position:relative;background:var(--ink)">
+        <span style="position:absolute;top:10px;left:10px;font-size:10px;letter-spacing:.1em;color:var(--on-ink-faint)">CHART · AT DECISION</span>
+        {kerzenKlein.map((c) => <span style={c}></span>)}
+        <span style="position:absolute;left:10px;right:10px;top:38%;height:1px;background:var(--on-ink-faint)"></span>
+        <span style="position:absolute;left:10px;top:calc(38% - 14px);font-size:9px;color:var(--on-ink-faint)">stop</span>
+        <span style="position:absolute;left:10px;right:10px;top:74%;height:1px;background:var(--brand-on-ink)"></span>
+        <span style="position:absolute;left:10px;top:calc(74% + 3px);font-size:9px;color:var(--brand-on-ink)">target · 2 R</span>
+      </div>
+    </div>
+  )}
+
+  {slug === 'metrics' && (
+    <>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--ink-line)">
+        {kpis.map((k) => (
+          <span style={k.stil}>
+            <span class="lbl">{k.name}</span>
+            <span style="font-family:var(--font-display);font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--on-ink)">{k.wert}</span>
+          </span>
+        ))}
+      </div>
+      <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px">
+        <span style="display:flex;justify-content:space-between;align-items:baseline">
+          <span class="lbl">MAY · ALL ACCOUNTS</span>
+          <span class="r">+11.4 R</span>
+        </span>
+        <span style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">
+          {monat.map((t) => <span style={t.stil}>{t.wert}</span>)}
+        </span>
+      </div>
+    </>
+  )}
+
+  {slug === 'alerts' && (
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;min-height:300px">
+      <div style="position:relative;background:var(--ink);border-right:1px solid var(--ink-line)">
+        {kerzen.map((c) => <span style={c}></span>)}
+        <span style="position:absolute;left:6%;right:10%;top:62%;height:1px;background:var(--brand-on-ink);transform:rotate(-11deg);transform-origin:left center"></span>
+        <span style="position:absolute;left:58%;top:38%;display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;background:var(--ink-2);border:1px solid var(--brand-on-ink);font-size:10px"><span style="width:6px;height:6px;border-radius:50%;background:var(--brand-on-ink)"></span>ALERT · on touch</span>
+        <span style="position:absolute;left:0;right:0;bottom:0;display:flex;gap:14px;padding:8px 12px;border-top:1px solid var(--ink-line);background:var(--ink-2);font-size:10px;color:var(--on-ink-muted)">
+          <span style="color:var(--on-ink-faint)">14:30</span>
+          <span style="color:var(--on-ink)">CPI · USD</span>
+          <span style="padding:0 6px;border-radius:3px;background:var(--ink-3);border:1px solid var(--ink-line-2);color:var(--warn)">HIGH</span>
+          <span style="margin-left:auto;color:var(--on-ink-faint)">news window · 12 min</span>
+        </span>
+      </div>
+      <div style="display:grid;place-items:center;padding:16px;background:var(--ink-2)">
+        <span style="width:150px;height:250px;border-radius:22px;background:var(--ink);border:2px solid var(--ink-line-2);position:relative;overflow:hidden">
+          <span style="position:absolute;top:8px;left:50%;transform:translateX(-50%);width:44px;height:5px;border-radius:3px;background:var(--ink-line-2)"></span>
+          <span style="position:absolute;top:30px;left:10px;right:10px;padding:9px 10px;border-radius:10px;background:var(--ink-3);border:1px solid var(--ink-line-2);display:flex;flex-direction:column;gap:3px;font-family:var(--font-text)">
+            <span style="display:flex;justify-content:space-between;font-size:9px;color:var(--on-ink-faint)"><span style="color:var(--brand-on-ink);font-weight:600">FixedR</span><span>now</span></span>
+            <span style="font-size:11px;font-weight:600;color:var(--on-ink);white-space:normal;line-height:1.35">NQ touched your trendline</span>
+          </span>
+          <span style="position:absolute;bottom:12px;left:10px;right:10px;text-align:center;font-size:9px;color:var(--on-ink-faint)">paired by QR · no account</span>
+        </span>
+      </div>
+    </div>
+  )}
+
+  {slug === 'start' && (
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;min-height:300px">
+      <div style="position:relative;padding:16px;display:flex;flex-direction:column;gap:10px;border-right:1px solid var(--ink-line)">
+        <span class="lbl">ORDER TICKET · DEMO</span>
+        <span style="display:flex;gap:8px">
+          <span style="flex:1;padding:8px 10px;border-radius:6px;background:var(--ink-3);border:1px solid var(--ink-line-2);color:var(--on-ink-muted)">Entry <span style="color:var(--on-ink);float:right">17,830</span></span>
+          <span style="flex:1;padding:8px 10px;border-radius:6px;background:var(--ink-3);border:1px solid var(--ink-line-2);color:var(--on-ink-muted)">Stop <span style="color:var(--on-ink);float:right">17,812</span></span>
+        </span>
+        <span style="position:relative;display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;background:var(--ink-3);border:1px solid var(--brand-on-ink);box-shadow:0 0 0 4px rgba(46,134,246,.18);margin-bottom:96px">
+          <span style="color:var(--on-ink-muted)">Risk</span>
+          <span style="display:flex;gap:4px">
+            <span style="padding:2px 8px;border-radius:4px;color:var(--on-ink-faint)">0.25</span>
+            <span style="padding:2px 8px;border-radius:4px;background:var(--brand-on-ink);color:#fff;font-weight:600">0.5 R</span>
+            <span style="padding:2px 8px;border-radius:4px;color:var(--on-ink-faint)">1.0</span>
+          </span>
+        </span>
+        <span style="position:absolute;left:16px;right:16px;top:150px;padding:10px 12px;border-radius:10px;background:var(--on-ink);color:var(--ink);font-family:var(--font-text);font-size:12px;line-height:1.4;white-space:normal;box-shadow:0 20px 40px -16px rgba(0,0,0,.8)">
+          <span style="position:absolute;right:40px;top:-6px;width:12px;height:12px;background:var(--on-ink);transform:rotate(45deg)"></span>
+          <b style="display:block;margin-bottom:2px">Guide 2 of 6 · Size a trade</b>
+          Pick the risk, not the contracts. The size follows from your stop.
+        </span>
+        <span style="margin-top:auto;display:flex;justify-content:space-between;color:var(--on-ink-muted)"><span>Size</span><span style="color:var(--on-ink);font-weight:600">2 contracts</span></span>
+        <span style="display:flex;justify-content:space-between;color:var(--on-ink-muted)"><span>Distance to daily limit</span><span style="color:var(--on-ink)">4.2 R</span></span>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:8px;background:var(--ink-2)">
+        <span class="lbl">TODO · 2 OF 6 DONE</span>
+        {todos.map((t) => (
+          <span style={t.stil}><span style={t.box}>{t.hak}</span><span style="font-family:var(--font-text);font-size:12px">{t.name}</span></span>
+        ))}
+        <span style="margin-top:auto;display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;background:var(--ink);border:1px solid var(--ink-line-2);color:var(--on-ink-faint)">
+          <span style="padding:1px 5px;border-radius:3px;border:1px solid var(--ink-line-2);font-size:10px">Ctrl K</span>Search everything…
+        </span>
+      </div>
+    </div>
+  )}
+</div>

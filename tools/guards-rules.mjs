@@ -12,11 +12,20 @@
 /** Claims-Verbotsliste: Rendite-/Erfolgsversprechen, Geldbeträge, Preise, erfundene Zahlen. */
 export const CLAIM_RULES = [
   {
+    // ⚠️ AUSNAHME 2026-09-12 (FXR-239, Kanvas v6) — eng geschnitten, wie die
+    // Preis-Ausnahme aus FXR-164. Die Startseite zeigt in Akt 01, Regel 03 einen
+    // UNSCHARFEN Geldbetrag neben dem scharfen R-Wert: das Bild IST das Argument
+    // („Money stays out of sight" / „The absence is the feature"). Der Betrag ist
+    // per `filter: blur(5px)` unlesbar und per `aria-hidden` auch fuer Screenreader
+    // weg — er behauptet nichts, er wird durchgestrichen.
+    // Erlaubt ist deshalb GENAU `$1,240` und nichts sonst: jeder andere Betrag,
+    // jede andere Schreibweise faellt weiter in die Regel.
+    // Michael entscheidet, ob die Ausnahme bleibt (offener Punkt im Ticket).
     id: 'dollarbetrag',
-    re: /\$\s?\d/,
-    why: 'Dollarbetrag (keine Geldbeträge, nirgends)',
-    trips: ['costs $49 a month', 'made $1,240 last week'],
-    passes: ['+2.4 R', 'the $ symbol never appears next to a number'],
+    re: /\$(?!1,240(?![\d,]))\s?\d/,
+    why: 'Dollarbetrag (keine Geldbeträge, nirgends; Ausnahme: der unscharfe $1,240 in Akt 01, FXR-239)',
+    trips: ['costs $49 a month', 'made $1,241 last week', 'a $1,240,000 account'],
+    passes: ['+2.4 R', 'the $ symbol never appears next to a number', 'blurred out: $1,240'],
   },
   {
     // FXR-164 (Michael 2026-09-05: "Bitte Preise auch übernehmen"): genau drei Beträge

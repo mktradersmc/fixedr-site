@@ -14,6 +14,12 @@ There is a unit that doesn't have this problem. Most serious trading literature 
 
 R is the amount you decided to risk on a trade, fixed before entry. You pick a risk — commonly a fixed percentage of the account. Your stop-loss defines where that risk is realized, and your position size is derived so that a stop-out costs exactly one R. Every outcome is then expressed as a multiple: a trade that returns twice what it risked is +2R, a stop-out is −1R, a scratch is 0R. That's the whole system. No conversion tables, no exceptions.
 
+<span class="r-kacheln">
+  <span><span class="k">STOP HIT</span><span class="v">−1 R</span><span class="t">The plan executed.</span></span>
+  <span><span class="k">SCRATCH</span><span class="v">0 R</span><span class="t">Nothing risked, nothing lost.</span></span>
+  <span><span class="k">TARGET</span><span class="v">+2 R</span><span class="t">Twice what was staked.</span></span>
+</span>
+
 The consequence is easy to miss and worth stating: R normalizes every trade by its own predefined risk. And that single normalization is what makes the rest of this article possible.
 
 ## The metric that breaks when you grow

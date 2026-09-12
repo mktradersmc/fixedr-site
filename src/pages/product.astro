@@ -12,6 +12,8 @@ import LayoutMosaic from '../components/illus/LayoutMosaic.astro';
 import RCalendar from '../components/illus/RCalendar.astro';
 import PayoutLock from '../components/illus/PayoutLock.astro';
 import DynamicRisk from '../components/illus/DynamicRisk.astro';
+import Icon from '../components/Icon.astro';
+import { FEATURE_PAGES, LANE_OF, LINE_OF } from '../content/produktnavigation';
 ---
 <Base
   title="Product"
@@ -32,6 +34,34 @@ import DynamicRisk from '../components/illus/DynamicRisk.astro';
   </PageHead>
 
   <div class="wrap">
+
+  {/* ── Nabe (FXR-239) ──────────────────────────────────────────────────────────
+      Acht Kacheln auf die acht Feature-Seiten. Sie stehen VOR den beiden
+      Reifegrad-Gruppen, nicht statt ihnen: die Nabe verteilt, die Gruppen darunter
+      erklären, was heute läuft und was entsteht. Damit hat das Aufklappbanner in der
+      Kopfleiste ein Ziel, das keine der acht Seiten ist.
+      Inhalt aus content/produktnavigation.ts — dieselbe Quelle wie Banner und
+      Fußzeile, damit die Liste nicht an drei Orten gepflegt wird. */}
+  <section style="padding-top: 2.5rem; padding-bottom: 0;">
+    <div class="section-head">
+      <p class="eyebrow">Eight pages, one cockpit</p>
+      <h2>Where each part of it lives.</h2>
+      <p>
+        The mechanics on this page are the short version. Each of the eight below goes into one
+        part of the cockpit properly — what it does, how it behaves, and where its limits are.
+      </p>
+    </div>
+    <div class="hub-tiles">
+      {FEATURE_PAGES.map((p) => (
+        <a class="hub-tile" href={`/product/${p.slug}`}>
+          <span class="ic"><Icon name={p.icon} size={20} /></span>
+          <span class="t">{p.title}</span>
+          <span class="d">{LINE_OF[p.slug]}</span>
+          <span class="lane">{LANE_OF[p.slug]}</span>
+        </a>
+      ))}
+    </div>
+  </section>
 
   <!-- In the build today — Gruppenkopf nach Kanvas: H2 + Pille statt Eyebrow + Zweit-H2. -->
   <section style="padding-top: 2.5rem;">

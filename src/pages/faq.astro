@@ -1,93 +1,111 @@
 ---
-import Base from '../layouts/Base.astro';
-import PageHead from '../components/PageHead.astro';
+// FXR-239 (Kanvas v7): neues Gerüst, KEIN geänderter Text.
+import TextPage from '../layouts/TextPage.astro';
 ---
-<Base
+<TextPage
   title="FAQ"
   description="Frequently asked questions about FixedR: prop-only policy, MetaTrader and NinjaTrader support, local-first data, R-only display."
-  bare
+  eyebrow="Questions, answered plainly"
+  h1="FAQ"
+  seite="FAQ"
+  hinweis="Eight questions. If yours isn't here, it belongs on the waitlist form."
 >
-  <PageHead eyebrow="Questions, answered plainly">FAQ</PageHead>
+  <div class="faq-liste">
+    <details class="eintrag" open>
+      <summary><span class="frage">Why is FixedR only for prop-firm accounts?</span><span class="pfeil"><svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5l3 3 3-3"></path></svg></span></summary>
+      <div class="antwort">
+        <p>
+          By design and by policy. FixedR automates order handling across accounts, and automation
+          must never be in a position to damage someone's private savings through a defect. Funded
+          accounts are the right habitat: the firm's capital, clearly bounded rules, and a
+          risk-first mindset already required by the challenge. Using FixedR on private accounts is
+          against its terms of use.
+        </p>
+      </div>
+    </details>
 
-  <article class="post">
-  <details>
-    <summary>Why is FixedR only for prop-firm accounts?</summary>
-    <p>
-      By design and by policy. FixedR automates order handling across accounts, and automation
-      must never be in a position to damage someone's private savings through a defect. Funded
-      accounts are the right habitat: the firm's capital, clearly bounded rules, and a
-      risk-first mindset already required by the challenge. Using FixedR on private accounts is
-      against its terms of use.
-    </p>
-  </details>
+    <details class="eintrag">
+      <summary><span class="frage">Which platforms does it work with?</span><span class="pfeil"><svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5l3 3 3-3"></path></svg></span></summary>
+      <div class="antwort">
+        <p>
+          MetaTrader and NinjaTrader. FixedR sits beside your platform as the cockpit — placing,
+          sizing and journaling — while the platform remains the execution venue.
+        </p>
+      </div>
+    </details>
 
-  <details>
-    <summary>Which platforms does it work with?</summary>
-    <p>
-      MetaTrader and NinjaTrader. FixedR sits beside your platform as the cockpit — placing,
-      sizing and journaling — while the platform remains the execution venue.
-    </p>
-  </details>
+    <details class="eintrag">
+      <summary><span class="frage">Really no money display at all? Not even an option?</span><span class="pfeil"><svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5l3 3 3-3"></path></svg></span></summary>
+      <div class="antwort">
+        <p>
+          Really. There is no money mode and no hidden toggle. The absence is deliberate: an option
+          you can switch on in a weak moment is not a commitment device. The only exception is the
+          account size you enter once when connecting an account — after that, everything is R.
+        </p>
+      </div>
+    </details>
 
-  <details>
-    <summary>Really no money display at all? Not even an option?</summary>
-    <p>
-      Really. There is no money mode and no hidden toggle. The absence is deliberate: an option
-      you can switch on in a weak moment is not a commitment device. The only exception is the
-      account size you enter once when connecting an account — after that, everything is R.
-    </p>
-  </details>
+    <details class="eintrag">
+      <summary><span class="frage">Where does my data live?</span><span class="pfeil"><svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5l3 3 3-3"></path></svg></span></summary>
+      <div class="antwort">
+        <p>
+          On your machine. FixedR is a local-first Windows application: your journal, account
+          configuration and trading records are stored in a local database, and the app works
+          without a cloud account. If you enable optional notifications to other devices, those
+          messages travel through a delivery service — everything else stays local.
+        </p>
+      </div>
+    </details>
 
-  <details>
-    <summary>Where does my data live?</summary>
-    <p>
-      On your machine. FixedR is a local-first Windows application: your journal, account
-      configuration and trading records are stored in a local database, and the app works
-      without a cloud account. If you enable optional notifications to other devices, those
-      messages travel through a delivery service — everything else stays local.
-    </p>
-  </details>
+    <details class="eintrag">
+      <summary><span class="frage">Does this website track me?</span><span class="pfeil"><svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5l3 3 3-3"></path></svg></span></summary>
+      <div class="antwort">
+        {/* E-C161: der Anspruch endet an der Mess-Grenze. „Diese Seite trackt dich nicht"
+            wäre in dem Moment falsch, in dem ein Kampagnen-Link eine Quelle unterscheidet.
+            Also: keine FREMD-Tracker, kein Datenverkauf — und offen sagen, was gemessen wird. */}
+        <p>
+          No third-party trackers, no advertising pixels, no cookies, no external fonts or scripts.
+          Nothing about you is sold or shared. What we do count is how many people join the waitlist
+          and which link they arrived from — a number, not a profile. The waitlist form is the only
+          thing that sends data anywhere, and only what you type into it.
+        </p>
+      </div>
+    </details>
 
-  <details>
-    <summary>Does this website track me?</summary>
-    {/* E-C161: der Anspruch endet an der Mess-Grenze. „Diese Seite trackt dich nicht"
-        wäre in dem Moment falsch, in dem ein Kampagnen-Link eine Quelle unterscheidet.
-        Also: keine FREMD-Tracker, kein Datenverkauf — und offen sagen, was gemessen wird. */}
-    <p>
-      No third-party trackers, no advertising pixels, no cookies, no external fonts or scripts.
-      Nothing about you is sold or shared. What we do count is how many people join the waitlist
-      and which link they arrived from — a number, not a profile. The waitlist form is the only
-      thing that sends data anywhere, and only what you type into it.
-    </p>
-  </details>
+    <details class="eintrag">
+      <summary><span class="frage">What does R mean, exactly?</span><span class="pfeil"><svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5l3 3 3-3"></path></svg></span></summary>
+      <div class="antwort">
+        <p>
+          R is the amount you decided to risk on a trade, fixed by your stop before entry. A trade
+          that hits its stop is <span class="r-value">-1R</span>. A trade closed at twice the risked
+          amount is <span class="r-value">+2R</span>. Because R is defined relative to your own
+          risk, results stay comparable across instruments, account sizes and time.
+        </p>
+      </div>
+    </details>
 
-  <details>
-    <summary>What does R mean, exactly?</summary>
-    <p>
-      R is the amount you decided to risk on a trade, fixed by your stop before entry. A trade
-      that hits its stop is <span class="r-value">-1R</span>. A trade closed at twice the risked
-      amount is <span class="r-value">+2R</span>. Because R is defined relative to your own
-      risk, results stay comparable across instruments, account sizes and time.
-    </p>
-  </details>
+    <details class="eintrag">
+      <summary><span class="frage">Will FixedR help me pass my evaluation?</span><span class="pfeil"><svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5l3 3 3-3"></path></svg></span></summary>
+      <div class="antwort">
+        <p>
+          No tool can promise that, and you should distrust any that does. What FixedR does is
+          structural: it makes the disciplined path the only path the software offers — mandatory
+          stops, fixed risk, no money number to tilt against. The trading is still yours.
+        </p>
+      </div>
+    </details>
 
-  <details>
-    <summary>Will FixedR help me pass my evaluation?</summary>
-    <p>
-      No tool can promise that, and you should distrust any that does. What FixedR does is
-      structural: it makes the disciplined path the only path the software offers — mandatory
-      stops, fixed risk, no money number to tilt against. The trading is still yours.
-    </p>
-  </details>
-
-  <details>
-    <summary>When can I get it? What does it cost?</summary>
-    <p>
-      FixedR is currently in a closed founders phase with a small group of prop traders.
-      Pricing will be announced when the founders phase opens up. The
-      <a href="/waitlist">waitlist</a> is the way in — founders-circle invitations go out in
-      order of signup.
-    </p>
-  </details>
-  </article>
-</Base>
+    <details class="eintrag">
+      <summary><span class="frage">When can I get it? What does it cost?</span><span class="pfeil"><svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5l3 3 3-3"></path></svg></span></summary>
+      <div class="antwort">
+        <p>
+          FixedR is currently in a closed founders phase with a small group of prop traders.
+          Pricing will be announced when the founders phase opens up. The
+          <a href="/waitlist">waitlist</a> is the way in — founders-circle invitations go out in
+          order of signup.
+        </p>
+      </div>
+    </details>
+    <span class="schluss"></span>
+  </div>
+</TextPage>

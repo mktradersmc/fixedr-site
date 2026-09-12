@@ -1,0 +1,276 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FXR-239 — Textseiten im neuen Auftritt (Kanvas `temp/export-web-v7`).
+   Manifesto · Methodology · Trust · FAQ · Blog · Waitlist.
+
+   ⚠️ v7 ändert an diesen Seiten KEIN WORT — gemessen: die acht FAQ-Antworten sind
+   zeichengleich mit dem Bestand. Es ist eine reine Umgestaltung. Deshalb steht hier
+   nur Gestalt, und der Inhalt der Seiten bleibt, wo er war.
+
+   Aufbau: dunkles Kopfband (linksbündig, 1200er Raster, H1 56/500 max 20ch) →
+   Zweispalter `minmax(0,.9fr) minmax(0,1.6fr)` mit Abstand 96: links eine sticky
+   Randspalte (Seitenname, Haarlinie, Hinweis), rechts die Lesespalte.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Kopfband ─────────────────────────────────────────────────────────────
+   v7 stellt es von mittig auf LINKSBÜNDIG und vom 760er auf das 1200er Raster —
+   dadurch steht es auf derselben Achse wie alle anderen Seiten. */
+.text-head { background: var(--ink); color: var(--on-ink); position: relative; overflow: hidden; }
+.text-head .raster {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(#111722 1px, transparent 1px), linear-gradient(90deg, #111722 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 10%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 10%, transparent 70%);
+}
+.text-head .inner {
+  position: relative; max-width: 1200px; margin: 0 auto; padding: 64px 40px 56px;
+  display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 16px;
+}
+.text-head .eyebrow {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--brand-on-ink); margin: 0;
+}
+.text-head h1 {
+  font-family: var(--font-display); font-size: 56px; line-height: 1.04; font-weight: 500;
+  letter-spacing: -.035em; margin: 0; text-wrap: pretty; max-width: 20ch;
+}
+.text-head .lede { font-size: 18px; line-height: 1.6; color: var(--on-ink-muted); margin: 0; text-wrap: pretty; }
+@media (max-width: 900px) {
+  .text-head .inner { padding: 48px 20px 40px; }
+  .text-head h1 { font-size: 38px; }
+}
+
+/* ── Körper: sticky Randspalte + Lesespalte ──────────────────────────────── */
+.text-body {
+  max-width: 1200px; margin: 0 auto; padding: 48px 40px 72px;
+  display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.6fr); gap: 96px; align-items: start;
+}
+.text-body aside { position: sticky; top: 120px; display: flex; flex-direction: column; gap: 12px; }
+.text-body aside .name {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--brand);
+}
+.text-body aside .ln { height: 1px; background: var(--line); }
+.text-body aside .hinweis { font-size: 14px; line-height: 1.55; color: var(--faint); }
+.text-body article { display: flex; flex-direction: column; gap: 18px; font-size: 17px; line-height: 1.7; color: var(--text); }
+.text-body article p { margin: 0; text-wrap: pretty; }
+/* Der erste Absatz steht in Textfarbe, die folgenden gedämpft — so trägt der
+   Einstieg, ohne dass eine Auszeichnung nötig wäre. */
+.text-body article > p:not(:first-child) { color: var(--muted); }
+.text-body article h2 {
+  font-family: var(--font-display); font-size: 28px; line-height: 1.15; font-weight: 500;
+  letter-spacing: -.025em; margin: 22px 0 0;
+}
+.text-body article h3 { font-family: var(--font-display); font-size: 20px; font-weight: 500; letter-spacing: -.02em; margin: 12px 0 0; }
+.text-body article .ln { height: 1px; background: var(--line); margin: 24px 0 6px; }
+.text-body article ul { margin: 0; padding-left: 1.2rem; color: var(--muted); display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 900px) {
+  .text-body { grid-template-columns: 1fr; gap: 28px; padding: 32px 20px 48px; }
+  .text-body aside { position: static; }
+}
+
+/* ── Methodology: vier Fragen als Liste, drei Bedingungen als Kacheln ────── */
+.fragen { display: flex; flex-direction: column; }
+.fragen .frage {
+  display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 18px; align-items: start;
+  padding: 18px 0; border-top: 1px solid var(--line);
+}
+.fragen .kreis {
+  width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%;
+  border: 1px solid var(--brand-line); font-family: var(--font-mono); font-size: 12px;
+  font-weight: 600; color: var(--brand);
+}
+.fragen .txt { display: flex; flex-direction: column; gap: 4px; }
+.fragen .t { font-family: var(--font-display); font-size: 20px; font-weight: 500; letter-spacing: -.02em; line-height: 1.3; }
+.fragen .h { font-size: 15px; line-height: 1.55; color: var(--muted); }
+.fragen .schluss { border-top: 1px solid var(--line); }
+
+/* BEFUND 2026-09-12 (Michael: „prüfe, ob du auch wirklich alle Farben und Effekte
+   sauber übernommen hast — das wirkt sich subtil auf die Optik aus"): hier standen
+   drei Abweichungen gegen die Vorlage, jede einzeln kaum sichtbar, zusammen ein
+   weicheres Bild als gewollt — `--line-soft` (#eef1f6) statt `--line` (#e3e8ef) am
+   Rahmen, `--muted` statt `--text` im Fließtext, und der untere Abstand fehlte. */
+.bedingungen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 6px 0; }
+.bedingungen div {
+  display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 10px;
+  background: var(--bg-alt); border: 1px solid var(--line);
+}
+.bedingungen .k { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--brand); }
+.bedingungen .t { font-size: 15px; line-height: 1.55; color: var(--text); }
+@media (max-width: 900px) { .bedingungen { grid-template-columns: 1fr; } }
+
+/* ── Trust: „Stays / Leaves" als Kartenpaar, dann vier Karten mit Reifegrad ── */
+.trust-band { background: var(--bg-alt); border-radius: 12px; margin: 24px 16px 0;  padding: 0; }
+.trust-band .inner {
+  max-width: 1200px; margin: 0 auto; padding: 56px 40px;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px;
+}
+.trust-band .karte { display: flex; flex-direction: column; gap: 14px; padding: 28px; border-radius: 10px; }
+.trust-band .karte.dunkel { background: var(--ink); color: var(--on-ink); border: 1px solid var(--ink-line); }
+.trust-band .karte.hell { background: var(--bg); border: 1px solid var(--line); }
+.trust-band .lbl { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.trust-band .karte.dunkel .lbl { color: var(--brand-on-ink); }
+.trust-band .karte.hell .lbl { color: var(--brand); }
+.trust-band ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; font-size: 15px; line-height: 1.5; }
+.trust-band .karte.dunkel ul { color: var(--on-ink-muted); }
+.trust-band .karte.hell ul { color: var(--muted); }
+@media (max-width: 900px) {
+  .trust-band { margin: 16px 12px 0; }
+  .trust-band .inner { grid-template-columns: 1fr; padding: 32px 20px; }
+}
+
+.vier-karten { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 6px; }
+.vier-karten .karte {
+  display: flex; flex-direction: column; gap: 12px; padding: 22px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--bg);
+}
+.vier-karten .t { font-family: var(--font-display); font-size: 19px; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; }
+.vier-karten .d { font-size: 15px; line-height: 1.55; color: var(--muted); }
+/* Der Reifegrad-Chip: BUILT gefüllt, PLANNED gestrichelt. Die Werte kommen aus
+   `content/reifegrad.ts` — die Seite behauptet nichts, was dort nicht steht. */
+.vier-karten .chip {
+  align-self: flex-start; font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; padding: 4px 9px; border-radius: 5px;
+}
+.vier-karten .chip.built { background: var(--brand-soft); color: var(--brand); border: 1px solid var(--brand-line); }
+.vier-karten .chip.planned { background: none; color: var(--faint); border: 1px dashed var(--line); }
+@media (max-width: 900px) { .vier-karten { grid-template-columns: 1fr; } }
+
+/* ── FAQ: Akkordeon mit Haarlinien, eine Frage offen ─────────────────────── */
+.faq-liste { display: flex; flex-direction: column; }
+.faq-liste .eintrag { border-top: 1px solid var(--line); }
+.faq-liste summary {
+  display: flex; justify-content: space-between; align-items: center; gap: 20px;
+  padding: 22px 0; cursor: pointer; list-style: none; color: var(--text);
+}
+.faq-liste summary::-webkit-details-marker { display: none; }
+.faq-liste summary:hover { color: var(--brand); }
+.faq-liste summary .frage { font-family: var(--font-display); font-size: 20px; font-weight: 500; letter-spacing: -.015em; line-height: 1.3; }
+.faq-liste summary .pfeil {
+  flex-shrink: 0; width: 30px; height: 30px; display: grid; place-items: center;
+  border-radius: 50%; border: 1px solid var(--line); color: var(--brand);
+  transition: transform .25s ease, border-color .25s ease;
+}
+.faq-liste details[open] summary .pfeil { transform: rotate(180deg); border-color: var(--brand-line); }
+.faq-liste .antwort { padding: 0 0 22px; font-size: 16.5px; line-height: 1.7; color: var(--muted); max-width: 62ch; }
+.faq-liste .antwort p { margin: 0 0 12px; }
+.faq-liste .antwort p:last-child { margin-bottom: 0; }
+.faq-liste .schluss { border-top: 1px solid var(--line); }
+
+/* ── Blog: Kartenraster, der neueste Beitrag über zwei Spalten ───────────── */
+.blog-raster {
+  max-width: 1200px; margin: 0 auto; padding: 48px 40px 72px;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
+}
+.blog-raster a {
+  display: flex; flex-direction: column; gap: 12px; padding: 26px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--text); text-decoration: none;
+}
+/* Vorlage v7: Schatten 0 24px 50px -30px — nicht der Standardwert der Karten. */
+.blog-raster a:hover { border-color: var(--brand-line-hover); color: var(--text); text-decoration: none; box-shadow: 0 24px 50px -30px rgba(10, 98, 207, .3); }
+/* `margin-top:auto` schiebt den Hinweis an den Fuss der Karte. Die Karten sind im
+   Raster gleich hoch, dadurch stehen alle „Read →" auf einer Linie — auch wenn die
+   Beschreibungen unterschiedlich lang sind. */
+.blog-raster .read { margin-top: auto; padding-top: 14px; font-size: 14px; font-weight: 600; color: var(--brand); }
+/* Der neueste Beitrag bekommt zwei Spalten und die helle Fläche — er ist der
+   Einstieg, nicht ein Eintrag unter vielen. */
+.blog-raster a.gross { grid-column: span 2; background: var(--bg-alt); }
+.blog-raster .datum { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--faint); }
+.blog-raster .t { font-family: var(--font-display); font-size: 21px; font-weight: 500; letter-spacing: -.02em; line-height: 1.25; }
+.blog-raster a.gross .t { font-size: 30px; }
+.blog-raster .d { font-size: 15px; line-height: 1.6; color: var(--muted); }
+@media (max-width: 900px) {
+  .blog-raster { grid-template-columns: 1fr; padding: 32px 20px 48px; }
+  .blog-raster a.gross { grid-column: span 1; }
+  .blog-raster a.gross .t { font-size: 24px; }
+}
+
+/* ── Waitlist: Karte im neuen Radius ────────────────────────────────────── */
+.waitlist-karte { border-radius: 10px; min-height: 560px; }
+.waitlist-karte input,
+.waitlist-karte .knopf,
+.waitlist-karte button { border-radius: 8px; }
+
+/* ═══ Blog-Artikel (Kanvas v7, `Blog Post.html`) ═══════════════════════════ */
+
+/* Kopfband: Pfad „Blog / Datum" statt eines Eyebrows, H1 etwas kleiner als auf den
+   Übersichtsseiten (52 statt 56) und auf 22ch begrenzt. */
+.text-head .pfad {
+  display: flex; align-items: center; gap: 12px; margin: 0;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--brand-on-ink);
+}
+.text-head .pfad a { color: var(--on-ink-faint); }
+.text-head .pfad a:hover { color: var(--on-ink); text-decoration: none; }
+.text-head .pfad .sep { color: var(--on-ink-faint); }
+.text-head h1.artikel { font-size: 52px; line-height: 1.05; max-width: 22ch; }
+.text-head .artikel ~ .lede { max-width: 44rem; }
+
+/* Inhaltsverzeichnis in der Randspalte. Es wird aus den H2 der Datei erzeugt, nicht
+   gepflegt — es kann deshalb nicht veralten, wenn eine Überschrift sich ändert. */
+.text-body aside .kapitel { display: flex; gap: 10px; font-size: 14px; line-height: 1.5; color: var(--muted); text-decoration: none; }
+.text-body aside .kapitel:hover { color: var(--brand); text-decoration: none; }
+.text-body aside .kapitel .nr { font-family: var(--font-mono); font-size: 11px; color: var(--faint); padding-top: 3px; }
+
+/* Der Text selbst. `post-body` bekommt, was Markdown erzeugt — deshalb greifen die
+   Regeln auf Elementebene statt auf Klassen. */
+.post-body { display: flex; flex-direction: column; gap: 18px; font-size: 17px; line-height: 1.7; color: var(--text); }
+.post-body p { margin: 0; text-wrap: pretty; color: var(--muted); }
+/* Der erste Absatz ist der Lead: größer und in Textfarbe. */
+.post-body > p:first-of-type { font-size: 19px; line-height: 1.6; color: var(--text); }
+.post-body h2 {
+  font-family: var(--font-display); font-size: 28px; line-height: 1.15; font-weight: 500;
+  letter-spacing: -.025em; margin: 22px 0 0; text-wrap: pretty;
+  /* Sprungziel des Verzeichnisses: 100px Versatz, damit die sticky Kopfleiste die
+     Überschrift nicht verdeckt. */
+  scroll-margin-top: 100px;
+}
+.post-body h3 { font-family: var(--font-display); font-size: 20px; font-weight: 500; letter-spacing: -.02em; margin: 12px 0 0; scroll-margin-top: 100px; }
+.post-body ul, .post-body ol { margin: 0; padding-left: 1.2rem; color: var(--muted); display: flex; flex-direction: column; gap: 8px; }
+.post-body .ln { height: 1px; background: var(--line); margin: 24px 0 6px; }
+.post-body .abschluss { color: var(--muted); }
+
+/* Zitat: eine gerundete Fläche, Aussage in der Display-Schrift. Noch nutzt kein
+   Beitrag ein Blockquote — die Gestalt steht bereit, falls einer es tut. */
+.post-body blockquote {
+  margin: 10px 0; padding: 22px 26px; border-radius: 10px;
+  background: var(--bg-alt); border: 1px solid var(--line); border-left: 1px solid var(--line);
+  font-family: var(--font-display); font-size: 22px; line-height: 1.35; font-weight: 500;
+  letter-spacing: -.02em; color: var(--text); text-wrap: pretty;
+}
+.post-body blockquote p { font-size: inherit; line-height: inherit; color: inherit; font-family: inherit; }
+
+/* R-Kacheln: drei Werte auf Tinte, für Stellen, an denen ein Beitrag Zahlen in R
+   zeigt. Die Vorlage führt sie als eigenen Blocktyp; benutzt wird der Block in
+   `trade-in-r.md` unter „What R is, in one paragraph" — dort steht er als HTML im
+   Markdown, damit die Site ohne Direktiven-Erweiterung auskommt. */
+.post-body .r-kacheln { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 6px 0; }
+.post-body .r-kacheln > * {
+  display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border-radius: 10px;
+  background: var(--ink); color: var(--on-ink); border: 1px solid var(--ink-line);
+}
+.post-body .r-kacheln .k { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; color: var(--on-ink-faint); }
+.post-body .r-kacheln .v { font-family: var(--font-display); font-size: 26px; font-weight: 600; letter-spacing: -.03em; color: var(--brand-on-ink); }
+.post-body .r-kacheln .t { font-size: 12px; color: var(--on-ink-muted); }
+@media (max-width: 900px) { .post-body .r-kacheln { grid-template-columns: 1fr; } }
+
+/* „Keep reading" unter dem Artikel: zwei Karten im gerundeten Band. */
+.weiterlesen { background: var(--bg-alt); border-radius: 12px; margin: 0 16px 24px; padding: 0; }
+.weiterlesen .inner { max-width: 1200px; margin: 0 auto; padding: 48px 40px 56px; display: flex; flex-direction: column; gap: 20px; }
+.weiterlesen .label {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--brand);
+}
+.weiterlesen .karten { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.weiterlesen .karten a {
+  display: flex; flex-direction: column; gap: 8px; padding: 22px 24px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--text); text-decoration: none;
+}
+.weiterlesen .karten a:hover { border-color: var(--brand-line-hover); color: var(--text); text-decoration: none; box-shadow: 0 24px 50px -30px rgba(10, 98, 207, .3); }
+.weiterlesen .datum { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; color: var(--faint); }
+.weiterlesen .t { font-family: var(--font-display); font-size: 20px; font-weight: 500; letter-spacing: -.02em; line-height: 1.25; }
+@media (max-width: 900px) {
+  .weiterlesen { margin: 0 12px 16px; }
+  .weiterlesen .inner { padding: 32px 20px 40px; }
+  .weiterlesen .karten { grid-template-columns: 1fr; }
+}

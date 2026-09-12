@@ -16,7 +16,8 @@
     "guards:leadmagnet": "node tools/guards-lead-magnet.mjs",
     "lead-magnet:pdf": "node tools/build-lead-magnet.mjs",
     "assets": "node tools/gen-assets.mjs",
-    "deploy-check": "node tools/deploy-gate.mjs"
+    "deploy-check": "node tools/deploy-gate.mjs",
+    "e2e:banner": "node tools/banner.e2e.mjs"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",

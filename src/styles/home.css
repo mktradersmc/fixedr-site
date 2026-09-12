@@ -1,0 +1,332 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FXR-239 — Startseite als roter Faden (Kanvas `temp/export-web-v6`).
+
+   ⚠️ REGEL (Michael 2026-09-11): „WENN ICH EIN DESIGN VORGEBE, DANN IST DAS
+   UMZUSETZEN, SO WIE ES DA IST." Jede Zahl hier ist aus dem Export abgeschrieben.
+   Nur von index.astro importiert — die Akte gibt es auf keiner anderen Seite.
+
+   Aufbau: Hero → roter Faden 01–04 (ragt 36 px in den Hero) → Akt 01 (drei Regeln,
+   Einleitung sticky) → Akt 02 (Scroll-Bühne, vier Schritte, vier Lagen) → Akt 03/04
+   (Zweispalter) → Pricing → These + Founders auf einer dunklen Fläche.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Hero ─────────────────────────────────────────────────────────────────
+   v6: Mono-Zeile statt Pille, H1 64/500, Innenabstand 80/88, Bildkarte Radius 10. */
+.home-hero { position: relative; background: var(--ink); color: var(--on-ink); overflow: hidden; padding: 0; }
+.home-hero .raster {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(#111722 1px, transparent 1px), linear-gradient(90deg, #111722 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse at 30% 30%, #000 20%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 30% 30%, #000 20%, transparent 70%);
+}
+.home-hero .big-r-wrap { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.home-hero .big-r {
+  position: absolute; left: -40px; top: -80px;
+  font-family: var(--font-display); font-size: 520px; line-height: .8; font-weight: 700;
+  letter-spacing: -.06em; color: #0a1d33; pointer-events: none; user-select: none;
+}
+.home-hero .inner {
+  position: relative; max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 48px; align-items: center; padding: 80px 40px 88px;
+}
+.home-hero .intro { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
+/* v6 ersetzt die Pille durch eine schlichte Mono-Zeile. */
+.home-hero .eyebrow {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--on-ink-muted); margin: 0;
+}
+.home-hero h1 {
+  font-family: var(--font-display); font-size: 64px; line-height: 1.02; font-weight: 500;
+  letter-spacing: -.035em; margin: 0; text-wrap: pretty;
+}
+/* Michael 2026-09-11: „Trade in R." gehört in eine eigene Zeile. */
+.home-hero h1 .accent { color: var(--brand-on-ink); display: block; }
+.home-hero .lede { font-size: 19px; line-height: 1.6; color: var(--on-ink-muted); margin: 0; text-wrap: pretty; }
+.home-hero .lede strong { color: var(--on-ink); font-weight: 600; }
+.home-hero .actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.home-hero .btn { padding: 14px 26px; border-radius: 8px; font-weight: 600; font-size: 16px; background: var(--brand-on-ink); color: #fff; }
+.home-hero .btn:hover { background: #1f6fd6; color: #fff; text-decoration: none; }
+.home-hero .btn.ghost { background: none; border: 1px solid var(--ink-line-2); color: var(--on-ink); font-weight: 500; }
+.home-hero .btn.ghost:hover { border-color: var(--on-ink-muted); color: var(--on-ink); }
+.home-hero .meta {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; padding-top: 10px;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: var(--on-ink-faint); margin: 0;
+}
+.home-hero .meta .lbl { color: var(--on-ink-muted); white-space: nowrap; }
+.home-hero .meta .chip { padding: 5px 10px; border: 1px solid var(--ink-line-2); border-radius: 5px; color: var(--on-ink-muted); }
+.home-hero .meta .rest { white-space: nowrap; }
+
+/* Bildkarte. Michael 2026-09-11: die Karte nimmt ihre Höhe vom Bild, damit jeder
+   Screenshot vollständig und randlos sitzt — deshalb KEIN festes aspect-ratio und
+   kein `transform: scale(...)` auf dem Inhalt. Das bewacht `tools/guards.mjs`. */
+.home-hero .stage {
+  position: relative; justify-self: end; width: min(100%, 720px);
+  border-radius: 10px; overflow: hidden; border: 1px solid var(--ink-line-2);
+  background: var(--ink);
+  box-shadow: 0 40px 120px -40px rgba(46, 134, 246, .55), 0 2px 4px rgba(0, 0, 0, .4);
+}
+.home-hero .stage-content { display: block; }
+.home-hero .stage-content img,
+.home-hero .stage-content video { display: block; width: 100%; height: auto; }
+/* Film-Schleier: zwei Auslöser, absichtlich beide — `:hover` trägt auch ohne
+   JavaScript, `.is-hover` setzt ein Skript, weil Chrome `:hover` während des
+   Bildlaufs nicht neu rechnet (Michael 2026-09-06). */
+.home-hero .stage-veil {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 22px;
+  background: rgba(6, 7, 10, 0); opacity: 0; pointer-events: none; backdrop-filter: blur(0);
+  transition: opacity .4s, background .4s, backdrop-filter .4s;
+}
+.home-hero .stage:hover .stage-veil,
+.home-hero .stage.is-hover .stage-veil {
+  background: rgba(6, 7, 10, .6); opacity: 1; pointer-events: auto; backdrop-filter: blur(6px);
+}
+@media (hover: none) {
+  .home-hero .stage-veil { background: rgba(6, 7, 10, .6); opacity: 1; pointer-events: auto; backdrop-filter: blur(6px); }
+}
+.home-hero .play-btn {
+  width: 72px; height: 72px; display: grid; place-items: center; border-radius: 50%;
+  background: var(--brand-on-ink); color: #fff; box-shadow: 0 20px 60px -10px rgba(46, 134, 246, .7);
+}
+.home-hero .stage-caption { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.home-hero .stage-title { font-family: var(--font-display); font-size: 22px; font-weight: 600; letter-spacing: -.02em; color: var(--on-ink); }
+.home-hero .stage-sub { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: var(--on-ink-muted); }
+
+@media (max-width: 980px) {
+  .home-hero .inner { grid-template-columns: 1fr; gap: 32px; padding: 56px 20px 64px; }
+  .home-hero h1 { font-size: 40px; }
+  .home-hero .big-r { font-size: 300px; }
+  .home-hero .stage { justify-self: stretch; }
+}
+
+/* ── Der rote Faden: 01–04, jede Kachel springt zu ihrem Akt ──────────────
+   Ragt 36 px in den Hero (`translateY(-36px)`) — die Kacheln sind die Klammer
+   zwischen Hero und Akten, nicht ein eigener Abschnitt. */
+.faden { background: var(--bg); padding: 0; }
+.faden .inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 40px; transform: translateY(-36px);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px;
+}
+.faden a {
+  display: flex; flex-direction: column; gap: 10px; padding: 24px 24px 26px;
+  border-radius: 10px; background: var(--bg); border: 1px solid var(--line);
+  box-shadow: 0 24px 60px -30px rgba(11, 15, 23, .25); color: var(--text); text-decoration: none;
+}
+.faden a:hover { color: var(--brand); border-color: var(--brand-line-hover); text-decoration: none; }
+.faden .nr { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--brand); }
+.faden .nr .ln { flex: 1; height: 1px; background: var(--brand-line); }
+.faden .t { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
+.faden .d { font-size: 14px; line-height: 1.55; color: var(--muted); text-wrap: pretty; }
+@media (max-width: 980px) {
+  .faden .inner { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 20px; transform: translateY(-24px); }
+}
+@media (max-width: 620px) { .faden .inner { grid-template-columns: 1fr; } }
+
+/* ── Akt 01 · The R view: Einleitung sticky, rechts drei Regeln ──────────── */
+.akt1 { background: var(--bg); padding: 0; }
+.akt1 .inner {
+  max-width: 1200px; margin: 0 auto; padding: 40px 40px 64px;
+  display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 96px; align-items: start;
+}
+.akt1 .lead { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 120px; }
+.akt1 .lead p { font-size: 18px; line-height: 1.65; color: var(--muted); text-wrap: pretty; max-width: 34rem; margin: 0; }
+.akt1 .regeln { display: flex; flex-direction: column; }
+.akt1 .regel {
+  display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 24px;
+  padding: 28px 0; border-top: 1px solid var(--line);
+}
+.akt1 .regel .kreis {
+  width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%;
+  border: 1px solid var(--brand-line); font-family: var(--font-mono); font-size: 14px;
+  font-weight: 600; color: var(--brand);
+}
+.akt1 .regel .txt { display: flex; flex-direction: column; gap: 12px; }
+.akt1 .regel .t { font-family: var(--font-display); font-size: 26px; line-height: 1.15; font-weight: 500; letter-spacing: -.02em; }
+.akt1 .regel .d { font-size: 17px; line-height: 1.65; color: var(--muted); text-wrap: pretty; }
+.akt1 .regel .bild { display: flex; padding-top: 6px; font-family: var(--font-mono); }
+.akt1 .schluss-linie { border-top: 1px solid var(--line); }
+@media (max-width: 980px) {
+  .akt1 .inner { grid-template-columns: 1fr; gap: 32px; padding: 24px 20px 48px; }
+  .akt1 .lead { position: static; }
+  .akt1 .regel { grid-template-columns: 56px minmax(0, 1fr); gap: 16px; }
+}
+
+/* ── Akt 02 · Safety guard: vier Schritte links, eine feste Bühne rechts ───
+   Der aktive Schritt wird per IntersectionObserver (`rootMargin:-40% 0 -50%`)
+   bestimmt; die Lagen wechseln mit Opacity und 28 px Versatz. */
+.akt2 { background: var(--bg-alt); border-radius: 12px; margin: 0 16px; padding: 0; }
+.akt2 .kopf { max-width: 1200px; margin: 0 auto; padding: 72px 40px 0; display: flex; flex-direction: column; gap: 14px; }
+.akt2 .kopf .txt { display: flex; flex-direction: column; gap: 18px; max-width: 40rem; }
+.akt2 .inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 40px 48px;
+  display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 80px;
+}
+.akt2 .schritte { display: flex; flex-direction: column; }
+.akt2 .schritt {
+  min-height: 46vh; display: flex; flex-direction: column; justify-content: center;
+  gap: 14px; padding: 40px 0; opacity: .28; transition: opacity .5s ease;
+}
+.akt2 .schritt[data-aktiv] { opacity: 1; }
+.akt2 .schritt h3 { font-family: var(--font-display); font-size: 28px; line-height: 1.15; font-weight: 500; letter-spacing: -.025em; margin: 0; }
+.akt2 .schritt p { font-size: 17px; line-height: 1.65; color: var(--muted); text-wrap: pretty; margin: 0; }
+.akt2 .schritt .rolle { font-family: var(--font-mono); color: var(--brand); font-weight: 600; }
+.akt2 .buehne-wrap { align-self: stretch; }
+.akt2 .buehne-sticky { position: sticky; top: 110px; height: 500px; }
+.akt2 .buehne {
+  position: relative; height: 100%; border-radius: 10px; background: var(--ink);
+  border: 1px solid var(--ink-line); overflow: hidden;
+  box-shadow: 0 60px 120px -60px rgba(11, 15, 23, .6);
+}
+.akt2 .buehne .raster {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(#111722 1px, transparent 1px), linear-gradient(90deg, #111722 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 30%, transparent 80%);
+}
+.akt2 .buehne .titel {
+  position: absolute; top: 18px; left: 22px; font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-faint);
+}
+.akt2 .buehne .fortschritt { position: absolute; top: 18px; right: 22px; display: flex; gap: 6px; }
+.akt2 .buehne .fortschritt span {
+  width: 6px; height: 6px; border-radius: 3px; background: var(--ink-line-2);
+  transition: width .4s, background .4s;
+}
+.akt2 .buehne .fortschritt span[data-an] { width: 18px; background: var(--brand-on-ink); }
+/* Die vier Lagen liegen übereinander; nur die aktive ist sichtbar. Eine schon
+   gezeigte Lage weicht nach OBEN (-28px), eine kommende nach unten (+28px) —
+   dadurch liest der Wechsel als Vorwärtsbewegung. */
+.akt2 .lage {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(28px) scale(.97); pointer-events: none;
+  transition: opacity .55s ease, transform .55s ease;
+}
+.akt2 .lage[data-vor] { transform: translateY(-28px) scale(.97); }
+.akt2 .lage[data-an] { opacity: 1; transform: none; pointer-events: auto; }
+.akt2 .lage .mono { font-family: var(--font-mono); }
+@media (max-width: 980px) {
+  .akt2 { margin: 0 12px; }
+  .akt2 .kopf { padding: 48px 20px 0; }
+  .akt2 .inner { grid-template-columns: 1fr; gap: 24px; padding: 0 20px 40px; }
+  .akt2 .schritt { min-height: 0; padding: 24px 0; opacity: 1; }
+  .akt2 .buehne-sticky { position: static; height: 420px; }
+}
+
+/* ── Akt 03/04 · Backtest und Journal ───────────────────────────────────── */
+.akt34 { background: var(--bg); padding: 0; }
+.akt34 .inner {
+  max-width: 1200px; margin: 0 auto; padding: 72px 40px 64px;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px;
+}
+.akt34 .spalte { display: flex; flex-direction: column; gap: 22px; }
+.akt34 .bild { position: relative; height: 240px; border-radius: 10px; overflow: hidden; background: var(--ink); border: 1px solid var(--ink-line); }
+.akt34 h2 { font-family: var(--font-display); font-size: 34px; line-height: 1.1; font-weight: 500; letter-spacing: -.03em; margin: 0; text-wrap: pretty; }
+.akt34 p { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0; text-wrap: pretty; }
+@media (max-width: 980px) { .akt34 .inner { grid-template-columns: 1fr; gap: 40px; padding: 48px 20px 40px; } }
+
+/* ── Pricing ──────────────────────────────────────────────────────────── */
+.preise { background: var(--bg-alt); border-radius: 12px; margin: 0 16px; padding: 0; }
+.preise .inner { max-width: 1200px; margin: 0 auto; padding: 72px 40px 64px; display: flex; flex-direction: column; gap: 40px; }
+.preise .kopf { display: flex; flex-direction: column; gap: 18px; max-width: 40rem; }
+.preise .vorschlag {
+  align-self: flex-start; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  color: var(--faint); padding: 5px 10px; border: 1px dashed var(--brand-line); border-radius: 4px;
+}
+.preise .karten { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.preise .karte {
+  display: flex; flex-direction: column; gap: 18px; padding: 32px 30px; border-radius: 10px;
+  background: var(--bg); color: var(--text); border: 1px solid var(--line);
+}
+.preise .karte.hervor { background: var(--ink); color: var(--on-ink); border: none; box-shadow: 0 30px 60px -30px rgba(6, 7, 10, .5); }
+.preise .karte .zeile { display: flex; justify-content: space-between; align-items: center; }
+.preise .karte .name { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.preise .karte .marke { padding: 3px 9px; border-radius: 999px; background: var(--brand-on-ink); color: #fff; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; }
+.preise .karte .preis { display: flex; align-items: baseline; gap: 6px; }
+.preise .karte .preis b { font-family: var(--font-display); font-size: 56px; line-height: 1; font-weight: 500; letter-spacing: -.04em; }
+.preise .karte .preis span { font-size: 14px; opacity: .6; }
+.preise .karte .satz { font-size: 16px; line-height: 1.55; opacity: .75; text-wrap: pretty; min-height: 50px; }
+.preise .karte ul { list-style: none; display: flex; flex-direction: column; gap: 11px; padding: 20px 0 0; margin: 0; border-top: 1px solid var(--line); flex: 1; }
+.preise .karte.hervor ul { border-top-color: var(--ink-line-2); }
+.preise .karte li { display: flex; gap: 10px; font-size: 15px; line-height: 1.5; }
+.preise .karte li .hak { color: var(--brand-on-ink); font-weight: 700; }
+.preise .karte .knopf { margin-top: 8px; padding: 13px 0; text-align: center; border-radius: 8px; font-weight: 600; font-size: 15px; border: 1px solid var(--line); color: var(--text); }
+.preise .karte.hervor .knopf { background: var(--brand-on-ink); color: #fff; border: none; }
+.preise .karte .knopf:hover { text-decoration: none; }
+@media (max-width: 980px) {
+  .preise { margin: 0 12px; }
+  .preise .inner { padding: 48px 20px 40px; }
+  .preise .karten { grid-template-columns: 1fr; }
+}
+
+/* ── These + Founders: EINE dunkle Fläche ────────────────────────────────
+   v6 fasst zusammen, was vorher zwei Abschnitte waren. */
+.schluss { background: var(--ink); color: var(--on-ink); position: relative; overflow: hidden; padding: 0; }
+.schluss .raster {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(#111722 1px, transparent 1px), linear-gradient(90deg, #111722 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 100%, #000 10%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 50% 100%, #000 10%, transparent 70%);
+}
+.schluss .inner { position: relative; max-width: 1200px; margin: 0 auto; padding: 72px 40px 64px; display: flex; flex-direction: column; gap: 64px; }
+.schluss .these { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: end; }
+.schluss .these h2 { font-family: var(--font-display); font-size: 52px; line-height: 1.04; font-weight: 500; letter-spacing: -.035em; margin: 0; text-wrap: pretty; }
+.schluss .these p { font-size: 18px; line-height: 1.65; color: var(--on-ink-muted); margin: 0; text-wrap: pretty; }
+.schluss .spalte { display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
+.schluss .founders {
+  display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 80px; align-items: center;
+  padding-top: 56px; border-top: 1px solid var(--ink-line);
+}
+.schluss .founders h2 { font-family: var(--font-display); font-size: 40px; line-height: 1.06; font-weight: 500; letter-spacing: -.03em; margin: 0; text-wrap: pretty; max-width: 22ch; }
+.schluss .eyebrow { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--brand-on-ink); }
+.schluss .feld {
+  height: 50px; display: flex; align-items: center; padding: 0 16px; border-radius: 8px;
+  background: var(--ink-2); border: 1px solid var(--ink-line-2); color: var(--on-ink-faint); font-size: 15px;
+}
+.schluss .knopf {
+  height: 50px; display: flex; align-items: center; justify-content: center;
+  background: var(--brand-on-ink); color: #fff; border-radius: 8px; font-weight: 600; font-size: 15px;
+}
+.schluss .knopf:hover { background: #1f6fd6; color: #fff; text-decoration: none; }
+.schluss .klein { font-size: 13px; color: var(--on-ink-faint); }
+/* BEFUND 2026-09-12: hier stand eine gerahmte Pille (padding 13/24, Rahmen rundum,
+   Radius 8). Die Vorlage setzt an dieser Stelle KEINEN Knopf, sondern einen Link mit
+   einer einzelnen Linie darunter:
+   `font-size:16px;font-weight:500;color:var(--on-ink);border-bottom:1px solid var(--ink-line-2);padding-bottom:3px` */
+.schluss .ghost {
+  font-size: 16px; font-weight: 500; color: var(--on-ink);
+  border-bottom: 1px solid var(--ink-line-2); padding-bottom: 3px;
+}
+.schluss .ghost:hover { border-color: var(--brand-on-ink); color: var(--brand-on-ink); text-decoration: none; }
+@media (max-width: 980px) {
+  .schluss .inner { padding: 48px 20px 40px; gap: 40px; }
+  .schluss .these { grid-template-columns: 1fr; gap: 24px; }
+  .schluss .these h2 { font-size: 34px; }
+  .schluss .founders { grid-template-columns: 1fr; gap: 28px; padding-top: 40px; }
+  .schluss .founders h2 { font-size: 30px; }
+}
+
+
+/* ── Gemeinsames der Akte ─────────────────────────────────────────────────
+   Eyebrow und H2 sind in allen Akten gleich; v6 setzt die Gewichte auf 500. */
+.akt1 .eyebrow, .akt2 .eyebrow, .akt34 .eyebrow, .preise .eyebrow {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--brand);
+}
+.akt1 h2, .akt2 h2, .preise h2 {
+  font-family: var(--font-display); font-size: 46px; line-height: 1.06; font-weight: 500;
+  letter-spacing: -.03em; margin: 0; text-wrap: pretty;
+}
+.mono { font-family: var(--font-mono); }
+
+/* Der unscharfe Geldbetrag neben dem scharfen R-Wert. Er ist das Argument der Regel,
+   nicht eine Angabe: lesbar wäre er ein Verstoß gegen die Kernthese, unlesbar ist er
+   ihr Beleg. `aria-hidden` im Markup, damit ihn auch kein Screenreader vorliest. */
+.akt1 .verwischt { font-size: 22px; color: #c3cad2; filter: blur(5px); user-select: none; }
+
+@media (max-width: 980px) {
+  .akt1 h2, .akt2 h2, .preise h2 { font-size: 32px; }
+}

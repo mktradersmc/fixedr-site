@@ -4,21 +4,17 @@
 // plan." — dort und nur dort (§5, Sparsamkeitsregel E-C157: EIN Slogan).
 // Ergänzt um D8.3 (die drei Bedingungen) und D8.4 (das Rahmenwerk, Oma-Test) — Vorrat aus
 // product\07 D8, hier zum ersten Mal als Site-Text ausgewählt.
-import Base from '../layouts/Base.astro';
-import PageHead from '../components/PageHead.astro';
+// FXR-239 (Kanvas v7): neues Gerüst, KEIN geänderter Text.
+import TextPage from '../layouts/TextPage.astro';
 ---
-<Base
+<TextPage
   title="Methodology"
   description="Why FixedR is a framework, not a coach: the four questions, the conditions for calm process-driven trading, and the plan-versus-outcome discipline that carries you across months, not one trade."
-  bare
+  eyebrow="The process that keeps you here after month three"
+  h1="Plan your trade, trade your plan."
+  seite="Methodology"
+  hinweis="Reading time · about 6 minutes"
 >
-  {/* Eyebrow/H1 nach Kanvas 2026-09-02 vertauscht: "Plan your trade, trade your plan."
-      steht dort als H1 (öffnet die Seite, product\07 D8/FXR-26-Nachtrag Punkt 4), die
-      bisherige H1 wird zur Eyebrow. Reine Umstellung, kein Textverlust — s. Protokoll.
-      Runde 13 (FXR-142): jetzt im Kopfband (PageHead), Langtext-Muster wie Manifesto. */}
-  <PageHead eyebrow="The process that keeps you here after month three">Plan your trade, trade your plan.</PageHead>
-
-  <article class="post">
     <p>
       Every trader trades according to some strategy, even the one who has never written it
       down. What isn't written down can't be broken in a way you can point to — and can't be
@@ -31,12 +27,13 @@ import PageHead from '../components/PageHead.astro';
       FixedR doesn't hand you a strategy. It holds a place for the answers to four questions,
       and keeps asking them the same way every time:
     </p>
-    <ol>
-      <li><strong>What exactly is my strategy?</strong> — as steps, not a feeling.</li>
-      <li><strong>Do I recognise my setup reliably?</strong> — before the trade, not after.</li>
-      <li><strong>What do the numbers say?</strong> — in R, comparable across accounts and time.</li>
-      <li><strong>Do I hold to it when it counts?</strong> — the question a plan alone can't answer.</li>
-    </ol>
+    <div class="fragen">
+      <div class="frage"><span class="kreis">01</span><span class="txt"><span class="t">What exactly is my strategy?</span><span class="h">as steps, not a feeling.</span></span></div>
+      <div class="frage"><span class="kreis">02</span><span class="txt"><span class="t">Do I recognise my setup reliably?</span><span class="h">before the trade, not after.</span></span></div>
+      <div class="frage"><span class="kreis">03</span><span class="txt"><span class="t">What do the numbers say?</span><span class="h">in R, comparable across accounts and time.</span></span></div>
+      <div class="frage"><span class="kreis">04</span><span class="txt"><span class="t">Do I hold to it when it counts?</span><span class="h">the question a plan alone can't answer.</span></span></div>
+      <span class="schluss"></span>
+    </div>
 
     <h2>A framework, not a coach</h2>
     <p>
@@ -63,11 +60,11 @@ import PageHead from '../components/PageHead.astro';
       and that is the more honest claim to make. FixedR is built around three conditions for
       trading well, not for trading successfully:
     </p>
-    <ul>
-      <li><strong>What you see.</strong> No money on screen — nothing to negotiate with.</li>
-      <li><strong>How it's structured.</strong> A process and a plan stand in for gut feeling.</li>
-      <li><strong>What you learn.</strong> Measurement instead of self-deception.</li>
-    </ul>
+    <div class="bedingungen">
+      <div><span class="k">What you see</span><span class="t">No money on screen — nothing to negotiate with.</span></div>
+      <div><span class="k">How it's structured</span><span class="t">A process and a plan stand in for gut feeling.</span></div>
+      <div><span class="k">What you learn</span><span class="t">Measurement instead of self-deception.</span></div>
+    </div>
     <p>
       Calm isn't a fourth condition — it's what tends to follow once the first three hold.
       And to be precise about what that is and isn't: these conditions are necessary, not
@@ -106,10 +103,9 @@ import PageHead from '../components/PageHead.astro';
       not a caveat buried in fine print; it's the reason the rest of this is credible.
     </p>
 
-    <hr />
+    <span class="ln" aria-hidden="true"></span>
     <p>
       Methodology is the second floor of FixedR — the mechanics that run from day one are on
       <a href="/product">Product</a>. <a href="/waitlist">Join the waitlist</a> to get in line.
     </p>
-  </article>
-</Base>
+</TextPage>

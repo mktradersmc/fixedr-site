@@ -1,18 +1,18 @@
 ---
-import Base from '../layouts/Base.astro';
-import PageHead from '../components/PageHead.astro';
+// FXR-239 (Kanvas v7): neues Gerüst, KEIN geänderter Text. v7 gestaltet die
+// Textseiten um — linksbündiges Kopfband im 1200er Raster, sticky Randspalte,
+// Lesespalte — und lässt den Inhalt unangetastet.
+import TextPage from '../layouts/TextPage.astro';
 ---
-<Base
+<TextPage
   title="Manifesto"
   description="Why FixedR shows you no money: risk is fixed before the trade, results are measured in R, and the number that makes you tilt never appears on screen."
-  bare
+  eyebrow="Manifesto"
+  h1="Why FixedR shows you no money"
+  lede="Open any trading platform and the largest number on the screen is money. Balance, equity, floating profit and loss — blinking, updating, demanding attention on every tick."
+  seite="Manifesto"
+  hinweis="Reading time · about 6 minutes"
 >
-  <PageHead
-    eyebrow="Manifesto"
-    lede="Open any trading platform and the largest number on the screen is money. Balance, equity, floating profit and loss — blinking, updating, demanding attention on every tick."
-  >Why FixedR shows you no money</PageHead>
-
-  <article class="post">
     <p>
       We think that number is the single biggest reason disciplined traders break their own rules.
       So we removed it. Not behind a setting. Not behind a toggle. FixedR simply does not
@@ -109,10 +109,9 @@ import PageHead from '../components/PageHead.astro';
       renegotiate it with you.</strong>
     </p>
 
-    <hr />
+    <span class="ln" aria-hidden="true"></span>
     <p>
       FixedR is a local-first Windows app for prop-firm accounts, currently in a closed founders
       phase. <a href="/waitlist">Join the waitlist</a> to get in line.
     </p>
-  </article>
-</Base>
+</TextPage>

@@ -23,6 +23,15 @@
   --brand-hover: #084fa6;
   --brand-soft: #e4effb;
   --brand-line: #b3d3f4;
+  /* Rahmenfarbe beim Überfahren. Michael 2026-09-12: „auf der landingpage [sind] die
+     hoverrahmen auf den kacheln direkt unterm hero hellblau … und nicht dunkel wie in
+     der vorlage." Gemessen stimmt das — aber nur auf Home: dort bettet die Vorlage die
+     dunkle Cockpit-Attrappe ein, die einen zweiten :root-Block mitbringt und `--brand`,
+     `--brand-soft` und `--brand-line` global überschreibt. Die anderen sieben Seiten des
+     Exports rendern #b3d3f4. Entschieden wurde der dunkle Rahmen — aber als EIGENES
+     Token, denn `--brand-line` trägt auch Ruhezustände (gestrichelte Chips, die
+     „built"-Marke, Haarlinien, Balken), die hellblau bleiben sollen. */
+  --brand-line-hover: #1b3f66;
 
   /* Tinte: die eine dunkle Fläche — seit Runde 13 (FXR-142) mehrere: Kopfleiste,
      Hero, Manifest-Band, Kopfband jeder Unterseite, Fußzeile. --ink-2/--ink-line-2
@@ -32,6 +41,11 @@
   --ink-line: #1c2027;
   --ink-line-2: #2b313a;
   --ink-dot: #2b313a; /* Alias von --ink-line-2, hält .stage rückwärtskompatibel. */
+  /* FXR-239, Kanvas v5: dritte Tiefenstufe auf der Tinte (Felder und Zeilen INNERHALB
+     einer Karte auf --ink-2) und der Warnton für Zustände, die weder gut noch schlecht
+     sind — bewusst kein Rot, weil Rot in dieser Marke der Bewertung gehört. */
+  --ink-3: #12161d;
+  --warn: #c98a1c;
   --on-ink: #f3f5f7;
   --on-ink-muted: #98a1ab;
   --on-ink-faint: #6b747e;
@@ -80,7 +94,14 @@ h3 { font-size: 1.15rem; letter-spacing: -.02em; margin: 1.6rem 0 0.4rem; }
 p { margin: 0.85rem 0; }
 
 a { color: var(--brand); text-decoration: none; font-weight: 500; }
-a:hover { text-decoration: underline; }
+/* BEFUND 2026-09-12: hier stand `a:hover { text-decoration: underline }`. Die Vorlage
+   unterstreicht NICHTS — gemessen auf drei Seiten des Kanvas-Exports: 0 von 33, 0 von 33,
+   0 von 23 Links. Bei uns waren es 18, 22 und 20. Die Regel war so breit, dass sie an
+   rund zwanzig Stellen einzeln mit `text-decoration:none` wieder ausgehebelt wurde —
+   und überall dort, wo das jemand vergessen hat (Kopfmenü, Fußzeile, Wartelisten-Knopf,
+   Fließtext-Links), lief sie sichtbar mit. Die Unterscheidung trägt die Farbe, wie in
+   der Vorlage; die vielen `text-decoration:none` weiter unten bleiben stehen, sie
+   schaden nicht und dokumentieren die Herkunft. */
 
 code, .mono { font-family: var(--font-mono); font-size: 0.92em; }
 code {
@@ -119,8 +140,17 @@ header.site .inner {
 header.site .logo { display: flex; align-items: center; justify-self: start; }
 header.site .logo img { display: block; width: 140px; height: auto; }
 header.site nav { display: flex; align-items: center; justify-self: center; gap: 26px; font-size: 14px; font-weight: 500; }
-header.site nav a { color: var(--on-ink-muted); }
-header.site nav a:hover { color: var(--on-ink); text-decoration: none; }
+/* Michael 2026-09-11: „bitte noch die headerschriftfarbe weiß machen." Das ist zugleich
+   die Rückkehr zur Vorlage — `export-web-v4` setzt die Nav-Glieder auf `var(--on-ink)`
+   und nur das aktive bzw. das mit offenem Banner auf `var(--brand-on-ink)`:
+     color: seite === id || (id === 'product' && menueOffen) ? brand-on-ink : on-ink
+   Im Bau standen sie auf `--on-ink-muted` (#98a1ab) — grau statt weiß. */
+header.site nav a { color: var(--on-ink); }
+/* Die Vorlage gibt den Menuepunkten KEIN `style-hover`: blau wird dort allein die
+   aktive Seite (und „Product", solange das Banner offen steht). Das Einfaerben beim
+   Ueberfahren war unsere Zutat — hier steht deshalb KEINE :hover-Regel mehr.
+   ⚠️ `color: inherit` waere falsch: es erbt die Farbe des Kopfbalkens (--text, dunkel),
+   nicht die eigene des Links. Gemessen: rgb(11,15,23) statt rgb(243,245,247). */
 header.site nav a[aria-current='page'] { color: var(--brand-on-ink); font-weight: 600; }
 header.site .head-actions { display: flex; align-items: center; gap: 14px; justify-self: end; }
 /* Sprachwechsel als Segmentschalter (FXR-164, gemessen: Rahmen 2px Innenrand, Radius
@@ -192,7 +222,7 @@ header.page-head .inner {
   display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px;
 }
 header.page-head .eyebrow { margin-bottom: 0; }
-header.page-head h1 { font-size: 52px; line-height: 1.05; letter-spacing: -.035em; margin: 0; text-wrap: pretty; }
+header.page-head h1 { font-size: 56px; line-height: 1.04; font-weight: 500; letter-spacing: -.035em; margin: 0; text-wrap: pretty; }
 header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: var(--on-ink-muted); text-wrap: pretty; }
 
 @media (max-width: 780px) {
@@ -209,19 +239,26 @@ header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: va
     linear-gradient(#111722 1px, transparent 1px),
     linear-gradient(90deg, #111722 1px, transparent 1px);
   background-size: 48px 48px;
-  -webkit-mask-image: radial-gradient(ellipse at 50% 20%, #000 20%, transparent 70%);
-  mask-image: radial-gradient(ellipse at 50% 20%, #000 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 30% 30%, #000 20%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 30% 30%, #000 20%, transparent 70%);
 }
+/* Vorlage `export-web-v4`: left:-40px;top:-80px, ohne Zentrierung — das R sitzt
+   angeschnitten links oben hinter der Textspalte, nicht mittig hinter allem. */
 .home-hero .big-r {
-  position: absolute; left: 50%; top: -60px; transform: translateX(-50%);
+  position: absolute; left: -40px; top: -80px;
   font-family: var(--font-display); font-size: 520px; line-height: .8; font-weight: 700;
   letter-spacing: -.06em; color: #0a1d33; pointer-events: none; user-select: none;
 }
+/* FXR-239 — Vorlage `export-web-v4`: Zweispalter, Text links, Bildkarte rechts.
+   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:48px;
+   align-items:center;padding:88px 40px 96px
+   Vorher (Runde 15) war es eine mittige Saeule mit der Buehne darunter. */
 .home-hero .inner {
   position: relative; max-width: 1200px; margin: 0 auto;
-  display: flex; flex-direction: column; align-items: center; gap: 36px; padding: 64px 40px 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 48px; align-items: center; padding: 88px 40px 96px;
 }
-.home-hero .intro { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; max-width: 860px; }
+.home-hero .intro { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
 .home-hero .pill {
   display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px;
   border: 1px solid var(--ink-line); background: var(--ink-2);
@@ -233,62 +270,63 @@ header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: va
 }
 @keyframes puls { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
 .home-hero h1 {
-  font-size: 68px; line-height: 1.02; letter-spacing: -.035em; margin: 0; max-width: 16ch; text-wrap: pretty;
+  font-size: 60px; line-height: 1.02; font-weight: 600; letter-spacing: -.035em; margin: 0; text-wrap: pretty;
 }
-.home-hero h1 .accent { color: var(--brand-on-ink); }
+/* Michael 2026-09-11: der Teil „Trade in R." gehört in eine eigene Zeile, der Umbruch
+   also VOR „Trade". Als `display: block` an der Auszeichnung statt als <br> im Text:
+   so hält der Umbruch auch, wenn jemand den Satz davor ändert, und er geht bei einer
+   späteren Übersetzung nicht verloren. */
+.home-hero h1 .accent { color: var(--brand-on-ink); display: block; }
 .home-hero .lede { max-width: 40rem; margin: 0; font-size: 19px; line-height: 1.6; color: var(--on-ink-muted); text-wrap: pretty; }
 .home-hero .lede strong { color: var(--on-ink); font-weight: 600; }
 .home-hero .actions { display: flex; gap: 12px; align-items: center; }
-.home-hero .meta { font-size: 14px; color: var(--on-ink-faint); }
-.home-hero .meta strong { font-weight: 600; color: var(--on-ink-muted); }
+/* Vorlage: Mono-Zeile, „WORKS WITH" plus zwei umrandete Marken. */
+.home-hero .meta {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; padding-top: 10px;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: var(--on-ink-faint);
+}
+.home-hero .meta .lbl { color: var(--on-ink-muted); white-space: nowrap; }
+.home-hero .meta .chip { padding: 5px 10px; border: 1px solid var(--ink-line-2); border-radius: 5px; color: var(--on-ink-muted); }
+.home-hero .meta .rest { white-space: nowrap; }
 
-/* Bühne mit Hover-Verwandlung (FXR-164, README-Nachtrag "Runde 15: Hero-Film und
-   Kopfleiste"; Zahlen headless am rendernden DOM von `temp/export-web-v3/FixedR Web
-   Home.html` gemessen, nicht nur aus der README übernommen — dort berechnet
-   `renderVals()`: breite = 1120 + 80*ease, hoehe = 420 + 255*ease,
-   skal = 0.7 + 0.05*ease, mit ease 0 in Ruhe und 1 beim Hover):
-   Ruhe 1120×420, Ecken oben 14px, unten offen, Inhalt skaliert 0,70, Blauschein von
-   unten. Hover 1200×675, alle Ecken 14px, Inhalt 0,75, Schein wandert unter die
-   Fläche, Übergang 0,6s cubic-bezier(.2,.7,.2,1) auf Höhe/Breite/Radius/Schatten/
-   Transform (Vorlage listet Transform im selben Übergang). */
-.home-hero .stripe-wrap { position: relative; width: 100%; display: flex; justify-content: center; margin-top: 8px; }
+/* FXR-239 — Bildkarte, ausgehend von `export-web-v4`:
+     position:relative;justify-self:end;width:min(100%,720px);
+     border-radius:14px;overflow:hidden;border:1px solid var(--ink-line-2);
+     background:var(--ink);
+     box-shadow:0 40px 120px -40px rgba(46,134,246,.55),0 2px 4px rgba(0,0,0,.4)
+
+   ⚠️ ZWEI bewusste Abweichungen von der Vorlage, beide auf Michaels Ansage vom
+   2026-09-11 — und beide, weil die Vorlage einen abstrakten Platzhalter zeigte, wo
+   jetzt ein echter Screenshot steht:
+
+   1. Die Vorlage legt eine FESTE Flaeche 1600x1000 mit `scale(.45)` = 720x450 in die
+      Karte. Die Karte ist aber nur 562x351 — die Spalte wird bei `max-width:1200` nie
+      breiter. Die Vorlage schnitt damit rechts und unten rund 22 Prozent ab. Beim
+      Platzhalter war das ein gewollter Anschnitt, beim Screenshot fehlten die rechte
+      Leiste und die Statuszeile. („kann man es vollstaendig anzeigen?")
+
+   2. Die Vorlage setzt `aspect-ratio: 16/10`. Michaels Screenshots treffen dieses
+      Verhaeltnis nicht (2880x1662 = 1,733), also blieb ein Rand oben und unten.
+      („koennen wir die karte in der hoehe verkleinern, sodass das bild passt?")
+
+   Loesung fuer beides an einer Stelle: die Karte bekommt KEIN festes Verhaeltnis mehr,
+   sondern nimmt ihre Hoehe vom Bild. Damit passt jeder kuenftige Screenshot randlos,
+   ohne dass hier wieder eine Zahl nachgezogen werden muss — ein festes
+   `aspect-ratio: 2880/1662` waere beim naechsten Bild schon wieder falsch.
+
+   Der urspruengliche Grund fuer die feste Flaeche (Michael 2026-09-06: eine prozentuale
+   Flaeche muss der Browser waehrend einer Groessenaenderung neu rastern, „ruckelt
+   leicht") ist gegenstandslos — die Karte aendert ihre Groesse nicht mehr. */
 .home-hero .stage {
-  position: relative; height: 420px; width: 1120px; max-width: 100%; overflow: hidden;
-  border-radius: 14px 14px 0 0; border: 1px solid var(--ink-line-2); border-bottom: none;
-  background: var(--ink); box-shadow: 0 -30px 120px -40px rgba(46, 134, 246, .45);
-  transition: height .6s cubic-bezier(.2, .7, .2, 1), width .6s cubic-bezier(.2, .7, .2, 1),
-    border-radius .6s, box-shadow .6s;
+  position: relative; justify-self: end; width: min(100%, 720px);
+  border-radius: 14px; overflow: hidden; border: 1px solid var(--ink-line-2);
+  background: var(--ink);
+  box-shadow: 0 40px 120px -40px rgba(46, 134, 246, .55), 0 2px 4px rgba(0, 0, 0, .4);
 }
-/*
- * Inhalt der Bühne — WORTGLEICH nach der Vorlage (`temp/export-web-v3`, `buehneInhalt`):
- *
- *     width:1600px;height:1000px;transform:scale(.700 → .750);transform-origin:top left
- *
- * ⚠️ KORREKTUR 2026-09-06. Vorher stand hier eine prozentuale Fläche (`width:100%`) mit
- * `object-fit: cover` und einem Skalierungssprung 1 → 1,0714. Rechnerisch dasselbe
- * Ergebnis, in der Bewegung aber etwas ganz anderes: weil die Fläche in Prozent der
- * Rahmenbreite steht und der Rahmen 0,6 s lang seine Breite und Höhe ändert, muss der
- * Browser den Bildausschnitt in JEDEM Bild neu berechnen und das Bild neu rastern.
- * Michael, 2026-09-06: „das ist bei WEITEM nicht so flüssig, ruckelt leicht."
- *
- * Die feste Fläche der Vorlage tut das nicht: sie wird einmal gerastert, danach ändert
- * sich nur noch ihr Transform — und Transform allein läuft im Compositor, ohne neues
- * Layout. Der Rahmen schneidet mehr oder weniger davon ab (`overflow: hidden`).
- *
- * Die Zahlen passen exakt zusammen: 1600 × 0,700 = 1120 (Rahmen in Ruhe),
- * 1600 × 0,750 = 1200 (Rahmen beim Überfahren). Deshalb 0,70 und 0,75 und kein anderer Wert.
- */
-.home-hero .stage-content {
-  width: 1600px; height: 1000px; transform: scale(.7); transform-origin: top left;
-  transition: transform .6s cubic-bezier(.2, .7, .2, 1);
-}
+/* Im Fluss, nicht absolut: nur so kann das Bild die Hoehe der Karte bestimmen. */
+.home-hero .stage-content { display: block; }
 .home-hero .stage-content img,
-.home-hero .stage-content video { display: block; width: 1600px; height: 1000px; object-fit: cover; object-position: top; }
-.home-hero .stage:hover .stage-content,
-.home-hero .stage.is-hover .stage-content { transform: scale(.75); }
-@media (hover: none) {
-  .home-hero .stage-content { transform: scale(.7); }
-}
+.home-hero .stage-content video { display: block; width: 100%; height: auto; }
 /* Schleier: unsichtbar/durchklickbar in Ruhe, blendet beim Überfahren ein.
    Zwei Auslöser, absichtlich beide: `:hover` als Grundlage (auch ohne JavaScript) und die
    Klasse `.is-hover`, die ein kleines Skript am Seitenende setzt. Grund steht dort. */
@@ -315,15 +353,21 @@ header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: va
 .home-hero .stage-title { font-family: var(--font-display); font-size: 22px; font-weight: 600; letter-spacing: -.02em; color: var(--on-ink); }
 .home-hero .stage-sub { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: var(--on-ink-muted); }
 
-.home-hero .stage:hover,
-.home-hero .stage.is-hover {
-  width: 1200px; height: 675px; border-radius: 14px;
-  /* Die Vorlage setzt die untere Kante ab der Hälfte der Bewegung wieder
-     (`border-bottom: ease > .5 ? 1px solid : none`) — im Ruhezustand läuft die Bühne nach
-     unten offen aus, geöffnet ist sie eine geschlossene Fläche. */
-  border-bottom: 1px solid var(--ink-line-2);
-  box-shadow: 0 30px 120px -40px rgba(46, 134, 246, .7);
-}
+/* ⚠️ HIER STAND DIE LETZTE HÄLFTE DER WACHSENDEN BÜHNE — 2026-09-11 entfernt.
+   Michael: „beim hover entsteht weiterhin ein großes Fenster zentral. das hover für
+   video darf aber nur im kleinen bild rechts angezeigt sein."
+   Gemessen war es genau das: die Karte sprang beim Überfahren von 561×351 bei x=718
+   auf 1200×675 bei x=80 — also aus der rechten Spalte heraus auf fast volle Breite.
+
+   Mein Fehler davor: Ich hatte die Verwandlung nur an EINER Stelle zurückgebaut
+   (`.stage-content`, die Skalierung des Bildinhalts) und angenommen, das sei die ganze
+   Mechanik. Die zweite Hälfte — Breite, Höhe, Radius, Schatten des RAHMENS — stand
+   sechzig Zeilen weiter unten und blieb aktiv. Eine Ablösung ist erst fertig, wenn
+   jeder Ort sie trägt; „ich habe die Regel entfernt" ist keine Messung.
+
+   In v4 ändert die Karte ihre Größe nicht mehr. Beim Überfahren blendet nur noch der
+   Schleier ein (nächste Regel). Der Prüfstand misst das jetzt: `npm run e2e:banner`
+   vergleicht den Kasten der Karte in Ruhe und beim Überfahren und verlangt Gleichheit. */
 .home-hero .stage:hover .stage-veil,
 .home-hero .stage.is-hover .stage-veil {
   background: rgba(6, 7, 10, .55); opacity: 1; pointer-events: auto; backdrop-filter: blur(6px);
@@ -340,7 +384,6 @@ header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: va
   .home-hero .lede { font-size: 16px; }
   .home-hero .actions { flex-direction: column; align-items: stretch; width: 100%; }
   .home-hero .stage,
-  .home-hero .stage:hover { height: 220px; width: 100%; }
   .home-hero .play-btn { width: 56px; height: 56px; }
   .home-hero .stage-title { font-size: 18px; }
 }
@@ -396,22 +439,36 @@ header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: va
 }
 
 /* ── Fußzeile (dreispaltig, Runde 13) ────────────────────────── */
-.footer-cols { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+/* FXR-239 — nach `temp/export-web-v4`: Raster ueber die VOLLE Inhaltsbreite statt
+   flex/space-between (das draengte die Spalten zusammen, Michael 2026-09-11:
+   "der footer hat dasselbe problem. der geht auch ueber die gesamte breite").
+   Vorlage: display:grid;grid-template-columns:minmax(0,1.4fr) repeat(4,minmax(0,1fr));gap:40px */
+.footer-cols { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(4, minmax(0, 1fr)); gap: 40px; align-items: start; }
+.footer-cols .brand-col .tech { display: flex; gap: 6px; margin-top: 6px; }
+.footer-cols .brand-col .tech span {
+  padding: 4px 9px; border: 1px solid var(--ink-line-2); border-radius: 5px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--on-ink-muted);
+}
 .footer-cols .brand-col { display: flex; flex-direction: column; gap: 12px; }
 .footer-cols .brand-col img { display: block; width: 128px; height: auto; }
 .footer-cols .brand-col p { font-size: 14px; max-width: 32ch; line-height: 1.55; color: var(--on-ink-faint); margin: 0; }
-.footer-cols nav { display: flex; gap: 40px; font-size: 14px; flex-wrap: wrap; }
-.footer-cols .group { display: flex; flex-direction: column; gap: 9px; }
-.footer-cols .group-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-faint); }
+.footer-cols nav { display: contents; }
+.footer-cols .group { display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+.footer-cols .group-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-faint); margin-bottom: 4px; }
 .footer-cols .group a { color: var(--on-ink-muted); font-weight: 400; }
+/* Vorlage: `style-hover="color:var(--on-ink)"` — der Link hellt auf, er unterstreicht nicht. */
+.footer-cols .group a:hover { color: var(--on-ink); text-decoration: none; }
+/* Vorlage `export-web-v4`: font-size:12px;line-height:1.6;color:var(--on-ink-faint);
+   max-width:90ch;text-wrap:pretty */
+.footer-disclaimer { font-size: 12px; line-height: 1.6; color: var(--on-ink-faint); max-width: 90ch; text-wrap: pretty; margin: 0; }
 .footer-legal {
   display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
   padding-top: 20px; border-top: 1px solid var(--ink-line); font-size: 13px; color: var(--on-ink-faint);
 }
 .footer-legal .notrack { margin-left: auto; }
 @media (max-width: 780px) {
-  .footer-cols { flex-direction: column; gap: 28px; }
-  .footer-cols nav { gap: 24px; }
+  .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+  .footer-cols .brand-col { grid-column: 1 / -1; }
   .footer-legal .notrack { margin-left: 0; }
 }
 
@@ -433,7 +490,7 @@ header.page-head .lede { margin: 0; font-size: 18px; line-height: 1.6; color: va
   background: var(--surface); border: 1px solid var(--line);
   border-radius: 14px; padding: 28px; box-shadow: none;
 }
-.card:hover { border-color: var(--brand-line); box-shadow: 0 20px 40px -24px rgba(10, 98, 207, .3); }
+.card:hover { border-color: var(--brand-line-hover); box-shadow: 0 20px 40px -24px rgba(10, 98, 207, .3); }
 .card.tint { background: var(--bg-alt); box-shadow: none; }
 .card.span-2 { grid-column: 1 / -1; }
 .card h3 { margin: 1rem 0 .4rem; font-size: 21px; }
@@ -492,12 +549,13 @@ details[open] summary { color: var(--brand); }
   padding: 72px 40px; display: grid; grid-template-columns: 1fr 440px; gap: 64px; align-items: center;
 }
 .waitlist-hero .intro { display: flex; flex-direction: column; gap: 18px; }
-.waitlist-hero h1 { font-size: 52px; line-height: 1.05; letter-spacing: -.035em; margin: 0; text-wrap: pretty; }
+/* v7: wie die uebrigen Kopfbaender — 56px im Gewicht 500, Zeile 1.04. */
+.waitlist-hero h1 { font-size: 56px; line-height: 1.04; font-weight: 500; letter-spacing: -.035em; margin: 0; text-wrap: pretty; max-width: 20ch; }
 .waitlist-hero .lede { margin: 0; font-size: 18px; line-height: 1.6; color: var(--on-ink-muted); text-wrap: pretty; }
 .waitlist-card {
   display: flex; flex-direction: column; gap: 14px; padding: 28px;
-  border-radius: 14px; background: var(--ink-2); border: 1px solid var(--ink-line-2);
-}
+  border-radius: 10px; background: var(--ink-2); border: 1px solid var(--ink-line-2);
+ min-height: 560px; }
 @media (max-width: 900px) {
   .waitlist-hero .inner { grid-template-columns: 1fr; padding: 48px 20px; gap: 32px; }
   .waitlist-hero h1 { font-size: 34px; }
@@ -580,8 +638,8 @@ footer.site {
   border-top: 1px solid var(--ink-line); margin-top: 0; font-size: .87rem;
 }
 footer.site .inner {
-  max-width: 1200px; margin: 0 auto; padding: 40px 40px 28px;
-  display: flex; flex-direction: column; gap: 28px;
+  max-width: 1200px; margin: 0 auto; padding: 64px 40px 28px;
+  display: flex; flex-direction: column; gap: 40px;
 }
 
 /* ── Die eine dunkle Fläche ───────────────────────────────────
@@ -733,3 +791,11 @@ footer.site .inner {
 .reifegrad-built { background: var(--tag-built-bg); border-color: var(--tag-built-ln); color: var(--tag-built-fg); }
 .reifegrad-planned { background: var(--tag-plan-bg); border-color: var(--tag-plan-ln); color: var(--tag-plan-fg); }
 .reifegrad-in-progress { background: var(--tag-prog-bg); border-color: var(--tag-prog-ln); color: var(--tag-prog-fg); }
+
+
+/* ── Warteliste (v7): Karte Radius 10, Feld und Knopf 8px ────────────────── */
+.waitlist-card input,
+.waitlist-card select,
+.waitlist-card .btn,
+.waitlist-card button { border-radius: 8px; }
+.waitlist-card .pf-pill { border-radius: 5px; }
