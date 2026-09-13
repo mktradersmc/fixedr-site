@@ -164,11 +164,21 @@
   display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 80px;
 }
 .akt2 .schritte { display: flex; flex-direction: column; }
+/* Michael 2026-09-13: „im abschnitt safety guard werden die textabschnitte je nach
+   scrollposition grau. das funktioniert nicht sauber (auch nicht in der vorlage).
+   deaktiviere das ausgrauen. lass die schrift durchgaengig in der originalen
+   schriftfarbe."
+   Hier stand `opacity: .28` mit `[data-aktiv] { opacity: 1 }` — wortgleich aus der
+   Vorlage (`opacity:${this.state.schritt === i ? 1 : .28}`). Der Fehler liegt in der
+   Mechanik, nicht in der Uebernahme: der Beobachter kennt nur EINEN aktiven Schritt
+   (rootMargin -40%/-50%), sodass zwischen zwei Schritten kurz gar keiner hell ist und
+   am Anfang wie am Ende des Abschnitts der jeweils aeussere haengen bleibt.
+   `data-aktiv` bleibt und steuert weiter Buehne, Titel und Fortschrittspunkte — nur
+   die Deckkraft haengt nicht mehr daran. */
 .akt2 .schritt {
   min-height: 46vh; display: flex; flex-direction: column; justify-content: center;
-  gap: 14px; padding: 40px 0; opacity: .28; transition: opacity .5s ease;
+  gap: 14px; padding: 40px 0;
 }
-.akt2 .schritt[data-aktiv] { opacity: 1; }
 .akt2 .schritt h3 { font-family: var(--font-display); font-size: 28px; line-height: 1.15; font-weight: 500; letter-spacing: -.025em; margin: 0; }
 .akt2 .schritt p { font-size: 17px; line-height: 1.65; color: var(--muted); text-wrap: pretty; margin: 0; }
 .akt2 .schritt .rolle { font-family: var(--font-mono); color: var(--brand); font-weight: 600; }
@@ -211,7 +221,7 @@
   .akt2 { margin: 0 12px; }
   .akt2 .kopf { padding: 48px 20px 0; }
   .akt2 .inner { grid-template-columns: 1fr; gap: 24px; padding: 0 20px 40px; }
-  .akt2 .schritt { min-height: 0; padding: 24px 0; opacity: 1; }
+  .akt2 .schritt { min-height: 0; padding: 24px 0; }
   .akt2 .buehne-sticky { position: static; height: 420px; }
 }
 

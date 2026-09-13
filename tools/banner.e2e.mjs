@@ -302,6 +302,36 @@ const h1v6 = await page.locator('.home-hero h1').evaluate((e) => {
 });
 ok(`Hero-H1 ist 64px/500 (${h1v6.size}/${h1v6.weight})`, h1v6.size === '64px' && h1v6.weight === '500');
 
+// ---- Safety guard: die vier Schritte bleiben lesbar ----------------------
+// Michael 2026-09-13: „im abschnitt safety guard werden die textabschnitte je nach
+// scrollposition grau. das funktioniert nicht sauber (auch nicht in der vorlage).
+// deaktiviere das ausgrauen." Gemessen wird an DREI Scrollstellen, weil der Fehler
+// genau zwischen zwei Schritten auftrat: dort war kurz keiner hell.
+await page.goto(url.replace(/\/$/, '') + '/');
+await page.waitForTimeout(500);
+{
+  const schritte = await page.locator('.akt2 .schritt').count();
+  let blass = [];
+  for (const anteil of [0.25, 0.5, 0.75]) {
+    await page.evaluate((a) => {
+      const abschnitt = document.querySelector('.akt2');
+      const k = abschnitt.getBoundingClientRect();
+      window.scrollTo(0, k.top + window.scrollY + k.height * a - window.innerHeight / 2);
+    }, anteil);
+    await page.waitForTimeout(700);
+    const werte = await page.evaluate(() => [...document.querySelectorAll('.akt2 .schritt')]
+      .map((e) => getComputedStyle(e).opacity));
+    werte.forEach((v, i) => { if (v !== '1') blass.push(`bei ${Math.round(anteil * 100)}%: Schritt ${i} = ${v}`); });
+  }
+  ok(`Safety guard: alle ${schritte} Schritte durchgaengig voll deckend (3 Scrollstellen)`,
+     schritte === 4 && blass.length === 0, blass.join(' · '));
+  // Die Steuerung darf davon unberuehrt sein: genau eine Lage ist sichtbar.
+  const lagen = await page.evaluate(() => document.querySelectorAll('.akt2 .lage[data-an]').length);
+  ok(`Safety guard: die Buehne schaltet weiter (genau 1 Lage an, gemessen ${lagen})`, lagen === 1);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(400);
+}
+
 // ---- Farben und Effekte gegen die Vorlage --------------------------------
 // BEFUND 2026-09-12 (Michael: „bitte pruefe, ob du auch wirklich alle farben und
 // effekte sauber uebernommen hast. das wirkt sich subtil auf die optik der seite aus"):
