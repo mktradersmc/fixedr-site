@@ -20,10 +20,31 @@ import PageHead from '../components/PageHead.astro';
       pixels. Your data is never sold or shared.</li>
     <li>All assets (fonts, images, styles) are served from this domain — nothing is loaded
       from third parties.</li>
-    <li>We count waitlist signups and which campaign link they came from. That is a
-      count, not a profile, and it is not tied to an identity.</li>
-    <li>The waitlist stores exactly what you submit, is used only to contact you about
-      FixedR access, and entries are deleted on request.</li>
+    {/* FXR-1938: die Anmeldung speichert die Herkunftsseite JE Adresse — der fruehere Satz
+        „a count, not a profile, not tied to an identity" stimmte damit nicht mehr. */}
+    <li>The waitlist uses a confirmed signup (double opt-in): you are on the list only after
+      you click the link in the confirmation e-mail. The link is valid for 48 hours;
+      unconfirmed signups are deleted within a day after it expires.</li>
+    <li>For each signup we store your e-mail address, the language, the page you signed up
+      on, the time of signup, confirmation and unsubscribe, and the version of the consent
+      text you agreed to. No name, no IP address.</li>
+    <li>Every e-mail carries a one-click unsubscribe link. After you unsubscribe we keep only
+      the record that you agreed and unsubscribed (address, times, consent version), so that
+      we can show it and do not write to you again.</li>
   </ul>
+
+  {/* FXR-1938: Abschnitte, die die Anmeldung braucht und die NICHT erfunden werden duerfen.
+      Jeder ist als Platzhalter markiert; der Marker oben haelt den Deploy weiter auf. */}
+  <div class="callout" data-blocker="WPAC26-PLACEHOLDER-DO-NOT-PUBLISH">
+    <p><strong>Placeholder — sections still to be written before publication:</strong></p>
+    <ul>
+      <li>[PLACEHOLDER] Controller: name and postal address (from the imprint), contact e-mail for privacy requests.</li>
+      <li>[PLACEHOLDER] Purpose and legal basis of the waitlist e-mails: consent, Art. 6(1)(a) GDPR; withdrawal at any time without affecting earlier processing.</li>
+      <li>[PLACEHOLDER] Legal basis for keeping the proof of consent and unsubscribe after withdrawal, and for how long.</li>
+      <li>[PLACEHOLDER] Recipients and processors: the host of the signup server and the provider that sends the e-mails (names, locations, data processing agreements, transfers outside the EU if any).</li>
+      <li>[PLACEHOLDER] Server log files of the website and the signup server: what is logged, for how long.</li>
+      <li>[PLACEHOLDER] Your rights (access, rectification, erasure, restriction, portability, objection) and how to use them; right to lodge a complaint with a supervisory authority.</li>
+    </ul>
+  </div>
   </article>
 </Base>

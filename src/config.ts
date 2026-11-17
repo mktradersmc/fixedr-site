@@ -1,9 +1,19 @@
 // Zentrale Site-Konfiguration.
-// WARTELISTE (E-C132): der Empfänger ist austauschbar — Dienst-Entscheid fällt mit dem
-// Hosting-Entscheid vor G4. Solange WAITLIST_ENDPOINT leer ist, rendert die Waitlist-Seite
-// den mailto:-Fallback. Einen Formulardienst aktivieren = nur diese eine Zeile füllen
-// (z. B. Formspree: 'https://formspree.io/f/<id>').
-export const WAITLIST_ENDPOINT = '';
+// WARTELISTE (E-C132, FXR-1938): Empfänger ist der eigene Lizenzserver (fixedr-server,
+// `POST /api/waitlist/subscribe`, Double-Opt-in). Die Adresse kommt beim Bau aus der
+// Umgebung (`PUBLIC_WAITLIST_ENDPOINT`, z. B. https://<dienst>/api/waitlist/subscribe),
+// nie fest in den Quelltext. Leer = die Seite rendert den mailto:-Fallback wie bisher.
+export const WAITLIST_ENDPOINT: string = String(import.meta.env.PUBLIC_WAITLIST_ENDPOINT ?? '').trim();
+
+// FXR-1938: der Wortlaut der Einwilligung MIT Fassung. Er muss Zeichen für Zeichen dem
+// Register des Servers entsprechen (fixedr-server `src/waitlist/consent.js`) — der Server
+// vergleicht den gezeigten Text und lehnt eine Abweichung mit 409 ab, statt einen Nachweis
+// über einen Text zu speichern, den niemand gesehen hat. Neue Fassung = beide Stellen.
+export const WAITLIST_CONSENT_VERSION = '2026-11-17';
+export const WAITLIST_CONSENT_TEXT =
+  'I want to join the FixedR waitlist. FixedR may e-mail me about my seat in the founders circle and the launch, ' +
+  'and occasionally about the topics of the guide and about FixedR. I can unsubscribe at any time with one click ' +
+  'in every e-mail.';
 
 // Postfach für den mailto:-Fallback. HINWEIS: E-Mail auf der Domain ist noch nicht
 // eingerichtet (Michael-Handarbeit, z. B. Cloudflare Email Routing — gratis).

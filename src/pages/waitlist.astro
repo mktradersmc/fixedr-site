@@ -3,12 +3,19 @@
 // und einen abweichenden Feldsatz (trades/firms statt Plattform-Wahl). Jetzt 1:1 nach
 // `temp/export-web-v2/FixedR Web Waitlist.html` — Ueberschrift, Lede und die Plattform-
 // Auswahl (MetaTrader/NinjaTrader/Both) aus der Referenz, echtes E-Mail-Feld. Ohne
-// WAITLIST_ENDPOINT (E-C131 noch offen) oeffnet "Join the waitlist" den mailto-Fallback
-// mit E-Mail und Plattform vorbelegt statt eines POSTs — ehrlich (kein Formular, das ins
-// Leere sendet), aber optisch die Referenz. Review-Befund vom 03.09. (Danke-Seite darf
-// keinen Mailversand behaupten, den der Bau nicht ausloest) gilt unveraendert weiter.
+// WAITLIST_ENDPOINT oeffnet "Join the waitlist" den mailto-Fallback mit E-Mail und Plattform
+// vorbelegt statt eines POSTs — ehrlich (kein Formular, das ins Leere sendet).
+//
+// FXR-1938 (Michael 2026-11-17: „wie in TAOW will ich einen email newsletter bauen"):
+// MIT Endpunkt spricht das Formular den Lizenzserver an — Double-Opt-in. Zustaende:
+// senden → „Schau in dein Postfach" (dieselbe Antwort fuer neue UND bekannte Adressen, der
+// Server unterscheidet sie bewusst nicht) oder Fehler. Ausdrueckliche Einwilligung als
+// Haken mit dem Wortlaut aus `config.ts` (Fassung geht mit). Die Plattform-Auswahl entfaellt
+// in diesem Zustand: der Server speichert nur Adresse, Sprache, Herkunft, Zeitpunkte und
+// Einwilligung — eine Auswahl, die nirgends ankommt, waere eine leere Frage.
+// Kein mailto-Rueckfall, sobald ein Endpunkt gesetzt ist.
 import Base from '../layouts/Base.astro';
-import { WAITLIST_ENDPOINT, WAITLIST_EMAIL } from '../config';
+import { WAITLIST_ENDPOINT, WAITLIST_EMAIL, WAITLIST_CONSENT_TEXT, WAITLIST_CONSENT_VERSION } from '../config';
 
 const hasEndpoint = WAITLIST_ENDPOINT.length > 0;
 ---
@@ -29,51 +36,143 @@ const hasEndpoint = WAITLIST_ENDPOINT.length > 0;
       </div>
 
       <div class="waitlist-card">
-        <form
-          class="waitlist waitlist-v2"
-          id="waitlist-form"
-          action={hasEndpoint ? WAITLIST_ENDPOINT : undefined}
-          method={hasEndpoint ? 'POST' : undefined}
-          data-mailto-fallback={hasEndpoint ? undefined : 'true'}
-          data-mailto-email={WAITLIST_EMAIL}
-        >
-          {/* FXR-45: Redirect nach dem Absenden zur Danke-Seite (nur mit echtem Endpoint —
-              `_next` ist die Formspree-Konvention, Feldname dienst-abhaengig, FXR-44). */}
-          {hasEndpoint && <input type="hidden" name="_next" value="/thanks" />}
-          <label for="email">Email
-            <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com" />
-          </label>
-          <label>Platform
-            <span class="platform-pills" role="radiogroup" aria-label="Platform">
-              <label class="pf-pill">
-                <input type="radio" name="platform" value="MetaTrader" checked />
-                <span>MetaTrader</span>
+        {hasEndpoint ? (
+          <>
+            <form
+              class="waitlist waitlist-v2"
+              id="waitlist-form"
+              novalidate
+              data-endpoint={WAITLIST_ENDPOINT}
+              data-consent-version={WAITLIST_CONSENT_VERSION}
+            >
+              <label for="email">Email
+                <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com" />
               </label>
-              <label class="pf-pill">
-                <input type="radio" name="platform" value="NinjaTrader" />
-                <span>NinjaTrader</span>
+              {/* Lockfeld fuer Automaten: fuer Menschen unsichtbar, nicht per Tab erreichbar. */}
+              <div class="hp" aria-hidden="true">
+                <label for="website">Website<input type="text" id="website" name="website" tabindex="-1" autocomplete="off" /></label>
+              </div>
+              <label class="consent" for="consent">
+                <input type="checkbox" id="consent" name="consent" required />
+                <span id="consent-text">{WAITLIST_CONSENT_TEXT}</span>
               </label>
-              <label class="pf-pill">
-                <input type="radio" name="platform" value="Both" />
-                <span>Both</span>
+              <button class="btn" type="submit" id="waitlist-submit">Join the waitlist</button>
+              <p class="status" id="waitlist-status" role="status" aria-live="polite"></p>
+            </form>
+            <div class="sent" id="waitlist-sent" hidden>
+              <p class="sent-title">Check your inbox.</p>
+              <p class="sent-text">
+                We sent a link to <strong id="waitlist-sent-email"></strong>. You are on the list once
+                you click it. The link is valid for 48 hours.
+              </p>
+              <p class="sent-text">Nothing arrived? Check your spam folder, or <a href="/waitlist">try again</a>.</p>
+            </div>
+            <noscript><p class="fine">Signing up needs JavaScript enabled in your browser.</p></noscript>
+            <p class="fine">
+              We send one confirmation e-mail first. Every e-mail carries a one-click unsubscribe
+              link. Details in the <a href="/privacy">privacy policy</a>.
+            </p>
+          </>
+        ) : (
+          <>
+            <form
+              class="waitlist waitlist-v2"
+              id="waitlist-form"
+              data-mailto-fallback="true"
+              data-mailto-email={WAITLIST_EMAIL}
+            >
+              <label for="email">Email
+                <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com" />
               </label>
-            </span>
-          </label>
-          <button class="btn" type="submit">Join the waitlist</button>
-        </form>
-        <p class="fine">No newsletter. One mail when your seat opens.</p>
-        {!hasEndpoint && (
-          <p class="fine">Already sent it? <a href="/thanks">Continue to your guide</a>.</p>
+              <label>Platform
+                <span class="platform-pills" role="radiogroup" aria-label="Platform">
+                  <label class="pf-pill">
+                    <input type="radio" name="platform" value="MetaTrader" checked />
+                    <span>MetaTrader</span>
+                  </label>
+                  <label class="pf-pill">
+                    <input type="radio" name="platform" value="NinjaTrader" />
+                    <span>NinjaTrader</span>
+                  </label>
+                  <label class="pf-pill">
+                    <input type="radio" name="platform" value="Both" />
+                    <span>Both</span>
+                  </label>
+                </span>
+              </label>
+              <button class="btn" type="submit">Join the waitlist</button>
+            </form>
+            <p class="fine">No newsletter. One mail when your seat opens.</p>
+            <p class="fine">Already sent it? <a href="/thanks">Continue to your guide</a>.</p>
+            <p class="fine">
+              Your address goes on the waitlist, nothing else — details in the
+              <a href="/privacy">privacy policy</a>.
+            </p>
+          </>
         )}
-        <p class="fine">
-          Your address goes on the waitlist, nothing else — details in the
-          <a href="/privacy">privacy policy</a>.
-        </p>
       </div>
     </div>
   </section>
 
-  {!hasEndpoint && (
+  {hasEndpoint ? (
+    <script>
+      // FXR-1938: Anmeldung beim Lizenzserver. JSON, weil der Server den gezeigten Wortlaut
+      // der Einwilligung mit seinem Register vergleicht.
+      const form = document.getElementById('waitlist-form');
+      const statusEl = document.getElementById('waitlist-status');
+      const sent = document.getElementById('waitlist-sent');
+      const submit = document.getElementById('waitlist-submit');
+      const MESSAGES = {
+        CONSENT_REQUIRED: 'Please tick the box to agree to the e-mails.',
+        INVALID_EMAIL: 'Please enter a valid e-mail address.',
+        CONSENT_OUTDATED: 'This page is out of date. Please reload it and try again.',
+        TOO_MANY_REQUESTS: 'Too many attempts from your connection. Please try again in an hour.',
+        SIGNUP_UNAVAILABLE: 'Signing up is not available right now. Please try again later.',
+      };
+      const fail = (text) => {
+        if (statusEl) { statusEl.textContent = text; statusEl.dataset.state = 'error'; }
+        if (submit) { submit.disabled = false; submit.textContent = 'Join the waitlist'; }
+      };
+      form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('email');
+        const consent = document.getElementById('consent');
+        const email = emailInput.value.trim();
+        if (!emailInput.checkValidity() || !email) return fail(MESSAGES.INVALID_EMAIL);
+        if (!consent.checked) return fail(MESSAGES.CONSENT_REQUIRED);
+        if (statusEl) { statusEl.textContent = ''; delete statusEl.dataset.state; }
+        if (submit) { submit.disabled = true; submit.textContent = 'Sending …'; }
+        try {
+          const response = await fetch(form.dataset.endpoint, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              email,
+              // Sprache der Bestaetigungsmail und der Serverseiten folgt dem Sprachschalter der Seite
+              // (Base.astro setzt data-lang); der Wortlaut der Einwilligung ist der gezeigte (englisch).
+              lang: document.documentElement.getAttribute('data-lang') === 'de' ? 'de' : 'en',
+              consent: true,
+              consentVersion: form.dataset.consentVersion,
+              consentText: document.getElementById('consent-text')?.textContent ?? '',
+              source: window.location.pathname,
+              website: (document.getElementById('website')).value,
+            }),
+          });
+          const body = await response.json().catch(() => ({}));
+          if (response.ok && body.ok) {
+            const target = document.getElementById('waitlist-sent-email');
+            if (target) target.textContent = email;
+            form.hidden = true;
+            if (sent) { sent.hidden = false; sent.setAttribute('tabindex', '-1'); sent.focus(); }
+            return;
+          }
+          fail(MESSAGES[body.code] ?? 'That did not work. Please try again.');
+        } catch {
+          fail('The server cannot be reached. Please check your connection and try again.');
+        }
+      });
+    </script>
+  ) : (
     <script>
       // Kein WAITLIST_ENDPOINT (E-C131): das Formular sendet nichts an einen Server, es
       // oeffnet stattdessen den Mail-Client mit E-Mail + gewaehlter Plattform vorbelegt —
@@ -83,7 +182,7 @@ const hasEndpoint = WAITLIST_ENDPOINT.length > 0;
       if (form && form.hasAttribute('data-mailto-fallback')) {
         form.addEventListener('submit', (e) => {
           e.preventDefault();
-          const email = document.getElementById('email').value.trim();
+          const email = (document.getElementById('email')).value.trim();
           const platform = form.querySelector('input[name="platform"]:checked')?.value ?? '';
           const to = form.getAttribute('data-mailto-email');
           const body =
@@ -98,3 +197,28 @@ const hasEndpoint = WAITLIST_ENDPOINT.length > 0;
   )}
 
 </Base>
+
+<style>
+  /* FXR-1938: Einwilligung als Haken mit Fliesstext — die Feldlabel der Karte sind mono und
+     in Versalien, der Wortlaut der Einwilligung muss normal lesbar sein. */
+  .consent {
+    flex-direction: row !important; align-items: flex-start; gap: 10px !important;
+    font-family: var(--font-text); font-size: 13px; line-height: 1.5; letter-spacing: normal;
+    text-transform: none; color: var(--on-ink-muted); cursor: pointer;
+  }
+  .consent input[type='checkbox'] {
+    width: 18px; height: 18px; min-width: 18px; margin: 2px 0 0; padding: 0;
+    accent-color: var(--brand-on-ink); cursor: pointer;
+  }
+  .waitlist-card form[hidden] { display: none !important; }
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .status { margin: 0; min-height: 0; font-size: 13px; line-height: 1.5; color: var(--on-ink-muted); }
+  .status:empty { display: none; }
+  .status[data-state='error'] { color: #ff8a8a; }
+  .sent { display: flex; flex-direction: column; gap: 10px; outline: none; }
+  .sent[hidden] { display: none; }
+  .sent-title { margin: 0; font-size: 22px; font-weight: 500; letter-spacing: -.02em; color: var(--on-ink); }
+  .sent-text { margin: 0; font-size: 14px; line-height: 1.6; color: var(--on-ink-muted); }
+  .sent-text strong { color: var(--on-ink); font-weight: 500; word-break: break-all; }
+  .sent-text a { color: var(--brand-on-ink); }
+</style>
