@@ -5,9 +5,15 @@
    UMZUSETZEN, SO WIE ES DA IST." Jede Zahl hier ist aus dem Export abgeschrieben.
    Nur von index.astro importiert — die Akte gibt es auf keiner anderen Seite.
 
-   Aufbau: Hero → roter Faden 01–04 (ragt 36 px in den Hero) → Akt 01 (drei Regeln,
-   Einleitung sticky) → Akt 02 (Scroll-Bühne, vier Schritte, vier Lagen) → Akt 03/04
-   (Zweispalter) → Pricing → These + Founders auf einer dunklen Fläche.
+   ⚠️ UMBAU FXR-2011 (2026-11-19, E-C321/E-C319): die Abschnittsfolge ist NICHT mehr die
+   des Exports, und der Kanvas ist nicht nachgezogen. Unveraendert aus dem Export:
+   Hero-Aufbau, .akt1, .akt2 (Buehne), .akt34, .zusagen, .schluss. Neu und nur aus
+   vorhandenen Token gebaut: .wege, .erster, .weg, der Preisblock (.anker, .alle,
+   .saetze) und .bekommst. Entfallen: .faden, .cockpit.
+
+   Aufbau: Hero → vier Wege → die Zahl (.akt1) → erster Trade → ein Weg (Leiter) +
+   Backtest/Journal (.akt34) → mehrere Konten (.akt2) → was FixedR nicht tut (.zusagen)
+   → Preis → Founders auf dunkler Fläche.
    ══════════════════════════════════════════════════════════════════════════ */
 
 /* ── Hero ─────────────────────────────────────────────────────────────────
@@ -34,12 +40,12 @@
 .home-hero .intro { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
 /* v6 ersetzt die Pille durch eine schlichte Mono-Zeile. */
 .home-hero .eyebrow {
-  font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--on-ink-muted); margin: 0;
+  font-family: var(--font-mono); font-size: 12px; line-height: 1.6; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--on-ink-muted); margin: 0; text-wrap: balance;
 }
 .home-hero h1 {
-  font-family: var(--font-display); font-size: 64px; line-height: 1.02; font-weight: 500;
-  letter-spacing: -.035em; margin: 0; text-wrap: pretty;
+  font-family: var(--font-display); font-size: 50px; line-height: 1.06; font-weight: 500;
+  letter-spacing: -.03em; margin: 0; text-wrap: pretty;
 }
 /* Michael 2026-09-11: „Trade in R." gehört in eine eigene Zeile. */
 .home-hero h1 .accent { color: var(--brand-on-ink); display: block; }
@@ -56,7 +62,7 @@
 }
 .home-hero .meta .lbl { color: var(--on-ink-muted); white-space: nowrap; }
 .home-hero .meta .chip { padding: 5px 10px; border: 1px solid var(--ink-line-2); border-radius: 5px; color: var(--on-ink-muted); }
-.home-hero .meta .rest { white-space: nowrap; }
+.home-hero .meta .rest { white-space: normal; }
 
 /* Bildkarte. Michael 2026-09-11: die Karte nimmt ihre Höhe vom Bild, damit jeder
    Screenshot vollständig und randlos sitzt — deshalb KEIN festes aspect-ratio und
@@ -96,42 +102,110 @@
 
 @media (max-width: 980px) {
   .home-hero .inner { grid-template-columns: 1fr; gap: 32px; padding: 56px 20px 64px; }
-  .home-hero h1 { font-size: 40px; }
+  .home-hero h1 { font-size: 32px; }
   .home-hero .big-r { font-size: 300px; }
   .home-hero .stage { justify-self: stretch; }
 }
 
-/* ── Der rote Faden: 01–04, jede Kachel springt zu ihrem Akt ──────────────
-   Ragt 36 px in den Hero (`translateY(-36px)`) — die Kacheln sind die Klammer
-   zwischen Hero und Akten, nicht ein eigener Abschnitt. */
-.faden { background: var(--bg); padding: 0; }
-.faden .inner {
-  max-width: 1200px; margin: 0 auto; padding: 0 40px; transform: translateY(-36px);
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px;
+/* ── Gemeinsamer Kopf der neuen Abschnitte (FXR-2011) ─────────────────────── */
+.wege .kopf, .erster .kopf, .weg .kopf { display: flex; flex-direction: column; gap: 18px; max-width: 44rem; }
+.wege .kopf p, .erster .kopf p, .weg .kopf p, .zusagen .kopf p, .preise .kopf p {
+  font-size: 18px; line-height: 1.65; color: var(--muted); margin: 0; text-wrap: pretty;
 }
-.faden a {
-  display: flex; flex-direction: column; gap: 10px; padding: 24px 24px 26px;
+.wege .eyebrow, .erster .eyebrow, .weg .eyebrow {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--brand);
+}
+.wege h2, .erster h2, .weg h2 {
+  font-family: var(--font-display); font-size: 46px; line-height: 1.06; font-weight: 500;
+  letter-spacing: -.03em; margin: 0; text-wrap: pretty;
+}
+
+/* ── 2 · Vier Wege, auf denen eine Bewertung endet ────────────────────────── */
+.wege { background: var(--bg); padding: 0; }
+.wege .inner { max-width: 1200px; margin: 0 auto; padding: 72px 40px 56px; display: flex; flex-direction: column; gap: 36px; }
+.wege .karten { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.wege .karte {
+  display: flex; flex-direction: column; gap: 14px; padding: 24px 24px 26px;
   border-radius: 10px; background: var(--bg); border: 1px solid var(--line);
-  box-shadow: 0 24px 60px -30px rgba(11, 15, 23, .25); color: var(--text); text-decoration: none;
+  box-shadow: 0 24px 60px -30px rgba(11, 15, 23, .25);
 }
-.faden a:hover { color: var(--brand); border-color: var(--brand-line-hover); text-decoration: none; }
-.faden .nr { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--brand); }
-.faden .nr .ln { flex: 1; height: 1px; background: var(--brand-line); }
-.faden .t { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
-.faden .d { font-size: 14px; line-height: 1.55; color: var(--muted); text-wrap: pretty; }
+.wege .nr { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--brand); }
+.wege .nr .ln { flex: 1; height: 1px; background: var(--brand-line); }
+.wege .t { font-family: var(--font-display); font-size: 22px; line-height: 1.15; font-weight: 600; letter-spacing: -.02em; }
+.wege .lage { font-size: 15px; line-height: 1.55; color: var(--text); text-wrap: pretty; min-height: 4.6em; }
+.wege .zeile { display: flex; flex-direction: column; gap: 5px; padding-top: 12px; border-top: 1px solid var(--line); }
+.wege .zeile .lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
+.wege .zeile .d { font-size: 14px; line-height: 1.55; color: var(--muted); text-wrap: pretty; }
+
+/* ── 4 · Der erste Trade in fuenfzehn Minuten ─────────────────────────────── */
+.erster { background: var(--bg-alt); border-radius: 12px; margin: 0 16px; padding: 0; }
+.erster .inner { max-width: 1200px; margin: 0 auto; padding: 72px 40px 56px; display: flex; flex-direction: column; gap: 36px; }
+.erster .schritte { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.erster .schritte li {
+  display: flex; flex-direction: column; gap: 10px; padding: 24px; border-radius: 10px;
+  background: var(--bg); border: 1px solid var(--line);
+}
+.erster .schritte .nr { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--brand); }
+.erster .schritte .t { font-family: var(--font-display); font-size: 20px; line-height: 1.2; font-weight: 600; letter-spacing: -.02em; }
+.erster .schritte .d { font-size: 15px; line-height: 1.55; color: var(--muted); text-wrap: pretty; }
+.erster .fuss { font-size: 16px; line-height: 1.6; color: var(--muted); margin: 0; }
+
+/* ── 5 · Ein Weg: die Leiter mit zwei durchlaufenden Baendern ─────────────── */
+.weg { background: var(--bg); padding: 0; }
+.weg .inner { max-width: 1200px; margin: 0 auto; padding: 72px 40px 8px; display: flex; flex-direction: column; gap: 28px; }
+.weg .leiter { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.weg .stufe {
+  display: flex; flex-direction: column; gap: 8px; padding: 22px 22px 24px; border-radius: 10px;
+  background: var(--ink); color: var(--on-ink); border: 1px solid var(--ink-line);
+}
+.weg .stufe .nr { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--brand-on-ink); }
+.weg .stufe .t { font-family: var(--font-display); font-size: 26px; line-height: 1.1; font-weight: 500; letter-spacing: -.02em; }
+.weg .stufe .wo { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-faint); }
+.weg .stufe .d { font-size: 14px; line-height: 1.55; color: var(--on-ink-muted); text-wrap: pretty; }
+.weg .band {
+  grid-column: 1 / -1; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px;
+  padding: 12px 22px; border-radius: 8px; background: var(--bg-alt); border: 1px solid var(--brand-line);
+}
+.weg .band .lbl { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--brand); }
+.weg .band .d { font-size: 14px; line-height: 1.5; color: var(--muted); }
+.weg .hinweis { font-size: 15px; line-height: 1.6; color: var(--muted); margin: 0; max-width: 46rem; text-wrap: pretty; }
+.weg .saetze { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.weg .saetze li {
+  padding: 18px 0; border-top: 1px solid var(--line);
+  font-family: var(--font-display); font-size: 24px; line-height: 1.25; font-weight: 500; letter-spacing: -.02em; text-wrap: pretty;
+}
+.weg .saetze li:last-child { border-bottom: 1px solid var(--line); }
+.akt34 .ueberleitung {
+  max-width: 1200px; margin: 0 auto; padding: 0 40px 72px;
+  font-family: var(--font-display); font-size: 24px; line-height: 1.3; font-weight: 500; letter-spacing: -.02em;
+}
+.akt34 .ueberleitung a { font-family: var(--font-text); font-size: 16px; letter-spacing: 0; margin-left: 10px; white-space: nowrap; }
+
 @media (max-width: 980px) {
-  .faden .inner { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 20px; transform: translateY(-24px); }
+  .wege .inner, .erster .inner { padding: 48px 20px 40px; gap: 28px; }
+  .weg .inner { padding: 48px 20px 8px; }
+  .erster { margin: 0 12px; }
+  .wege h2, .erster h2, .weg h2 { font-size: 32px; }
+  .wege .karten, .erster .schritte, .weg .leiter { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wege .lage { min-height: 0; }
+  .weg .saetze li { font-size: 20px; }
+  .akt34 .ueberleitung { padding: 0 20px 48px; font-size: 20px; }
+  .akt34 .ueberleitung a { display: block; margin: 8px 0 0; }
 }
-@media (max-width: 620px) { .faden .inner { grid-template-columns: 1fr; } }
+@media (max-width: 620px) {
+  .wege .karten, .erster .schritte, .weg .leiter { grid-template-columns: 1fr; }
+}
 
 /* ── Akt 01 · The R view: Einleitung sticky, rechts drei Regeln ──────────── */
 .akt1 { background: var(--bg); padding: 0; }
 .akt1 .inner {
-  max-width: 1200px; margin: 0 auto; padding: 40px 40px 64px;
+  max-width: 1200px; margin: 0 auto; padding: 24px 40px 72px;
   display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 96px; align-items: start;
 }
 .akt1 .lead { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 120px; }
 .akt1 .lead p { font-size: 18px; line-height: 1.65; color: var(--muted); text-wrap: pretty; max-width: 34rem; margin: 0; }
+.akt1 .lead p a { font-size: 16px; font-weight: 500; }
 .akt1 .regeln { display: flex; flex-direction: column; }
 .akt1 .regel {
   display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 24px;
@@ -217,6 +291,7 @@
 .akt2 .lage[data-vor] { transform: translateY(-28px) scale(.97); }
 .akt2 .lage[data-an] { opacity: 1; transform: none; pointer-events: auto; }
 .akt2 .lage .mono { font-family: var(--font-mono); }
+.akt2 .lage .lage-inhalt { width: min(440px, calc(100% - 40px)); }
 @media (max-width: 980px) {
   .akt2 { margin: 0 12px; }
   .akt2 .kopf { padding: 48px 20px 0; }
@@ -237,21 +312,18 @@
 .akt34 p { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0; text-wrap: pretty; }
 @media (max-width: 980px) { .akt34 .inner { grid-template-columns: 1fr; gap: 40px; padding: 48px 20px 40px; } }
 
-/* ── Das ganze Cockpit und die drei Zusagen (FXR-1765) ──────────────────────
-   Nur vorhandene Token und das Kachelmuster `.hub-tile` aus mega.css. */
-.cockpit, .zusagen { background: var(--bg); padding: 0; }
-.cockpit .inner, .zusagen .inner {
-  max-width: 1200px; margin: 0 auto; padding: 56px 40px 24px;
+/* ── 7 · Was FixedR nicht tut, drei Zusagen (FXR-1765) ─────────────────────── */
+.zusagen { background: var(--bg); padding: 0; }
+.zusagen .inner {
+  max-width: 1200px; margin: 0 auto; padding: 72px 40px 72px;
   display: flex; flex-direction: column; gap: 32px;
 }
-.zusagen .inner { padding-bottom: 72px; }
-.cockpit .kopf, .zusagen .kopf { display: flex; flex-direction: column; gap: 18px; max-width: 40rem; }
-.cockpit .kopf p { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0; text-wrap: pretty; }
-.cockpit .eyebrow, .zusagen .eyebrow {
+.zusagen .kopf { display: flex; flex-direction: column; gap: 18px; max-width: 44rem; }
+.zusagen .eyebrow {
   font-family: var(--font-mono); font-size: 12px; font-weight: 600;
   letter-spacing: .1em; text-transform: uppercase; color: var(--brand);
 }
-.cockpit h2, .zusagen h2 {
+.zusagen h2 {
   font-family: var(--font-display); font-size: 46px; line-height: 1.06; font-weight: 500;
   letter-spacing: -.03em; margin: 0; text-wrap: pretty;
 }
@@ -266,16 +338,36 @@
 .zusagen .karte a { margin-top: auto; padding-top: 6px; font-size: 14px; font-weight: 500; }
 .akt2 .kopf .txt .firmen { font-size: 16px; line-height: 1.65; color: var(--muted); margin: 0; max-width: 40rem; text-wrap: pretty; }
 @media (max-width: 980px) {
-  .cockpit .inner, .zusagen .inner { padding: 40px 20px 16px; }
-  .zusagen .inner { padding-bottom: 48px; }
-  .cockpit h2, .zusagen h2 { font-size: 32px; }
+  .zusagen .inner { padding: 48px 20px 48px; }
+  .zusagen h2 { font-size: 32px; }
   .zusagen .karten { grid-template-columns: 1fr; }
 }
 
 /* ── Pricing ──────────────────────────────────────────────────────────── */
 .preise { background: var(--bg-alt); border-radius: 12px; margin: 0 16px; padding: 0; }
 .preise .inner { max-width: 1200px; margin: 0 auto; padding: 72px 40px 64px; display: flex; flex-direction: column; gap: 40px; }
-.preise .kopf { display: flex; flex-direction: column; gap: 18px; max-width: 40rem; }
+.preise .kopf { display: flex; flex-direction: column; gap: 18px; max-width: 44rem; }
+.preise .lbl { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--brand); }
+.preise .anker { display: flex; flex-direction: column; gap: 14px; }
+.preise .gattungen { display: flex; flex-wrap: wrap; gap: 8px; }
+.preise .gattung {
+  padding: 9px 16px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line);
+  font-size: 15px; line-height: 1.3; color: var(--text);
+}
+.preise .gattung.spaeter { border-style: dashed; color: var(--muted); }
+.preise .anker .klein { font-size: 14px; line-height: 1.6; color: var(--muted); max-width: 46rem; text-wrap: pretty; }
+.preise .alle {
+  display: flex; flex-direction: column; gap: 18px; padding: 28px 30px; border-radius: 10px;
+  background: var(--ink); color: var(--on-ink); box-shadow: 0 30px 60px -30px rgba(6, 7, 10, .5);
+}
+.preise .alle .lbl { color: var(--brand-on-ink); }
+.preise .alle ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 40px; }
+.preise .alle li { display: flex; gap: 10px; font-size: 16px; line-height: 1.5; }
+.preise .alle li .hak { color: var(--brand-on-ink); font-weight: 700; }
+.preise .saetze { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 40px; }
+.preise .saetze p { font-size: 15px; line-height: 1.6; color: var(--muted); margin: 0; text-wrap: pretty; }
+.preise .saetze strong { display: block; color: var(--text); font-weight: 600; margin-bottom: 4px; }
+.preise .karte .preis.offen b { font-size: 28px; line-height: 2; letter-spacing: -.02em; color: var(--muted); }
 .preise .vorschlag {
   align-self: flex-start; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
   color: var(--faint); padding: 5px 10px; border: 1px dashed var(--brand-line); border-radius: 4px;
@@ -304,6 +396,9 @@
   .preise { margin: 0 12px; }
   .preise .inner { padding: 48px 20px 40px; }
   .preise .karten { grid-template-columns: 1fr; }
+  .preise .alle { padding: 24px 20px; }
+  .preise .alle ul, .preise .saetze { grid-template-columns: 1fr; }
+  .preise .karte .satz { min-height: 0; }
 }
 
 /* ── These + Founders: EINE dunkle Fläche ────────────────────────────────
@@ -336,7 +431,13 @@
   background: var(--brand-on-ink); color: #fff; border-radius: 8px; font-weight: 600; font-size: 15px;
 }
 .schluss .knopf:hover { background: #1f6fd6; color: #fff; text-decoration: none; }
-.schluss .klein { font-size: 13px; color: var(--on-ink-faint); }
+.schluss .klein { font-size: 13px; line-height: 1.55; color: var(--on-ink-faint); }
+.schluss .founders { padding-top: 0; border-top: none; align-items: start; }
+.schluss .bekommst { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 32px; }
+.schluss .bekommst li { display: flex; flex-direction: column; gap: 4px; padding-top: 14px; border-top: 1px solid var(--ink-line-2); }
+.schluss .bekommst .t { font-size: 16px; font-weight: 600; color: var(--on-ink); }
+.schluss .bekommst .d { font-size: 15px; line-height: 1.55; color: var(--on-ink-muted); text-wrap: pretty; }
+@media (max-width: 620px) { .schluss .bekommst { grid-template-columns: 1fr; } }
 /* BEFUND 2026-09-12: hier stand eine gerahmte Pille (padding 13/24, Rahmen rundum,
    Radius 8). Die Vorlage setzt an dieser Stelle KEINEN Knopf, sondern einen Link mit
    einer einzelnen Linie darunter:
@@ -350,7 +451,7 @@
   .schluss .inner { padding: 48px 20px 40px; gap: 40px; }
   .schluss .these { grid-template-columns: 1fr; gap: 24px; }
   .schluss .these h2 { font-size: 34px; }
-  .schluss .founders { grid-template-columns: 1fr; gap: 28px; padding-top: 40px; }
+  .schluss .founders { grid-template-columns: 1fr; gap: 28px; }
   .schluss .founders h2 { font-size: 30px; }
 }
 

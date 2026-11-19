@@ -12,32 +12,28 @@
 /** Claims-Verbotsliste: Rendite-/Erfolgsversprechen, Geldbeträge, Preise, erfundene Zahlen. */
 export const CLAIM_RULES = [
   {
-    // ⚠️ AUSNAHME 2026-09-12 (FXR-239, Kanvas v6) — eng geschnitten, wie die
-    // Preis-Ausnahme aus FXR-164. Die Startseite zeigt in Akt 01, Regel 03 einen
-    // UNSCHARFEN Geldbetrag neben dem scharfen R-Wert: das Bild IST das Argument
-    // („Money stays out of sight" / „The absence is the feature"). Der Betrag ist
-    // per `filter: blur(5px)` unlesbar und per `aria-hidden` auch fuer Screenreader
-    // weg — er behauptet nichts, er wird durchgestrichen.
-    // Erlaubt ist deshalb GENAU `$1,240` und nichts sonst: jeder andere Betrag,
-    // jede andere Schreibweise faellt weiter in die Regel.
-    // Michael entscheidet, ob die Ausnahme bleibt (offener Punkt im Ticket).
+    // FXR-2011 (2026-11-19): die Ausnahme fuer den unscharfen Betrag aus FXR-239 ist
+    // ENTFALLEN. Die Startseite zeigt neben dem scharfen R-Wert jetzt einen unscharfen
+    // Fleck OHNE Zahl — das Bild traegt dasselbe Argument, und im Quelltext steht kein
+    // Geldbetrag eines Trades mehr. Damit gilt die Regel wieder ohne Loch.
     id: 'dollarbetrag',
-    re: /\$(?!1,240(?![\d,]))\s?\d/,
-    why: 'Dollarbetrag (keine Geldbeträge, nirgends; Ausnahme: der unscharfe $1,240 in Akt 01, FXR-239)',
-    trips: ['costs $49 a month', 'made $1,241 last week', 'a $1,240,000 account'],
-    passes: ['+2.4 R', 'the $ symbol never appears next to a number', 'blurred out: $1,240'],
+    re: /\$\s?\d/,
+    why: 'Dollarbetrag (keine Geldbeträge, nirgends)',
+    trips: ['costs $49 a month', 'made $1,241 last week', 'a $1,240,000 account', 'blurred out: $1,240'],
+    passes: ['+2.4 R', 'the $ symbol never appears next to a number'],
   },
   {
-    // FXR-164 (Michael 2026-09-05: "Bitte Preise auch übernehmen"): genau drei Beträge
-    // sind jetzt erlaubt — €19/€39/€69, aus der Vorlage `FixedR Web Home.html` gemessen,
-    // ausdrücklich als "Vorschlag" markiert (FXR-74 entscheidet noch nicht endgültig).
-    // Jedes ANDERE Eurozeichen (andere Zahl, andere Reihenfolge Zahl-vor-Zeichen) bleibt
-    // gesperrt — die Ausnahme ist eng auf die drei Preiskarten-Werte geschnitten.
+    // E-C319 / E-C321 (Michael 2026-11-19): genau EIN Betrag ist erlaubt — €29, der
+    // Preis der Basisstufe, als Vorschlag markiert. Die hoeheren Stufen haben noch keinen
+    // Preis und stehen als „to be announced" da; die frueheren €19/€39/€69 (FXR-164) sind
+    // abgeloest und fallen wieder in die Regel. Jedes ANDERE Eurozeichen (andere Zahl,
+    // Zahl vor dem Zeichen) bleibt gesperrt — so kann kein erfundener Stufenpreis und
+    // kein Preisanker mit Summe unbemerkt auf die Seite kommen.
     id: 'eurozeichen',
-    re: /€(?!(?:19|39|69)\b)/,
-    why: 'Eurozeichen außerhalb der drei erlaubten Preise €19/€39/€69 (FXR-164; FXR-74 offen)',
-    trips: ['39 € pro Monat', '€100 per month', '€199'],
-    passes: ['no currency signs anywhere', 'Basic is listed at €19 / month', '€39 / month', '€69 / month'],
+    re: /€(?!29\b)/,
+    why: 'Eurozeichen außerhalb des einen erlaubten Preises €29 (E-C321; höhere Stufen offen)',
+    trips: ['39 € pro Monat', '€100 per month', '€199', '€19 / month', '€69 / month', '€290'],
+    passes: ['no currency signs anywhere', 'One account is listed at €29 / month'],
   },
   {
     id: 'waehrungsbetrag',

@@ -29,4 +29,4 @@ export const TAGLINE = 'Trade Calm. By Design.';
 // (Michael 2026-08-29): mit dem Ergebnis führen, das Mittel danach. „Es zeigt dir
 // Risiko" war eine Aussage darüber, was wir verweigern.
 export const DESCRIPTION =
-  'A local-first trading cockpit for prop traders, where everything on the screen is built to keep you level. Same trader, better conditions: the numbers do not disappear, they change scale — you risk a percentage, not an amount, and every result reads in R rather than a sum you can hold against your rent.';
+  'The trading environment for prop traders: practise, test and trade in one place. Local-first, and everything on the screen is built to keep you level. Same trader, better conditions: the numbers do not disappear, they change scale — you risk a percentage, not an amount, and every result reads in R rather than a sum you can hold against your rent.';
