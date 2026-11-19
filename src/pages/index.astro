@@ -14,6 +14,8 @@
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { FEATURE_PAGES, LINE_OF } from '../content/produktnavigation';
 import '../styles/home.css';
 
 // FXR-164: der Produktfilm existiert noch nicht. Ohne Datei bleibt es beim Standbild,
@@ -31,12 +33,19 @@ const saeulen = [
   { nr: '04', titel: 'Journal', text: 'Every trade documented on the way through: setup, rule compliance, outcome. Nothing to fill in afterwards.' },
 ];
 
-const buehneTitel = ['One ticket · three accounts', 'Roles, not windows', 'Payout protection', 'Your month in R'];
+// FXR-1765: drei Zusagen vor den Preisen. Aussagen über die Bedingungen, nie über den Trader.
+const zusagen = [
+  { nr: '01', titel: 'No money on screen', text: 'Risk, result and distance to the limit appear only in R and percent. There is no toggle that brings a currency view back.', link: null },
+  { nr: '02', titel: 'Your data stays on your machine', text: 'FixedR runs locally on Windows, with no cloud account. Your trades, accounts and journal never reach us.', link: { href: '/trust', text: 'What does cross the line is on Trust →' } },
+  { nr: '03', titel: 'You place every trade', text: 'No bot, no signals, no black box. FixedR enforces your own rules and records what happened; the decision stays with the trader.', link: null },
+];
+
+const buehneTitel =['One ticket · three accounts', 'Roles, not windows', 'Payout protection', 'Your month in R'];
 
 const verteilung = [
   { konto: 'FTMO 100k', wert: '4.2', ok: true },
   { konto: 'Apex 150k', wert: '6.1', ok: true },
-  { konto: 'TopStep 50k', wert: 'not configured', ok: false },
+  { konto: 'Lucid 50k', wert: 'not configured', ok: false },
 ];
 
 // Balken der Zeitrahmen-Lage: deterministisch aus dem Index, damit jeder Bau gleich
@@ -92,7 +101,7 @@ const pakete = [
     <span class="big-r-wrap" aria-hidden="true"><span class="big-r">R</span></span>
     <div class="inner">
       <div class="intro">
-        <p class="eyebrow">For prop traders · Windows · founders circle open</p>
+        <p class="eyebrow">For prop traders · Windows · founders circle forming</p>
         <h1>Loud charts. Calm numbers. <span class="accent">Trade in R.</span></h1>
         <p class="lede">
           Money changes scale with every account and pulls at you on every trade.
@@ -129,7 +138,7 @@ const pakete = [
           </span>
           <span class="stage-caption">
             <span class="stage-title">One trade, in R, start to finish.</span>
-            <span class="stage-sub">45 s · no sound needed</span>
+            {heroVideoExists && <span class="stage-sub">45 s · no sound needed</span>}
           </span>
         </div>
       </div>
@@ -217,6 +226,11 @@ const pakete = [
       <div class="txt" data-reveal>
         <span class="eyebrow">02 · Safety guard</span>
         <h2>One trade, every account, one set of rules.</h2>
+        <p class="firmen">
+          Rule profiles are maintained today for Apex, FTMO, IQ Capital and Lucid. In
+          preparation: FundedNext, The5ers, MyFundedFutures, Blue Guardian, Alpha Capital Group
+          and Sure Leverage Funding. Platforms: MetaTrader 5 and NinjaTrader 8.
+        </p>
       </div>
     </div>
     <div class="inner">
@@ -366,6 +380,46 @@ const pakete = [
           itself is still there in month three. The plan was the order ticket; the outcome is the
           trade as it closed.
         </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ The whole cockpit: alle elf Produktseiten (FXR-1765) ═══ -->
+  <section class="cockpit">
+    <div class="inner">
+      <div class="kopf" data-reveal>
+        <span class="eyebrow">The whole cockpit</span>
+        <h2>Eleven parts, one page each.</h2>
+        <p>Each part of the cockpit has its own page: what it does, how it behaves and where its limits are.</p>
+      </div>
+      <div class="hub-tiles" data-reveal>
+        {FEATURE_PAGES.map((p) => (
+          <a class="hub-tile" href={`/product/${p.slug}`}>
+            <span class="ic"><Icon name={p.icon} size={20} /></span>
+            <span class="t">{p.title}</span>
+            <span class="d">{LINE_OF[p.slug]}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Drei Zusagen (FXR-1765) ═══ -->
+  <section class="zusagen">
+    <div class="inner">
+      <div class="kopf" data-reveal>
+        <span class="eyebrow">Three promises</span>
+        <h2>What you can rely on, by how it is built.</h2>
+      </div>
+      <div class="karten" data-reveal>
+        {zusagen.map((z) => (
+          <div class="karte">
+            <span class="nr">{z.nr}</span>
+            <span class="t">{z.titel}</span>
+            <span class="d">{z.text}</span>
+            {z.link && <a href={z.link.href}>{z.link.text}</a>}
+          </div>
+        ))}
       </div>
     </div>
   </section>

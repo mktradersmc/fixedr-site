@@ -51,7 +51,7 @@ const werkzeuge = [0, 1, 2, 3, 4, 5].map(
 const konten = [
   ['FTMO 100k', 'Rule profile · FTMO Swing', '3 contracts', true],
   ['Apex 150k', 'Rule profile · Apex PA', '4 contracts', true],
-  ['TopStep 50k', 'not configured', 'halted · no size guessed', false],
+  ['Lucid 50k', 'not configured', 'halted · no size guessed', false],
 ].map(([name, regel, wert, ok]) => ({
   name, regel, wert,
   stil: `display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;background:var(--ink-3);border:1px solid ${ok ? 'var(--ink-line-2)' : 'var(--warn)'}`,
@@ -111,6 +111,31 @@ const todos = [
   stil: `display:flex;align-items:center;gap:9px;color:${ok ? 'var(--on-ink-faint)' : 'var(--on-ink)'};${ok ? 'text-decoration:line-through' : ''}`,
   box: `width:15px;height:15px;display:grid;place-items:center;border-radius:4px;font-size:10px;${ok ? 'background:var(--brand-on-ink);color:#fff' : 'border:1px solid var(--ink-line-2)'}`,
 }));
+
+// FXR-1765: Attrappen der drei neuen Seiten — gleiche Bausteine, keine Zahlen in Geld.
+const schutz = [
+  ['Drawdown floor', 'trailing · equity', '3.4 R left', false],
+  ['Daily loss', 'resets at flatten time', '1.1 of 2.0 R', false],
+  ['News window', 'CPI · USD · buffer 5 min', 'NQ locked', true],
+  ['Target close', 'at the profit target', '1.8 % to go', false],
+].map(([name, regel, wert, warn]) => ({
+  name, regel, wert,
+  stil: `display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;background:var(--ink-3);border:1px solid ${warn ? 'var(--warn)' : 'var(--ink-line-2)'}`,
+  wertStil: warn ? 'color:var(--warn);font-weight:600' : 'color:var(--brand-on-ink);font-weight:600',
+}));
+
+const cvd = Array.from({ length: 28 }, (_, i) => {
+  const h = 18 + ((i * 29) % 70);
+  return `position:absolute;left:${4 + i * 3.4}%;bottom:0;width:1.8%;height:${h}%;border-radius:1px;background:${i % 4 === 0 ? 'var(--brand-on-ink)' : 'var(--ink-line-2)'}`;
+});
+
+const woche: { tag: string; ev: { zeit: string; stufe: string }[] }[] = [
+  { tag: 'Mon', ev: [{ zeit: '09:30 · EUR', stufe: 'HIGH' }] },
+  { tag: 'Tue', ev: [] },
+  { tag: 'Wed', ev: [{ zeit: '14:30 · USD', stufe: 'HIGH' }, { zeit: '20:00 · USD', stufe: 'HIGH' }] },
+  { tag: 'Thu', ev: [{ zeit: '14:30 · USD', stufe: 'MED' }] },
+  { tag: 'Fri', ev: [] },
+];
 ---
 <div class="ausschnitt">
   <span class="chrom">
@@ -265,6 +290,77 @@ const todos = [
           </span>
           <span style="position:absolute;bottom:12px;left:10px;right:10px;text-align:center;font-size:9px;color:var(--on-ink-faint)">paired by QR · no account</span>
         </span>
+      </div>
+    </div>
+  )}
+
+  {slug === 'protection' && (
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;min-height:300px">
+      <div style="padding:16px;border-right:1px solid var(--ink-line);display:flex;flex-direction:column;gap:8px">
+        <span class="lbl">APEX 150K · RULES OF THE PROGRAMME</span>
+        {schutz.map((k) => (
+          <span style={k.stil}>
+            <span style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-weight:600;color:var(--on-ink)">{k.name}</span>
+              <span style="font-size:10px;color:var(--on-ink-faint)">{k.regel}</span>
+            </span>
+            <span style={k.wertStil}>{k.wert}</span>
+          </span>
+        ))}
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:8px;background:var(--ink-2)">
+        <span class="lbl">GUARD STATE · REPORTED BACK</span>
+        <span style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;background:var(--ink-3);border:1px solid var(--ink-line-2)"><span>Apex 150k</span><span style="color:var(--brand-on-ink);font-weight:600">ACTIVE</span></span>
+        <span style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;background:var(--ink-3);border:1px solid var(--ink-line-2)"><span>FTMO 100k</span><span style="color:var(--brand-on-ink);font-weight:600">ACTIVE</span></span>
+        <span style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;background:var(--ink-3);border:1px solid var(--warn)"><span>Lucid 50k</span><span style="color:var(--warn);font-weight:600">NOT ACTIVE</span></span>
+        <span style="margin-top:auto;font-family:var(--font-text);font-size:11px;line-height:1.45;color:var(--on-ink-muted);border-left:2px solid var(--ink-line-2);padding-left:8px;white-space:normal">A guard that is off says so on the screen.</span>
+      </div>
+    </div>
+  )}
+
+  {slug === 'indicators' && (
+    <>
+      <div style="position:relative;height:250px;background:var(--ink)">
+        <span style="position:absolute;inset:0;background-image:linear-gradient(var(--ink-line) 1px,transparent 1px);background-size:100% 40px;opacity:.5"></span>
+        <span style="position:absolute;left:30%;right:0;top:0;bottom:0;background:rgba(46,134,246,.06);border-left:1px solid var(--ink-line-2)"></span>
+        <span style="position:absolute;left:calc(30% + 8px);top:10px;font-size:10px;letter-spacing:.1em;color:var(--on-ink-faint)">SESSION</span>
+        {kerzen.map((c) => <span style={c}></span>)}
+        <span style="position:absolute;left:0;right:0;top:34%;border-top:1px dashed var(--ink-line-2)"></span>
+        <span style="position:absolute;right:10px;top:calc(34% - 18px);padding:1px 6px;background:var(--ink-2);border:1px solid var(--ink-line-2);border-radius:3px;font-size:10px;color:var(--on-ink-muted)">Institutional level</span>
+        <span style="position:absolute;left:0;right:0;top:62%;border-top:1px dashed var(--brand-on-ink);opacity:.7"></span>
+        <span style="position:absolute;right:10px;top:calc(62% + 4px);padding:1px 6px;background:var(--ink-2);border:1px solid var(--brand-on-ink);border-radius:3px;font-size:10px;color:var(--brand-on-ink)">Liquidity level</span>
+        <span style="position:absolute;left:12px;top:10px;display:flex;gap:6px">
+          <span style="padding:2px 7px;border-radius:3px;background:var(--ink-2);border:1px solid var(--ink-line-2);font-size:10px;color:var(--on-ink-muted)">NWOG</span>
+          <span style="padding:2px 7px;border-radius:3px;background:var(--ink-2);border:1px solid var(--ink-line-2);font-size:10px;color:var(--on-ink-muted)">NDOG</span>
+        </span>
+      </div>
+      <div style="position:relative;height:90px;background:var(--ink-2);border-top:1px solid var(--ink-line)">
+        <span style="position:absolute;top:8px;left:12px;font-size:10px;letter-spacing:.1em;color:var(--on-ink-faint)">CVD · FUTURES</span>
+        {cvd.map((c) => <span style={c}></span>)}
+      </div>
+    </>
+  )}
+
+  {slug === 'planning' && (
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;min-height:300px">
+      <div style="padding:16px;border-right:1px solid var(--ink-line);display:flex;flex-direction:column;gap:8px">
+        <span class="lbl">WEEK</span>
+        <span style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;flex:1">
+          {woche.map((d) => (
+            <span style="display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:8px;background:var(--ink-3);border:1px solid var(--ink-line-2);min-width:0">
+              <span style="font-size:10px;letter-spacing:.1em;color:var(--on-ink-faint)">{d.tag.toUpperCase()}</span>
+              {d.ev.map((e) => (
+                <span style={`padding:4px 5px;border-radius:4px;background:var(--ink-2);border:1px solid ${e.stufe === 'HIGH' ? 'var(--warn)' : 'var(--ink-line-2)'};font-size:9px;color:var(--on-ink-muted);line-height:1.35;white-space:normal`}>{e.zeit}</span>
+              ))}
+            </span>
+          ))}
+        </span>
+      </div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:8px;background:var(--ink-2)">
+        <span class="lbl">ECONOMIC CALENDAR · BACKTEST</span>
+        <span class="zeile"><span>14:30 · CPI · USD</span><span style="color:var(--warn)">HIGH</span></span>
+        <span class="zeile"><span>Actual</span><span style="color:var(--on-ink-faint)">hidden until 14:30</span></span>
+        <span style="margin-top:auto;font-family:var(--font-text);font-size:11px;line-height:1.45;color:var(--on-ink-muted);border-left:2px solid var(--ink-line-2);padding-left:8px;white-space:normal">Replay clock 14:12. The result is not known yet.</span>
       </div>
     </div>
   )}

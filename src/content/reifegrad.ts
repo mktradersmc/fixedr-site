@@ -23,11 +23,12 @@ export const REIFEGRAD: ReifegradEntry[] = [
   { id: 'on-your-machine', status: 'built', note: 'Windows app, installer, no cloud account.' },
   { id: 'payout-lock', status: 'built', note: 'Trading can be paused on an account once it is payout-eligible.' },
   { id: 'dynamic-risk-rule', status: 'built', note: 'R can follow a written rule on account state.' },
+  // FXR-1765: beide waren „planned", sind gebaut (Auftraggeber, November 2026).
+  { id: 'firm-rule-profiles', status: 'built', note: 'Maintained rule sets per prop firm, delivered by us.' },
+  { id: 'news-protection', status: 'built', note: 'News window with buffer, locks only the affected symbol. A net, not a guarantor.' },
 
   // ── §4.2 "On the way — and what shapes it" — Founders-Pitch, keine Zahl/Datum ──
   { id: 'auto-documentation', status: 'planned', note: 'The plan next to the result, without typing it up.' },
-  { id: 'firm-rule-profiles', status: 'planned', note: 'Maintained rule sets per prop firm, instead of hand-entered numbers.' },
-  { id: 'news-protection', status: 'planned', note: 'Netz, kein Garant. — an escalation ladder, not a promise.' },
   { id: 'guardian-statement', status: 'planned', note: 'What the tool quietly prevented over a month.' },
 
   // ── §6 /trust ────────────────────────────────────────────────────────

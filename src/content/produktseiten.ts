@@ -125,6 +125,12 @@ export const SEITEN: Record<string, Produktseite> = {
         ]
       },
       {
+        "h2": "Two platforms, one order",
+        "ps": [
+          "MetaTrader 5 and NinjaTrader 8 accounts sit under the same order ticket, so one order can go to accounts on both. Broker passwords are kept in the Windows Credential Manager, not in a file, and are never sent to us."
+        ]
+      },
+      {
         "h2": "What still depends on the broker",
         "ps": [
           "The stop itself sits with the broker, not with us. If FixedR were to go offline, an order already placed with a stop attached still closes where it was set — the software watches and enforces the rule, it does not stand between your stop and the market."
@@ -205,6 +211,30 @@ export const SEITEN: Record<string, Produktseite> = {
         "ps": [
           "Tools do not replace a strategy. What they do is make an existing one checkable — a setup you can point to on the chart is a setup you can argue with, which is the only kind worth trading."
         ]
+      },
+      {
+        "h2": "Managing the trade on the chart",
+        "ps": [
+          "An open trade is handled where you see it. Take a partial close, move the stop to breakeven, or drag a mark to a new level — the chart is the control, not a form beside it. The long and short tool draws the trade with a fixed reward-to-risk ratio, so the target follows the stop instead of being guessed separately."
+        ],
+        "punkte": [
+          {
+            "b": "Partial close and breakeven.",
+            "t": "Handled on the chart itself."
+          },
+          {
+            "b": "Marks by dragging.",
+            "t": "Levels are moved by dragging them on the chart."
+          },
+          {
+            "b": "Long and short tool.",
+            "t": "A fixed reward-to-risk ratio, drawn as part of the trade."
+          },
+          {
+            "b": "Split chart.",
+            "t": "A chart divided within its window."
+          }
+        ]
       }
     ]
   },
@@ -265,6 +295,12 @@ export const SEITEN: Record<string, Produktseite> = {
         "h2": "What more charts do not buy you",
         "ps": [
           "More charts are not more clarity — the role is. Four windows with nothing said about what each is for add noise; the same four windows with HTF, MTF and LTF assigned add up to a single statement about the market."
+        ]
+      },
+      {
+        "h2": "More than one monitor",
+        "ps": [
+          "A workspace can spread across several monitors. A second window carries its own chart group and stays in sync with the first, so the roles keep meaning the same thing on every screen."
         ]
       }
     ]
@@ -336,6 +372,24 @@ export const SEITEN: Record<string, Produktseite> = {
         ]
       },
       {
+        "h2": "Prop challenge simulation",
+        "ps": [
+          "A programme's rules can run along with the replay clock. Drawdown floor, daily loss limit and the rest are checked as simulated time passes, and each session ends as passed or broken. Fees and payouts are not modelled — the simulation tests whether the rules held, nothing more."
+        ]
+      },
+      {
+        "h2": "Costs the way a broker charges them",
+        "ps": [
+          "Spread, commission, slippage and swap are part of the test. A result that ignores them measures a market nobody can trade."
+        ]
+      },
+      {
+        "h2": "Reading the result",
+        "ps": [
+          "Each session is evaluated as an R curve with its drawdown beside it. Start at a random point in the data when you do not want to pick the day, and jump to the next session when you do."
+        ]
+      },
+      {
         "h2": "What the record is for",
         "ps": [
           "Every replay trade lands in the same record as a live one, in R. A month of practice and a month of trading are comparable, and the routine you build in replay is the routine you already know when it counts. The honest limit belongs here too — a replay is the market without the money. It trains the method. It does not simulate the fear."
@@ -390,13 +444,19 @@ export const SEITEN: Record<string, Produktseite> = {
       {
         "h2": "The chart, at the moment",
         "ps": [
-          "Every entry keeps a screenshot of the chart as it looked when the decision was made — not a chart pulled up later and redrawn until the setup looks cleaner than it was. That is the difference between a record and a reconstruction."
+          "Every entry keeps a screenshot of the chart as it looked when the decision was made — not a chart pulled up later and redrawn until the setup looks cleaner than it was. That is the difference between a record and a reconstruction. The screenshot is taken automatically for each trade."
         ]
       },
       {
         "h2": "Tags and strategy",
         "ps": [
           "Every entry belongs to a named strategy, and can carry tags on top of it. A review that asks how the pullback strategy did this month is asking a question the label already answers."
+        ]
+      },
+      {
+        "h2": "Your own traits, and a rating before the trade",
+        "ps": [
+          "Each strategy can carry traits of its own — the things you want to see on every entry of that strategy. A rating given before the trade sits on the entry too, so how sure you were is on the record next to how it ended."
         ]
       },
       {
@@ -517,8 +577,14 @@ export const SEITEN: Record<string, Produktseite> = {
       {
         "h2": "On your phone, without a second account",
         "ps": [
-          "Alerts push to your phone even when the cockpit is closed. Pairing a phone is a QR code scanned once, cockpit to handset — there is no account to create with us, and no login beyond the one already on your desk.",
+          "Alerts push to your phone while you are away from the screen. Pairing a phone is a QR code scanned once, cockpit to handset — there is no account to create with us, and no login beyond the one already on your desk.",
           "The phone app is built for Android. There is no iOS version — that is the honest state of it today, not a footnote to skip past."
+        ]
+      },
+      {
+        "h2": "Encrypted end to end",
+        "ps": [
+          "The key is exchanged by that same QR code, so the relay between your computer and your phone cannot read an alert. The computer has to be running: the alerts come from the cockpit on your desk, and the phone only receives them."
         ]
       },
       {
@@ -530,7 +596,7 @@ export const SEITEN: Record<string, Produktseite> = {
       {
         "h2": "“A net, not a guarantor.”",
         "ps": [
-          "News protection works as a ladder, not a single switch: the closer a high-impact release gets, the stricter the constraint becomes — size steps down first, then new entries stop, then an open position can be flattened if the release is close enough and large enough. It catches most of what would otherwise catch you; it does not promise that every release ends quietly."
+          "News protection locks the affected symbol for a window around a high-impact release, with a buffer on either side; every other symbol stays tradable. The times come from the economic calendar. It catches most of what would otherwise catch you; it does not promise that every release ends quietly."
         ]
       },
       {
@@ -589,6 +655,175 @@ export const SEITEN: Record<string, Produktseite> = {
         "ps": [
           "FixedR is a Windows application with an installer. No cloud account holds your setup, no browser tab keeps it alive — it runs on the machine in front of you, the same way it did the day before.",
           "Fifteen minutes teaches the mechanics: connecting an account, sizing a trade, reading a limit. It does not teach the strategy — deciding what to trade and when stays your work, same as it always was."
+        ]
+      }
+    ]
+  },
+  // FXR-1765: drei Seiten nach Stand November 2026, gleiches Muster wie oben.
+  "protection": {
+    "eyebrow": "The trade",
+    "h1": "Your firm's rules, enforced where the order executes.",
+    "tabs": [
+      "Guard",
+      "Rules",
+      "News"
+    ],
+    "chrom": "guard active · rules per account",
+    "lede": "A prop firm's programme is a list of limits, and each account has its own copy of it. The guard holds that list for every account and enforces it in the terminal itself, at the place the order is executed.",
+    "claim": "A rule you have to remember is a rule you will eventually break. The guard remembers it for you, on every account, and tells you when it is not running.",
+    "bloecke": [
+      {
+        "h2": "The programme's rules, per account",
+        "ps": [
+          "The rules of the firm's programme apply to each account on its own. Three of them carry most of the weight."
+        ],
+        "punkte": [
+          {
+            "b": "Drawdown floor.",
+            "t": "Static or trailing, measured on equity or on balance — as the programme defines it."
+          },
+          {
+            "b": "Daily loss limit.",
+            "t": "The day's limit for that account, not a figure shared with the others."
+          },
+          {
+            "b": "News window.",
+            "t": "A window around high-impact releases, with a buffer on either side."
+          }
+        ]
+      },
+      {
+        "h2": "Enforced in the terminal",
+        "ps": [
+          "In MetaTrader, the FixedR Expert Advisor runs inside the terminal and enforces the rules there — where the order is executed, not in a window beside it. For NinjaTrader the same is built."
+        ]
+      },
+      {
+        "h2": "You see whether it is running",
+        "ps": [
+          "The state of the guard is reported back to the cockpit and shown. If the guard is not active on an account, the interface says so. Silence never means that everything is fine."
+        ]
+      },
+      {
+        "h2": "News locks the symbol it concerns",
+        "ps": [
+          "The news guard blocks only the affected symbol. A release that moves one market does not stop you trading another. The times come from the economic calendar on the planning view."
+        ]
+      },
+      {
+        "h2": "Target close",
+        "ps": [
+          "When an account reaches its profit target, it closes. The target is a stopping point, not a number to push past."
+        ]
+      },
+      {
+        "h2": "Payout protection",
+        "ps": [
+          "Once an account is eligible for payout, FixedR can pause trading on it until the money is actually out. Most risk tooling exists to protect you from a loss. This protects a gain that already happened, from a trade placed after the fact that undoes it."
+        ]
+      },
+      {
+        "h2": "Recognised by the account name, maintained by us",
+        "ps": [
+          "FixedR recognises the firm from the name of the account and applies that firm's rule profile. We maintain the profiles and deliver them. Maintained today: Apex, FTMO, IQ Capital and Lucid. In preparation: FundedNext, The5ers, MyFundedFutures, Blue Guardian, Alpha Capital Group and Sure Leverage Funding."
+        ]
+      },
+      {
+        "h2": "A net, not a guarantor",
+        "ps": [
+          "The guard enforces the rules it knows, on the accounts it is running on. It is a net, not a guarantor: it does not decide your trades, and the stop that holds a position still sits with the broker."
+        ]
+      }
+    ]
+  },
+  "indicators": {
+    "eyebrow": "The trade",
+    "h1": "The indicators come with the platform.",
+    "tabs": [
+      "NQ · M15",
+      "Indicators",
+      "CVD"
+    ],
+    "chrom": "same in live, test and backtest",
+    "lede": "Most of what a chart is asked to show is already built in. More than fifty standard indicators, eighteen candle patterns, and a set of our own for levels, structure and sessions.",
+    "claim": "An indicator that behaves differently in a backtest than live tells you nothing about the strategy. Here the same indicator runs in all three places.",
+    "bloecke": [
+      {
+        "h2": "More than fifty standard indicators",
+        "ps": [
+          "Moving averages, oscillators, volatility and volume are covered, along with 18 candle patterns. The usual ones are there so that you do not need a workaround to put them on a chart."
+        ]
+      },
+      {
+        "h2": "Our own indicators",
+        "ps": [
+          "On top of the standard set there are indicators built by FixedR itself."
+        ],
+        "punkte": [
+          {
+            "b": "Institutional Levels.",
+            "t": "Drawn on the chart next to your own marks."
+          },
+          {
+            "b": "Liquidity Levels.",
+            "t": "A second set of levels, on the same chart."
+          },
+          {
+            "b": "Market Structure.",
+            "t": "Shown in three tiers."
+          },
+          {
+            "b": "Opening Gaps.",
+            "t": "The new week opening gap (NWOG) and the new day opening gap (NDOG)."
+          },
+          {
+            "b": "Sessions and Pivots.",
+            "t": "Both available as indicators in their own right."
+          }
+        ]
+      },
+      {
+        "h2": "Footprint and CVD for futures",
+        "ps": [
+          "Footprint candles and a CVD pane are available for futures, drawn from NinjaTrader data. They sit on the chart like any other indicator."
+        ]
+      },
+      {
+        "h2": "The same in live, test and backtest",
+        "ps": [
+          "Live, test and backtest use the same indicators. What you see in replay is what the indicator would have shown live, so a backtest is not read through a different instrument."
+        ]
+      }
+    ]
+  },
+  "planning": {
+    "eyebrow": "Around it",
+    "h1": "The week, laid out before it starts.",
+    "tabs": [
+      "Week",
+      "Economic calendar",
+      ""
+    ],
+    "chrom": "news times feed the guard",
+    "lede": "A trading week has a shape that is known in advance: when the releases fall, which days are quiet. The planning view puts that shape on one screen, next to the charts it affects.",
+    "claim": "Looking at the week before it starts is not a ritual. It is how you find out which hours you are not going to trade.",
+    "bloecke": [
+      {
+        "h2": "A week calendar and an economic calendar",
+        "ps": [
+          "The planning view holds a week calendar and the economic calendar together. Releases appear at the hour they happen, with their impact, so the day's quiet and loud stretches are visible at a glance."
+        ]
+      },
+      {
+        "h2": "The times feed the news guard",
+        "ps": [
+          "The release times in the calendar are the same times the news guard works from. A window around a release is therefore not typed in separately: it comes from the calendar you are already reading."
+        ]
+      },
+      {
+        "h2": "No look-ahead in the backtest",
+        "ps": [
+          "In a backtest, the calendar shows the actual value only from the simulated moment of publication. Before that moment the release is there, but its result is not. The test cannot know what you could not have known."
         ]
       }
     ]

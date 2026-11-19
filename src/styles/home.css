@@ -237,6 +237,41 @@
 .akt34 p { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0; text-wrap: pretty; }
 @media (max-width: 980px) { .akt34 .inner { grid-template-columns: 1fr; gap: 40px; padding: 48px 20px 40px; } }
 
+/* ── Das ganze Cockpit und die drei Zusagen (FXR-1765) ──────────────────────
+   Nur vorhandene Token und das Kachelmuster `.hub-tile` aus mega.css. */
+.cockpit, .zusagen { background: var(--bg); padding: 0; }
+.cockpit .inner, .zusagen .inner {
+  max-width: 1200px; margin: 0 auto; padding: 56px 40px 24px;
+  display: flex; flex-direction: column; gap: 32px;
+}
+.zusagen .inner { padding-bottom: 72px; }
+.cockpit .kopf, .zusagen .kopf { display: flex; flex-direction: column; gap: 18px; max-width: 40rem; }
+.cockpit .kopf p { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0; text-wrap: pretty; }
+.cockpit .eyebrow, .zusagen .eyebrow {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--brand);
+}
+.cockpit h2, .zusagen h2 {
+  font-family: var(--font-display); font-size: 46px; line-height: 1.06; font-weight: 500;
+  letter-spacing: -.03em; margin: 0; text-wrap: pretty;
+}
+.zusagen .karten { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.zusagen .karte {
+  display: flex; flex-direction: column; gap: 12px; padding: 28px 28px 30px; border-radius: 10px;
+  background: var(--bg-alt); border: 1px solid var(--line);
+}
+.zusagen .karte .nr { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--brand); }
+.zusagen .karte .t { font-family: var(--font-display); font-size: 24px; line-height: 1.15; font-weight: 500; letter-spacing: -.02em; }
+.zusagen .karte .d { font-size: 16px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
+.zusagen .karte a { margin-top: auto; padding-top: 6px; font-size: 14px; font-weight: 500; }
+.akt2 .kopf .txt .firmen { font-size: 16px; line-height: 1.65; color: var(--muted); margin: 0; max-width: 40rem; text-wrap: pretty; }
+@media (max-width: 980px) {
+  .cockpit .inner, .zusagen .inner { padding: 40px 20px 16px; }
+  .zusagen .inner { padding-bottom: 48px; }
+  .cockpit h2, .zusagen h2 { font-size: 32px; }
+  .zusagen .karten { grid-template-columns: 1fr; }
+}
+
 /* ── Pricing ──────────────────────────────────────────────────────────── */
 .preise { background: var(--bg-alt); border-radius: 12px; margin: 0 16px; padding: 0; }
 .preise .inner { max-width: 1200px; margin: 0 auto; padding: 72px 40px 64px; display: flex; flex-direction: column; gap: 40px; }

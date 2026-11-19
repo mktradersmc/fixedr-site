@@ -1,5 +1,5 @@
 ---
-// FeaturePage — das Gerüst der acht Seiten unter /product/ (FXR-239).
+// FeaturePage — das Gerüst der elf Seiten unter /product/ (FXR-239, ab FXR-1765 elf).
 //
 // Aufbau und Werte aus dem Kanvas-Entwurf `temp/export-web-v5`: vier Bänder —
 // Kopfband (Tinte, rechts das Lane-Symbol groß) · Claim + Produkt-Ausschnitt ·
@@ -51,7 +51,7 @@ if (i >= 0 && i < FEATURE_PAGES.length - 1) {
   const n = FEATURE_PAGES[i + 1];
   nachbarn.push({ k: `${n.lane} →`, t: n.title, href: `/product/${n.slug}` });
 }
-nachbarn.push({ k: 'All eight', t: 'Everything the cockpit does', href: '/product' });
+nachbarn.push({ k: 'All eleven', t: 'Everything the cockpit does', href: '/product' });
 ---
 <Base title={meta.title} description={seite.lede} bare>
   {/* Kopfband. Die Klasse `feat-head` erfüllt zugleich die Kopfband-Pflicht des

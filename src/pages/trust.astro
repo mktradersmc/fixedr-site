@@ -19,7 +19,8 @@ import ReifegradChip from '../components/ReifegradChip.astro';
       <div class="karte dunkel"><span class="lbl">Stays on your machine</span><ul><li>Broker connections, market data, order execution, your journal, account
         configuration and trading history — the whole working system.</li></ul></div>
       <div class="karte hell"><span class="lbl">Leaves the machine</span><ul><li>Only two things: a licence/subscription check, and the allocation step that decides
-        account order and per-account risk when a trade goes to several accounts at once.</li></ul></div>
+        account order and per-account risk when a trade goes to several accounts at once.</li>
+        <li>Plus alerts to your phone, end-to-end encrypted through a relay that cannot read them.</li></ul></div>
     </div></section>
   </Fragment>
 
@@ -27,7 +28,8 @@ import ReifegradChip from '../components/ReifegradChip.astro';
   <p>
     Nearly everything FixedR does runs locally: broker connections, market data, the
     application itself, your journal, your account configuration, every trade it places.
-    Exactly two things ever reach a server we operate, and nothing else does.
+    Exactly two things about you ever reach a server we operate. Two further things cross the
+    line, and neither carries your trading to us — they are the next section.
   </p>
 
   {/* Vier-Karten-Zusammenfassung nach Kanvas — zusätzlich zu, nicht statt der
@@ -47,6 +49,22 @@ import ReifegradChip from '../components/ReifegradChip.astro';
     Neither of those two carries a price, a symbol or a trade — only what a licence check
     needs, and the account IDs and risk percentages an allocation decision needs.
     <ReifegradChip id="local-only" /> The server never learns what you trade.
+  </p>
+
+  <h2>What else crosses the line</h2>
+  <p>
+    <strong>Firm rule profiles arrive from the licence server.</strong> The rule sets we
+    maintain for each prop firm are loaded from there onto your machine. That is a download:
+    nothing about your accounts goes up with it.
+  </p>
+  <p>
+    <strong>Alerts to your phone go through a relay, end-to-end encrypted.</strong> The key is
+    exchanged between your computer and your phone by QR code, and the relay in between cannot
+    read the content. It passes on a message it cannot open.
+  </p>
+  <p>
+    <strong>Broker passwords stay in the Windows Credential Manager, not in a file.</strong>
+    They are never sent to us.
   </p>
 
   <h2>The sunset clause</h2>

@@ -40,9 +40,21 @@ export const FEATURE_PAGES: FeaturePageRef[] = [
     "lane": "The trade"
   },
   {
+    "slug": "protection",
+    "title": "Protection",
+    "icon": "shield",
+    "lane": "The trade"
+  },
+  {
     "slug": "charts",
     "title": "Charts and drawing",
     "icon": "pen",
+    "lane": "The trade"
+  },
+  {
+    "slug": "indicators",
+    "title": "Indicators",
+    "icon": "pulse",
     "lane": "The trade"
   },
   {
@@ -68,6 +80,12 @@ export const FEATURE_PAGES: FeaturePageRef[] = [
     "title": "Metrics in R",
     "icon": "chart",
     "lane": "Practice and review"
+  },
+  {
+    "slug": "planning",
+    "title": "Planning view",
+    "icon": "clock",
+    "lane": "Around it"
   },
   {
     "slug": "alerts",
@@ -111,6 +129,18 @@ export const BANNER_LANES: BannerLane[] = [
         "title": "Command palette and calendar",
         "text": "Ctrl+K finds everything; the economic calendar sits in a pane",
         "slug": "start"
+      },
+      {
+        "icon": "pulse",
+        "title": "Indicators",
+        "text": "50+ standard indicators, 18 candle patterns and our own, identical in replay",
+        "slug": "indicators"
+      },
+      {
+        "icon": "clock",
+        "title": "Planning view",
+        "text": "Week calendar and economic calendar in one window",
+        "slug": "planning"
       }
     ]
   },
@@ -167,6 +197,12 @@ export const BANNER_LANES: BannerLane[] = [
         "slug": "accounts"
       },
       {
+        "icon": "ladder",
+        "title": "Protection",
+        "text": "Drawdown, daily loss and news windows, enforced in the terminal",
+        "slug": "protection"
+      },
+      {
         "icon": "compass",
         "title": "Guided setup",
         "text": "Six guides for six purposes, plus a todo panel until you are done",
@@ -183,12 +219,6 @@ export const BANNER_LANES: BannerLane[] = [
         "title": "Automatic trade documentation",
         "text": "The plan next to the result, without typing it up",
         "slug": "journal"
-      },
-      {
-        "icon": "ladder",
-        "title": "News protection",
-        "text": "An escalation ladder — a net, not a guarantor",
-        "slug": "alerts"
       },
       {
         "icon": "statement",
