@@ -18,9 +18,11 @@ import ReifegradChip from '../components/ReifegradChip.astro';
     <section class="trust-band"><div class="inner">
       <div class="karte dunkel"><span class="lbl">Stays on your machine</span><ul><li>Broker connections, market data, order execution, your journal, account
         configuration and trading history — the whole working system.</li></ul></div>
-      <div class="karte hell"><span class="lbl">Leaves the machine</span><ul><li>Only two things: a licence/subscription check, and the allocation step that decides
-        account order and per-account risk when a trade goes to several accounts at once.</li>
-        <li>Plus alerts to your phone, end-to-end encrypted through a relay that cannot read them.</li></ul></div>
+      <div class="karte hell"><span class="lbl">Leaves the machine</span><ul><li>Your FixedR account (e-mail address and password) with the licence check, and the
+        allocation step that decides account order and per-account risk when a trade goes to
+        several accounts at once.</li>
+        <li>An automatic error report when the application hits a fault, and the check for updates.</li>
+        <li>Alerts to your phone, end-to-end encrypted through a relay that cannot read them.</li></ul></div>
     </div></section>
   </Fragment>
 
@@ -28,8 +30,9 @@ import ReifegradChip from '../components/ReifegradChip.astro';
   <p>
     Nearly everything FixedR does runs locally: broker connections, market data, the
     application itself, your journal, your account configuration, every trade it places.
-    Exactly two things about you ever reach a server we operate. Two further things cross the
-    line, and neither carries your trading to us — they are the next section.
+    What does reach a server we operate: your account with the licence check, the allocation
+    step, an error report when the application hits a fault, and the requests for updates and
+    rule profiles. None of them carries your trading to us. The details follow below.
   </p>
 
   {/* Vier-Karten-Zusammenfassung nach Kanvas — zusätzlich zu, nicht statt der
@@ -46,12 +49,25 @@ import ReifegradChip from '../components/ReifegradChip.astro';
   </div>
 
   <p>
-    Neither of those two carries a price, a symbol or a trade — only what a licence check
-    needs, and the account IDs and risk percentages an allocation decision needs.
+    Your FixedR account is an e-mail address and a password you choose on the registration
+    page; the licence belongs to that account, and every start checks it, so registration,
+    sign-in and the licence check need an internet connection. The allocation step sends the
+    account IDs and risk percentages a distribution decision needs. None of this carries a
+    price, a symbol or a trade.
     <ReifegradChip id="local-only" /> The server never learns what you trade.
   </p>
 
   <h2>What else crosses the line</h2>
+  <p>
+    <strong>An error report goes to FixedR support when the application hits a fault.</strong>
+    It is sent automatically and holds the error, where in the program it happened, the
+    version and build, system details and an installation ID. It is redacted against a fixed
+    list of allowed fields before it leaves.
+  </p>
+  <p>
+    <strong>The application asks whether an update is available.</strong> That is a request
+    for a version, nothing about your accounts goes with it.
+  </p>
   <p>
     <strong>Firm rule profiles arrive from the licence server.</strong> The rule sets we
     maintain for each prop firm are loaded from there onto your machine. That is a download:

@@ -20,15 +20,18 @@ export const REIFEGRAD: ReifegradEntry[] = [
   { id: 'across-accounts', status: 'built', note: 'One order, distributed by configuration — nothing guessed.' },
   { id: 'r-only-display', status: 'built', note: 'Every result in R. No money mode, no toggle.' },
   { id: 'multi-timeframe-sync', status: 'built', note: 'Roles (HTF/MTF/LTF) drive sync, not window position.' },
-  { id: 'on-your-machine', status: 'built', note: 'Windows app, installer, no cloud account.' },
+  { id: 'on-your-machine', status: 'built', note: 'Windows app with an installer. Trading data stays on this machine; signing in uses your FixedR account.' },
   { id: 'payout-lock', status: 'built', note: 'Trading can be paused on an account once it is payout-eligible.' },
   { id: 'dynamic-risk-rule', status: 'built', note: 'R can follow a written rule on account state.' },
   // FXR-1765: beide waren „planned", sind gebaut (Auftraggeber, November 2026).
   { id: 'firm-rule-profiles', status: 'built', note: 'Maintained rule sets per prop firm, delivered by us.' },
   { id: 'news-protection', status: 'built', note: 'News window with buffer, locks only the affected symbol. A net, not a guarantor.' },
+  // FXR-2013: war „planned", waehrend Startseite und /product/journal es als gebaut beschrieben. Gemessen
+  // 2026-11-19 in awesome-cockpit: Tabelle `journal_entries` (DatabaseService.js), Oberflaeche
+  // `trading-cockpit/src/components/journal/*`. Gilt fuer Auftraege, die ueber FixedR gesetzt wurden.
+  { id: 'auto-documentation', status: 'built', note: 'The plan next to the result, without typing it up — for orders placed through FixedR.' },
 
   // ── §4.2 "On the way — and what shapes it" — Founders-Pitch, keine Zahl/Datum ──
-  { id: 'auto-documentation', status: 'planned', note: 'The plan next to the result, without typing it up.' },
   { id: 'guardian-statement', status: 'planned', note: 'What the tool quietly prevented over a month.' },
 
   // ── §6 /trust ────────────────────────────────────────────────────────

@@ -36,7 +36,7 @@ const saeulen = [
 // FXR-1765: drei Zusagen vor den Preisen. Aussagen über die Bedingungen, nie über den Trader.
 const zusagen = [
   { nr: '01', titel: 'No money on screen', text: 'Risk, result and distance to the limit appear only in R and percent. There is no toggle that brings a currency view back.', link: null },
-  { nr: '02', titel: 'Your data stays on your machine', text: 'FixedR runs locally on Windows, with no cloud account. Your trades, accounts and journal never reach us.', link: { href: '/trust', text: 'What does cross the line is on Trust →' } },
+  { nr: '02', titel: 'Your data stays on your machine', text: 'FixedR runs locally on Windows. Your trades, accounts and journal never reach us. You sign in with a FixedR account for the licence.', link: { href: '/trust', text: 'What does cross the line is on Trust →' } },
   { nr: '03', titel: 'You place every trade', text: 'No bot, no signals, no black box. FixedR enforces your own rules and records what happened; the decision stays with the trader.', link: null },
 ];
 
@@ -116,7 +116,7 @@ const pakete = [
           <span class="lbl">WORKS WITH</span>
           <span class="chip">MetaTrader</span>
           <span class="chip">NinjaTrader</span>
-          <span class="rest">· runs on your machine · no cloud account</span>
+          <span class="rest">· runs on your machine · trading data stays local</span>
         </p>
       </div>
       {/* Michael 2026-09-11: die Karte nimmt ihre Höhe vom Bild, damit jeder Screenshot
@@ -425,12 +425,12 @@ const pakete = [
   </section>
 
   <!-- ═══ Pakete ═══ -->
-  <section class="preise">
+  <section class="preise" id="pricing">
     <div class="inner">
       <div class="kopf" data-reveal>
         <span class="eyebrow">Pricing</span>
         <h2>Three tiers. One set of rules.</h2>
-        <span class="vorschlag">SCHNITT UND PREISE — VORSCHLAG</span>
+        <span class="vorschlag">PRICES ARE A PROPOSAL</span>
       </div>
       <div class="karten" data-reveal>
         {pakete.map((p) => (
@@ -480,7 +480,7 @@ const pakete = [
         <div style="display:flex;flex-direction:column;gap:12px">
           <span class="feld">you@example.com</span>
           <a class="knopf" href="/waitlist">Join the waitlist</a>
-          <span class="klein">No newsletter. One mail when your seat opens.</span>
+          <span class="klein">Mail about your seat and the launch, occasionally about the guide and FixedR. One click unsubscribes.</span>
         </div>
       </div>
     </div>

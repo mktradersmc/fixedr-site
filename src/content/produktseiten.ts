@@ -531,9 +531,9 @@ export const SEITEN: Record<string, Produktseite> = {
         ]
       },
       {
-        "h2": "The monthly statement of what did not happen",
+        "h2": "Planned: the monthly statement of what did not happen",
         "ps": [
-          "Protection is invisible when it works. Once a month, the record adds up the things that quietly did not go wrong: orders held to the exact size, stops that were never moved, sessions stopped at the limit instead of continued. It is the answer to the only question that matters when a subscription renews — what is this actually doing for me."
+          "Protection is invisible when it works. This part is not built yet. The plan: once a month, the record adds up the things that quietly did not go wrong — orders held to the exact size, stops that were never moved, sessions stopped at the limit instead of continued. It is meant to answer the only question that matters when a subscription renews — what is this actually doing for me."
         ]
       }
     ]
@@ -653,7 +653,7 @@ export const SEITEN: Record<string, Produktseite> = {
       {
         "h2": "Installed once, on your own machine",
         "ps": [
-          "FixedR is a Windows application with an installer. No cloud account holds your setup, no browser tab keeps it alive — it runs on the machine in front of you, the same way it did the day before.",
+          "FixedR is a Windows application with an installer. Your setup is stored on the machine in front of you, not on a server, and no browser tab keeps it alive. You sign in with a FixedR account, which carries the licence; registration and sign-in need an internet connection.",
           "Fifteen minutes teaches the mechanics: connecting an account, sizing a trade, reading a limit. It does not teach the strategy — deciding what to trade and when stays your work, same as it always was."
         ]
       }
